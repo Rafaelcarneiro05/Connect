@@ -42,4 +42,7 @@ Route::middleware([
     Route::get('/financial/brief', function () {
         return view('livewire/financial/brief');
     })->name('financial-brief');
+    Route::get('/working-day/register-day', function () {
+        return view('livewire/working-day/register-working-day');
+    })->name('register-day');
 });

@@ -27,17 +27,8 @@ class FinancialBrief extends Component
 
     public function search()
     {
-
-        dd('cccccccccccccccccccccccccccccccccccc'); 
-
         
-
-       // $this->balanco_entr = Financial::where('cashflow', 'entrada')->sum('value');
-       // $this->balanco_saida = Financial::where('cashflow', 'saida')->sum('value');
-        //dd($this->balanco_entr);
-
     }
-
     
 
     public function render()

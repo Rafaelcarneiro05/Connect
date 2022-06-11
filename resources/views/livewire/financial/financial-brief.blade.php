@@ -50,7 +50,7 @@
                                
                                         <tr>
                                             <td>{{$financial->cashflow}} </td>
-                                            <td>{{$financial->value}}</td>
+                                            <td>{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
                                             <td>{{$financial->descricao}}</td>
                                             <td>{{date('d/m/Y',strtotime($financial->created_at))}}</td>  
                                         </tr>
@@ -63,14 +63,14 @@
                             
                         </div>
                         <div wire>
-                            Entrada: {{$balanco_entr}}
+                            Entrada: {{'R$' .number_format($balanco_entr, 2,',', '.')}}
                             <div>
-                                Saída: {{$balanco_saida}}
+                                Saída: {{'R$' .number_format($balanco_saida, 2,',', '.')}}
                             </div>
                             <div>
                                 @php
                                 if ( empty($cashflow) ) { 
-                                    echo 'Final:'.$soma;
+                                    echo 'Final: R$'.number_format($soma, 2,',', '.');
                                 }    
                                 @endphp
                             </div>

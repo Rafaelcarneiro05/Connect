@@ -5,10 +5,12 @@ namespace App\Http\Livewire\Financial;
 use App\Models\Financial;
 use Livewire\Component;
 
-use function Ramsey\Uuid\v1;
+
 
 class FinancialFlow extends Component
 {
+
+
 
     public $cashflow = 'entrada';
     public $saida = 'despesas';
@@ -21,6 +23,11 @@ class FinancialFlow extends Component
     public $cotacaoEmBRL;
     public $taxa;
     public $fracao;
+    public $brl;
+
+
+
+
 
 
     public function entrada()
@@ -31,21 +38,17 @@ class FinancialFlow extends Component
 
     public function saida()
     {
-        if ($this->cashflow == 'saida') {
-            $this->validate([
-                'descricao' => 'string'
-            ]);
-        }
+
     }
 
 
-    //VALIDAÇÃO MODEDAS 
+
+
+
 
     public function store()
 
     {
-
-
 
         //converte valor do formato 15.120,00 para 15120.00
 
@@ -73,16 +76,36 @@ class FinancialFlow extends Component
         $this->emit(event: 'save');
     }
 
+    public function updatedMoeda()
+    {
+        if ($this->moeda == 'brl') {
+            $this->nomeMoeda = 'real';
+            $this->cotacaoMoeda = 1;
+        } elseif ($this->moeda == 'usdt') {
+            $this->nomeMoeda = 'dólar';
+            $this->cotacaoMoeda = 5;
+        } elseif ($this->moeda == 'euro') {
+            $this->nomeMoeda = 'euro';
+            $this->cotacaoMoeda = 10;
+        } elseif ($this->moeda == 'bnb') {
+            $this->nomeMoeda = 'binance';
+            $this->cotacaoMoeda = 2000;
+        } elseif ($this->moeda == 'btc') {
+            $this->nomeMoeda = 'bitcoin';
+            $this->cotacaoMoeda = 10000;
+        }
 
+    }
 
     public function render()
     {
 
+       // $this->emit('carregarJQUERY');
 
         //faz requisição HTTP get à Tatum API, na carteira Wallet-Xpud, solicitando um endereço na Blockchain , considerando a tatum_seed
         //faz requisição HTTP get à Tatum API, na carteira Wallet-Xpud, solicitando um endereço na Blockchain , considerando a tatum_seed
 
-        $HttpClient = new \GuzzleHttp\Client(['verify' => false]);
+        /*$HttpClient = new \GuzzleHttp\Client(['verify' => false]);
 
 
 
@@ -95,7 +118,7 @@ class FinancialFlow extends Component
         //consulta configurações do COINMARKETCAP
         $coinmarketcap_settings = CoinmarketcapConfiguracoes::first();
 
-        try {
+        try{
 
             $returned__ = $HttpClient->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BTC&convert=BRL', [
                 'headers' => [
@@ -117,7 +140,7 @@ class FinancialFlow extends Component
             return redirect()->route('site.forma.de.pagamento')->withErrors([
                 'api_tatum_indisponivel_ou_credenciais_invalidas' => trans('site.api_tatum_indisponivel_ou_credenciais_invalidas')
             ]);
-        }
+        }*/
 
 
         return view('livewire.financial.financial-flow');

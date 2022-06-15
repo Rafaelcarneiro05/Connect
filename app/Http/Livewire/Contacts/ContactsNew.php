@@ -122,7 +122,7 @@ class ContactsNew extends Component
             'newUser.sort_code' => 'required|string',
             'cep' => 'required|min:8',
             'endereco' => 'required',
-            'bairro' => 'requirede',
+            'bairro' => 'required',
             'complemento' => 'nullable',
             'cidade' => 'required',
             'estado' => 'required',

@@ -16,11 +16,13 @@ class ContactItem extends Component
 
     public function edit(User $contact)
     {
-        $this->clearValidation(); 
+        $this->clearValidation();
 
         $this->updating = true;
 
         $this->contact = $contact;
+
+
     }
 
     public function update()
@@ -32,6 +34,8 @@ class ContactItem extends Component
         $this->updating = false;
 
         $this->emit(event: 'refreshList');
+
+
     }
 
     public function confirmDeletion(User $contact)
@@ -54,27 +58,28 @@ class ContactItem extends Component
 
     public function render()
     {
+
         return view(view: 'contacts.contact-item');
     }
 
     public function rules()
     {
         return [
-            'contact.name' => 'required|string',
-            'contact.email' => 'required|email',
-            'contact.password' => 'required|string|min:6|max:12',
-            'contact.phone' => 'required|string|min:8',
-            'contact.address' => 'required|string',
-            'contact.birth_date' => 'required|date',
-            'contact.cpf' => 'required|string',
-            'contact.bank_account' => 'required|string',
-            'contact.sort_code' => 'required|string',
-            'contact.cep' => 'required|string|min:8',
-            'contact.endereco' => 'required|string|',
-            'contact.bairro' => 'required|string|',
+            'contact.name' => 'string',
+            'contact.email' => 'email',
+            'contact.password' => 'string|min:6|max:12',
+            'contact.phone' => 'string|min:8',
+
+            'contact.birth_date' => 'date',
+            'contact.cpf' => 'string',
+            'contact.bank_account' => 'string',
+            'contact.sort_code' => 'string',
+            'contact.cep' => 'string|min:8',
+            'contact.endereco' => 'string|',
+            'contact.bairro' => 'string|',
             'contact.complemento' => 'nullable|string|',
-            'contact.cidade' => 'required|string|',
-            'contact.estado' => 'required|string|',
+            'contact.cidade' => 'string|',
+            'contact.estado' => 'string|',
         ];
     }
 }

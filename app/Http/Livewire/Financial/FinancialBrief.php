@@ -75,7 +75,6 @@ class FinancialBrief extends Component
         $this->brl = $financial->brl;
 
         $this->openModal();
-
     }
 
 
@@ -95,7 +94,6 @@ class FinancialBrief extends Component
     {
 
         $this->reset();
-
     }
 
 
@@ -110,7 +108,7 @@ class FinancialBrief extends Component
 
 
 
-        Financial::updateOrCreate(['id' => $this->financial_id],[
+        Financial::updateOrCreate(['id' => $this->financial_id], [
             'cashflow' => $this->FIELD_cashflow,
             'value' => $valor_tratado,
             'saida' => $this->saida,
@@ -132,17 +130,21 @@ class FinancialBrief extends Component
         session()->flash('message', 'Item registrado com sucesso.');
 
         $this->closeModal();
-
-
-
     }
 
 
+    public $confirmingItemDeletion = false;
 
+    public function confirmingItemDeletion($id)
+    {
+        $this->confirmingItemDeletion = $id;
+    }
 
     public function destroy($id)
     {
+
         Financial::find($id)->delete();
+        $this->confirmingItemDeletion = false;
         session()->flash('message', 'Item deletado com sucesso.');
     }
 
@@ -174,29 +176,25 @@ class FinancialBrief extends Component
             $where[] = ['created_at', '>=',   $from_explodido];
         }
 
-        $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [ $this->cashflow ];
+        $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [$this->cashflow];
 
 
-        $this->financials = Financial::where($where)->whereIn('cashflow', $filter)->orderBy('created_at','desc')->paginate(10);
+        $this->financials = Financial::where($where)->whereIn('cashflow', $filter)->orderBy('created_at', 'desc')->paginate(10);
 
 
 
 
 
-        if( $this->cashflow == 'entrada')
-        {
+        if ($this->cashflow == 'entrada') {
             $this->balanco_entr = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
             $this->balanco_saida = '0';
-        }elseif($this->cashflow == 'saida')
-        {
+        } elseif ($this->cashflow == 'saida') {
             $this->balanco_saida = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
             $this->balanco_entr = '0';
-        }else
-        {
-            $this->balanco_entr = Financial::where($where)->whereIn('cashflow',['entrada'])->sum('value');
-            $this->balanco_saida = Financial::where($where)->whereIn('cashflow',['saida'])->sum('value');
+        } else {
+            $this->balanco_entr = Financial::where($where)->whereIn('cashflow', ['entrada'])->sum('value');
+            $this->balanco_saida = Financial::where($where)->whereIn('cashflow', ['saida'])->sum('value');
             $this->soma = $this->balanco_entr - $this->balanco_saida;
-
         }
 
 
@@ -204,7 +202,7 @@ class FinancialBrief extends Component
 
 
         return view('livewire.financial.financial-brief', [
-           // 'financials' => $financials,
+            // 'financials' => $financials,
             'financials_retorno' =>  $this->financials
             //dd($financials),
 

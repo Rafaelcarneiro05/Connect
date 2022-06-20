@@ -11,7 +11,11 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        {{-- <link href="{{ mix('css/app.css') }}" rel='stylesheet'> --}}
+        <script src="{{ url('/js/manifest.js') }}"></script>
+        <script src="{{ url('/js/vendor.js') }}"></script>
+        <script src="{{ mix('/js/app.js') }}"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         @livewireStyles
 
@@ -21,9 +25,9 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
-        
-        <!-- maskMoney e maskedInput -->      
-        <script src="{{ asset('js/Jquery/JQuery.MaskMoney.js') }}"></script> 
+
+        <!-- maskMoney e maskedInput -->
+        <script src="{{ asset('js/Jquery/JQuery.MaskMoney.js') }}"></script>
         <script src="{{ asset('js/Jquery/JQuery.MaskedInput.js') }}"></script>
 
 

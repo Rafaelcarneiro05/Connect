@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between">
     <button
-        class="cursor-pointer ml-6 text-sm text-gray-400 underline focus:outline-none hover:text-text-gray" 
+        class="cursor-pointer ml-6 text-sm text-gray-400 underline focus:outline-none hover:text-text-gray"
         wire:click="edit({{ $contact}})">
         {{__('More Information')}}
     </button>
@@ -25,7 +25,7 @@
 
                 </div>
 
-                
+
                 <div class="col-span-6 sm:col-span-4">
                         <x-jet-label for="contact.email" value="{{ __('E-mail') }}"/>
                         <x-jet-input type="text"
@@ -33,7 +33,7 @@
                                      wire:model.defer="contact.email"
                                      autofocus/>
                         <x-jet-input-error for="contact.email" class="mt-2"/>
-    
+
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
@@ -77,7 +77,7 @@
 
                 </div>
 
-                
+
                 <div class="col-span-6 sm:col-span-4">
                     <x-jet-label for="contact.bairro" value="{{ __('Bairro') }}"/>
                     <x-jet-input type="text"
@@ -151,7 +151,7 @@
 
                 </div>
 
-                
+
                 <div class="col-span-6 sm:col-span-4">
                     <x-jet-label for="contact.sort_code" value="{{ __('Sort code') }}"/>
                     <x-jet-input type="text"
@@ -196,4 +196,3 @@
         </x-slot>
     </x-jet-confirmation-modal>
 </div>
-             

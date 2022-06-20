@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Facade;
 return [
     'cashflow' => ['entrada', 'saida'],
 
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

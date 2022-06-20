@@ -8,25 +8,15 @@
       <!-- This element is to trick the browser into centering the modal contents. -->
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
 
-      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
 
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 block mr-auto ml-auto">
 
 
 
 
                 <!-- CONTEUDO DA MODAL -->
                 <div>
-
-                    <x-jet-section-border/>
-
-                        <div class="md:grid md:grid-cols-3 md:gap-6">
-                            <x-jet-section-title>
-                                <x-slot name="title">{{ __('Cash Flow') }} </x-slot>
-                                <x-slot name="description">{{ __('Cash Basis.')}}</x-slot>
-                            </x-jet-section-title>
-
-
                             <div class="mt-5 md:mt-0 md:col-span-2">
                                 <form> <!-- wire:submit.prevent="store"-->
 
@@ -89,34 +79,35 @@
                                                     </div>
                                                 @endif
                                                 @if($moeda == 'usdt')
-                                                <div class="col-span-6 sm:col-span-4">
-                                                    <div>
-                                                        <label for="">Fração em dollar:</label>
-                                                        <input wire:model.defer="fracao" type="text" class="mascara_fracao">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Cotação do dia Dollar:</label>
-                                                        <input wire:model.defer="cotacaoEmBRL" type="text" class="value_valor">
+                                                    <div class="col-span-6 sm:col-span-4">
+                                                        <div>
+                                                            <label for="">Fração em dollar:</label>
+                                                            <input wire:model.defer="fracao" type="text" class="mascara_fracao">
+                                                        </div>
                                                         <br>
-                                                        Exemplo: 1 USD = R$ 5,00
+                                                        <div>
+                                                            <label for="">Cotação do dia Dollar:</label>
+                                                            <input wire:model.defer="cotacaoEmBRL" type="text" class="value_valor">
+                                                            <br>
+                                                            Exemplo: 1 USD = R$ 5,00
+                                                        </div>
+                                                        <br>
+                                                        <div>
+                                                            <label for="">Fonte:</label>
+                                                            <input wire:model.defer="fonte" type="text">
+                                                        </div>
+                                                        <br>
+                                                        <div >
+                                                            <label for="">Observação:</label>
+                                                            <input wire:model.defer="observacao" type="text">
+                                                        </div>
+                                                        <br>
+                                                        <div>
+                                                            <label for="">Taxa de Transação:</label>
+                                                            <input wire:model.defer="taxa" type="text">
+                                                        </div>
                                                     </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Fonte:</label>
-                                                        <input wire:model.defer="fonte" type="text">
-                                                    </div>
-                                                    <br>
-                                                    <div >
-                                                        <label for="">Observação:</label>
-                                                        <input wire:model.defer="observacao" type="text">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Taxa de Transação:</label>
-                                                        <input wire:model.defer="taxa" type="text">
-                                                    </div>
-                                            @endif
+                                                @endif
 
                                             @if($moeda == 'euro')
                                                 <div class="col-span-6 sm:col-span-4">
@@ -215,7 +206,7 @@
                                                 </div>
                                             @endif
 
-
+                                        </div>
 
 
                                             @if($cashflow == 'saida')
@@ -248,7 +239,7 @@
                                                     </div>
                                                 </div>
                                             @endif
-                                        </div>
+
                                         <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA -->
 
 
@@ -268,20 +259,7 @@
                                             @endif
 
 
-                                            <!--
-                                            <div class="col-span-6 sm:col-span-4">
-                                                <div class="flex items-center justify-between px-4 py-3 bg-gray-50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-                                                    <x-jet-action-message class="mr-3" on="save">
-                                                        {{ __('Save Successfully') }}
-                                                    </x-jet-action-message>
 
-
-                                                    <x-jet-button>
-                                                        {{ __('Save') }}
-                                                    </x-jet-button>
-                                                </div>
-                                            </div>
-                                        -->
 
                         </div>
 

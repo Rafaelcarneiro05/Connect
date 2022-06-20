@@ -64,29 +64,21 @@
                                             <td>{{$financial->descricao}}</td>
                                             <td>{{date('d/m/Y',strtotime($financial->data))}}</td>
                                             <td>
-                                                <button
+                                                <x-jet-button
                                                     class=""
                                                     wire:click="edit({{ $financial->id }})">
                                                     {{__('Edit')}}
-                                                </button>
-                                                <button
+                                                </x-jet-button>
+                                                <x-jet-danger-button type="button"
                                                     class=""
-                                                    wire:click="destroy({{ $financial->id }})">
+                                                    wire:click="confirmingItemDeletion({{ $financial->id }})">
                                                     {{__('Delete')}}
-                                                </button>
+                                                </x-jet-danger-button>
                                         </td>
-
-
                                         </tr>
-
-
                                     @endforeach
-
                                 </tbody>
                             </table>
-
-
-
                         </div>
                         <div wire>
                             Entrada: {{'R$' .number_format($balanco_entr, 2,',', '.')}}
@@ -106,7 +98,27 @@
 
 
         </x-jet-action-section>
+            <!-- Delete User Confirmation Modal -->
+        <x-jet-dialog-modal wire:model="confirmingItemDeletion">
+            <x-slot name="title">
+                {{ __('Apagar?') }}
+            </x-slot>
 
+            <x-slot name="content">
+                {{ __('Você tem certeza que deseja apagar esse item?') }}
+
+            </x-slot>
+
+            <x-slot name="footer">
+                <x-jet-secondary-button wire:click="$set('confirmingItemDeletion', false)" wire:loading.attr="disabled">
+                    {{ __('Cancelar') }}
+                </x-jet-secondary-button>
+
+                <x-jet-danger-button class="ml-3" wire:click="destroy({{ $confirmingItemDeletion }})" wire:loading.attr="disabled">
+                    {{ __('Apagar') }}
+                </x-jet-danger-button>
+            </x-slot>
+        </x-jet-dialog-modal>
     </div>
     {{ $financials_retorno->links() }}
-</div>
+

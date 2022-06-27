@@ -16,6 +16,11 @@ class ContactList extends Component
 
     use WithPagination;
 
+
+    public $search;
+
+    protected $queryString = ['search'];
+
     protected $listeners = ['refreshList' => '$refresh'];
 
 
@@ -27,7 +32,10 @@ class ContactList extends Component
 
     public function render()
     {
-        return view('contacts.contact-list'
-        );
+
+        return view('contacts.contact-list',[
+            'users' => User::where('name', 'like', '%'.$this->search.'%')->get(),
+        ]);
+
     }
 }

@@ -11,7 +11,7 @@
     @endif
     <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded my-3">Cadastrar Novo item</button>
     @if($isOpen)
-        @include('livewire.financial.financial-flow')
+        @include('livewire.people.employee-register')
     @endif
 
 

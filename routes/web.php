@@ -19,11 +19,15 @@ Route::get('/', function () {
 });
 Route::resource('/admin/users', AuthController::class);
 
+
+// ********************************************************************************************************
+// ROTAS DO MODLO financial
+// ********************************************************************************************************
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
-])->group(function () {  
+])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -46,3 +50,38 @@ Route::middleware([
         return view('livewire/working-day/register-working-day');
     })->name('register-day');
 });
+
+// ********************************************************************************************************
+// ********************************************************************************************************
+
+
+
+
+
+
+
+
+// ********************************************************************************************************
+// ROTAS DO MODLO PEOPLE
+// ********************************************************************************************************
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+
+
+    //ROTA QUE ABRE A VIEW MODULE, QUE POR SUA VEZ CHAMA O COMPONENTE LIVEWIRE
+    Route::get('/people/employee-module', function (){
+        return view('livewire/people/employee-module');
+    })->name('employee-module');
+
+
+
+
+});
+
+
+// ********************************************************************************************************
+// ********************************************************************************************************
+

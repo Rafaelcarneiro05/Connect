@@ -36,11 +36,8 @@
                                     {{ __('Manage Employee') }}
                                 </div>
 
-                                <x-jet-dropdown-link href="{{ route('contacts-new') }}">
-                                    {{ __('Register') }}
-                                </x-jet-dropdown-link>
-                                <x-jet-dropdown-link href="{{ route('contacts-list') }}">
-                                    {{ __('All Employees') }}
+                                <x-jet-dropdown-link href="{{ route('employee-module') }}">
+                                    {{ __('Employees') }}
                                 </x-jet-dropdown-link>
                             </x-slot>
                         </x-jet-dropdown>

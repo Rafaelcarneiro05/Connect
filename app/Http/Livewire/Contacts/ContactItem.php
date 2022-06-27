@@ -65,21 +65,20 @@ class ContactItem extends Component
     public function rules()
     {
         return [
-            'contact.name' => 'string',
-            'contact.email' => 'email',
-            'contact.password' => 'string|min:6|max:12',
-            'contact.phone' => 'string|min:8',
-
-            'contact.birth_date' => 'date',
-            'contact.cpf' => 'string',
-            'contact.bank_account' => 'string',
-            'contact.sort_code' => 'string',
-            'contact.cep' => 'string|min:8',
-            'contact.endereco' => 'string|',
-            'contact.bairro' => 'string|',
+            'contact.name' => 'nullable|string',
+            'contact.email' => 'nullable|email',
+            'contact.password' => 'nullable|string|min:6',
+            'contact.phone' => 'nullable|string|min:8',
+            'contact.birth_date' => 'nullable|date',
+            'contact.cpf' => 'nullable|string',
+            'contact.bank_account' => 'nullable|string',
+            'contact.sort_code' => 'nullable|string',
+            'contact.cep' => 'nullable|string|min:8',
+            'contact.endereco' => 'nullable|string|',
+            'contact.bairro' => 'nullable|string|',
             'contact.complemento' => 'nullable|string|',
-            'contact.cidade' => 'string|',
-            'contact.estado' => 'string|',
+            'contact.cidade' => 'nullable|string|',
+            'contact.estado' => 'nullable|string|',
         ];
     }
 }

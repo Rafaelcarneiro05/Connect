@@ -1,14 +1,13 @@
-<div class="flex items-center justify-between">
-    <button
-        class="cursor-pointer ml-6 text-sm text-gray-400 underline focus:outline-none hover:text-text-gray"
+<div class="overflow-x-auto">
+    <x-jet-button
         wire:click="edit({{ $contact}})">
-        {{__('More Information')}}
-    </button>
+        {{__('Edit')}}
+    </x-jet-button>
 
-    <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+    <x-jet-danger-button type="button"
             wire:click="confirmDeletion({{ $contact }})">
         {{ __('Delete')}}
-    </button>
+    </x-jet-danger-button>
 
     <x-jet-dialog-modal wire:model="updating">
         <x-slot name="title"> {{ __('Details & Edit') }}</x-slot>

@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\Financial;
+namespace App\Http\Livewire\People;
 
-use App\Models\Financial;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class FinancialBrief extends Component
+//  MODELS UTILIZADAS
+use App\Models\Financial;
+
+
+
+
+class Employee extends Component
 {
-
-
     public $updateMode = false;
 
     //TELA DE PESQUISA
@@ -241,7 +243,7 @@ class FinancialBrief extends Component
 
 
 
-        return view('livewire.financial.financial-brief', [
+        return view('livewire.people.employee', [
 
             'financials_retorno' =>  $this->financials,
 
@@ -251,4 +253,5 @@ class FinancialBrief extends Component
 
         ]);
     }
+
 }

@@ -2,7 +2,13 @@
 
 namespace App\Http\Livewire\Financial;
 
+//models utilizadas
+
+use App\Http\Livewire\Empresas\EmpresasCreate;
 use App\Models\Financial;
+use App\Models\Empresas;
+
+
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,8 +19,17 @@ class FinancialBrief extends Component
 
     public $updateMode = false;
 
+    //EMPRESA
+    public $empresa;
+    public $empresas;
+    public $empresas_id;
+
+
+
     //TELA DE PESQUISA
     use WithPagination;
+
+    //public $financials;
 
     public $cashflow = 'entrada';
     public $from;
@@ -46,13 +61,11 @@ class FinancialBrief extends Component
     public $brl;
 
 
-    protected $financials;
 
     public function create() //abrir modal para cadastro ----
     {
         $this->resetInputFields();
         $this->openModal();
-
     }
 
 
@@ -75,6 +88,7 @@ class FinancialBrief extends Component
         $this->taxa = $financial->taxa;
         $this->fracao = $financial->fracao;
         $this->brl = $financial->brl;
+        $this->empresas_id = $financial->empresas_id;
 
         $this->openModal();
     }
@@ -96,13 +110,13 @@ class FinancialBrief extends Component
     {
 
         $this->reset();
-
     }
 
 
     public function store()  //PROCESSAMENTO do cadastrar ou editar: updateOrCreate
 
     {
+
 
         //converte valor do formato 15.120,00 para 15120.00
 
@@ -114,8 +128,7 @@ class FinancialBrief extends Component
 
         //TAXA
         $taxa_tratada = null;
-        if($this->taxa)
-        {
+        if ($this->taxa) {
             $taxa_tratada = str_replace('.', '', $this->taxa);
             $taxa_tratada = str_replace(',', '.', $taxa_tratada);
             $taxa_tratada = str_replace('R$', '', $taxa_tratada);
@@ -124,8 +137,7 @@ class FinancialBrief extends Component
 
         //FRACAO
         $fracao_tratada = null;
-        if($this->fracao)
-        {
+        if ($this->fracao) {
             $fracao_tratada = str_replace('.', '', $this->fracao);
             $fracao_tratada = str_replace(',', '.', $fracao_tratada);
         }
@@ -133,8 +145,7 @@ class FinancialBrief extends Component
 
         //COTACAO
         $cotacao_tratada = null;
-        if($this->cotacaoEmBRL)
-        {
+        if ($this->cotacaoEmBRL) {
             $cotacao_tratada = str_replace('.', '', $this->cotacaoEmBRL);
             $cotacao_tratada = str_replace(',', '.', $cotacao_tratada);
             $cotacao_tratada = str_replace('R$', '', $cotacao_tratada);
@@ -145,6 +156,7 @@ class FinancialBrief extends Component
         //EDIÇÃO OU CRIAÇÃO updateOrCreate
 
         Financial::updateOrCreate(['id' => $this->financial_id], [
+            'empresas_id' => $this->empresas_id,
             'cashflow' => $this->cashflow,
             'value' => $valor_tratado,
             'saida' => $this->saida,
@@ -185,14 +197,28 @@ class FinancialBrief extends Component
     }
 
 
-
-
     public function render()
     {
+        //SELECT EMPRESAS
+
+        $this->empresas = Empresas::get();
+
+
+
 
         //BUSCAR DATA -- SOMA ENTRADA E SAIDA
+        /*$empresas_find = DB::table('empresas')
+                            ->join('financials', 'empresas.id', '=', 'financials.empresas_id')
+                            ->select('empresas.*', 'financials.*')
+                            ->get();*/
+
 
         $where = [];
+
+        if ($this->empresa) {
+
+            $where[] = ['empresas_id', '=', $this->empresa];
+        }
 
 
 
@@ -214,10 +240,14 @@ class FinancialBrief extends Component
             $where[] = ['created_at', '>=',   $from_explodido];
         }
 
+
         $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [$this->cashflow];
 
 
-        $this->financials = Financial::where($where)->whereIn('cashflow', $filter)->orderBy('data', 'desc')->paginate(10);
+
+
+
+        $financials_retorno = Financial::where($where)->whereIn('cashflow', $filter)->orderBy('data', 'desc')->paginate(10);
 
 
 
@@ -229,8 +259,7 @@ class FinancialBrief extends Component
         } elseif ($this->cashflow == 'saida') {
             $this->balanco_saida = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
             $this->balanco_entr = '0';
-        }
-        else {
+        } else {
             $this->balanco_entr = Financial::where($where)->whereIn('cashflow', ['entrada'])->sum('value');
             $this->balanco_saida = Financial::where($where)->whereIn('cashflow', ['saida'])->sum('value');
             $this->balanco_taxa = Financial::where($where)->sum('taxa');
@@ -238,12 +267,12 @@ class FinancialBrief extends Component
         }
 
 
-
-
-
         return view('livewire.financial.financial-brief', [
 
-            'financials_retorno' =>  $this->financials,
+            'financials_retorno' => $financials_retorno,
+
+
+
 
 
 

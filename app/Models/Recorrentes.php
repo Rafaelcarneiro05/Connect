@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Financial extends Model
+class Recorrentes extends Model
 {
     use HasFactory;
 
-
-    public $table = 'financials';
+    public $table = 'recorrente';
     public $timestamps = true;
 
 
-    protected $guarded = [];
 
+    protected $guarded = [];
 }

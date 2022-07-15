@@ -21,7 +21,7 @@ Route::resource('/admin/users', AuthController::class);
 
 
 // ********************************************************************************************************
-// ROTAS DO MODLO financial
+// ROTAS DO MODULO financial
 // ********************************************************************************************************
 Route::middleware([
     'auth:sanctum',
@@ -49,6 +49,18 @@ Route::middleware([
     Route::get('/working-day/register-day', function () {
         return view('livewire/working-day/register-working-day');
     })->name('register-day');
+
+    //EMPRESAS//EMPRESAS//EMPRESAS
+    Route::get('/financial/empresas', function () {
+        return view('livewire/empresas/list-empresas');
+    })->name('list-empresa');
+
+    //RECORRENTES//RECORRENTES//RECORRENTES
+    Route::get('/financial/recorrentes', function () {
+        return view('livewire/recorrentes/list-recorrentes');
+    })->name('list-recorrentes');
+
+
 });
 
 // ********************************************************************************************************
@@ -62,7 +74,7 @@ Route::middleware([
 
 
 // ********************************************************************************************************
-// ROTAS DO MODLO PEOPLE
+// ROTAS DO MODULO PEOPLE
 // ********************************************************************************************************
 Route::middleware([
     'auth:sanctum',

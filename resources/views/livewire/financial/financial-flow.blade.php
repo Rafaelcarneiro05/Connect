@@ -24,6 +24,18 @@
                                         <div class="grid grid-cols-6 gap-6">
 
                                             <div class="col-span-6 sm:col-span-4">
+                                                <label for="">Selecione a Empresa</label>
+                                                <select wire:model.defer="empresas_id" class="border-2 border-neutral-500 rounded">
+                                                    <option disabled >Selecione uma opção</option>
+                                                    <option value="">Nenhuma</option>
+                                                        @foreach($empresas as $empresa)
+                                                            <option  name="" value="{{$empresa->id}}"> {{$empresa->name}}</option>
+
+                                                        @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-span-6 sm:col-span-4">
                                                 <div class="form-control">
                                                     <label> Selecione o tipo de operação:</label>
                                                     <select wire:model="cashflow" class="border-2 border-neutral-500 rounded">
@@ -33,9 +45,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-
-
-
 
                                             <br>
                                             <div class="col-span-6 sm:col-span-4">
@@ -205,7 +214,7 @@
                                                             <div >
                                                                 <label for="descricao">Descrição do gasto:</label>
                                                             <div>
-                                                                <textarea class="w-full h-20 border-2 border-neutral-500 rounded" name="" id="" cols="100" rows="15"></textarea>
+                                                                <textarea class="w-full h-20 border-2 border-neutral-500 rounded" name="" id="" cols="100" rows="15" wire:model.defer="descricao"></textarea>
                                                             </div>
                                                             <br>
                                                         </div>

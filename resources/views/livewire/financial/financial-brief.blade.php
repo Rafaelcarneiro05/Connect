@@ -37,9 +37,18 @@
                                 <option value="entrada">Entrada</option>
                                 <option value="saida">Saída</option>
                             </select>
-                        </div>
-                    </div>
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="">Selecione a Empresa</label>
+                                <select wire:model="empresa" class="border-2 border-neutral-500 rounded">
+                                    <option disabled >Selecione uma opção</option>
+                                    <option value="">Nenhuma</option>
+                                        @foreach($empresas as $empresa)
+                                            <option value="{{$empresa->id}}"> {{$empresa->name}}</option>
 
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="overflow-x-auto">
                             <table class="table-fixed w-full">
@@ -48,16 +57,25 @@
                                         <th>Natureza</th>
                                         <th>Valor</th>
                                         <th>Data</th>
+                                        <th>Empresa</th>
                                     </tr>
                                 </thead>
                                 <tbody align="center">
                                     @foreach ($financials_retorno as $financial)
-
-
+                                    @php
+                                        $nome_empresa = '';
+                                        if(!is_null($financial->empresas_id)){
+                                            $empresa_to = DB::table('empresas')->where('id', '=', $financial->empresas_id)->first();
+                                            $nome_empresa = $empresa_to->name;
+                                        }
+                                    @endphp
                                         <tr>
+
                                             <td class="border border-slate-300">{{$financial->cashflow}} </td>
                                             <td class="border border-slate-300">{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
                                             <td class="border border-slate-300">{{date('d/m/Y',strtotime($financial->data))}}</td>
+                                            <td class="border border-slate-300">{{$nome_empresa}}</td>
+
                                             <td>
                                                 <x-jet-button
                                                     class=""
@@ -72,6 +90,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -94,8 +113,8 @@
                                 @endphp
                             </div>
                         </div>
-
             </x-slot>
+
 
 
         </x-jet-action-section>
@@ -122,4 +141,3 @@
         </x-jet-dialog-modal>
     </div>
     {{ $financials_retorno->links() }}
-

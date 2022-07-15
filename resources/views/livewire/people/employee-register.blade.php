@@ -18,231 +18,188 @@
                 <!-- CONTEUDO DA MODAL -->
                 <div>
                             <div class="mt-5 md:mt-0 md:col-span-2">
-                                <form> <!-- wire:submit.prevent="store"-->
+                                <form> <!-- (FORMULARIO COM CAMPOS) wire:submit.prevent="store"-->
 
                                     <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
-                                        <div class="grid grid-cols-6 gap-6">
+                                        <div class="grid grid-cols-6 gap-6">     
 
-                                            <div class="col-span-6 sm:col-span-4">
-                                                <div class="form-control">
-                                                    <label> Selecione o tipo de operação:</label>
-                                                    <select wire:model="cashflow" class="border-2 border-neutral-500 rounded">
-                                                        <option disabled >Selecione uma opção</option>
-                                                        <option value="entrada">Entrada</option>
-                                                        <option value="saida">Saída</option>
-                                                    </select>
-                                                </div>
+                                        
+                                    <!-- campos -->
+                                    <div class="col-span-6 sm:col-span-4">
+                                             <div class="form-control">
+                                                <label> Nome:</label>
+                                                <input wire:model.defer="nome" type="text" class="border-2 border-neutral-500 rounded">
                                             </div>
+                                    </div>
 
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Email:</label>
+                                                <input wire:model.defer="email" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
 
+                                    <div class="col-span-6 sm:col-span-4">
+                                             <div class="form-control">
+                                                <label> Senha:</label>
+                                                <input wire:model.defer="senha" type="password" class="border-2 border-neutral-500 rounded" value="">
+                                            </div>
+                                    </div>
 
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Cep:</label>
+                                                <input wire:model.deboundance.800ms="cep" onchange="@this.set('cep', this.value);" type="text" class="mask_cep border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
 
-                                            <br>
-                                            <div class="col-span-6 sm:col-span-4">
-                                                <label for="">Moeda</label>
-                                                <select wire:model="moeda" class="border-2 border-neutral-500 rounded">
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Endereço:</label>
+                                                <input wire:model.defer="endereco" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                     <div class="col-span-6 sm:col-span-4">
+                                             <div class="form-control">
+                                                <label> Bairro:</label>
+                                                <input wire:model.defer="bairro" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Complemento:</label>
+                                                <input wire:model.defer="complemento" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Cidade:</label>
+                                                <input wire:model.defer="cidade" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Estado:</label>
+                                                <input wire:model.defer="estado" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                     </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Perfil:</label>
+                                                <select wire:model="role" class="border-2 border-neutral-500 rounded pppppp"> 
                                                     <option disabled >Selecione uma opção</option>
-                                                    <option value="brl">BRL</option>
-                                                    <option value="usdt">USDT</option>
-                                                    <option value="euro">EURO</option>
-                                                    <option value="bnb">BNB</option>
-                                                    <option value="btc">BTC</option>
-
+                                                    <option value="admin">Administrador</option>
+                                                    <option value="user">Colaborador</option>
                                                 </select>
                                             </div>
-                                            <br>
-                                            <div class="col-span-6 sm:col-span-4">
-                                                <div>
-                                                    <label for="valor">Valor</label>
-                                                    <input id="valor" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="valor" onchange="@this.set('valor', this.value);" />
-                                                </div>
+                                    </div>
+
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Telefone:</label>
+                                                <input wire:model.deboundance.800ms="telefone" onchange="@this.set('telefone', this.value);" type="text" class="mask_telefone border-2 border-neutral-500 rounded">
                                             </div>
-                                            <br>
+                                    </div>
 
-                                                @if($moeda == 'brl')
-                                                    <div class="col-span-6 sm:col-span-4">
-                                                        <div>
-                                                            <label >Fonte:</label>
-                                                            <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                        <br>
-                                                        <div >
-                                                            <label >Observação:</label>
-                                                            <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                @endif
-                                                @if($moeda == 'usdt')
-                                                    <div class="col-span-6 sm:col-span-4">
-                                                        <div>
-                                                            <label for="">Fração em dollar:</label>
-                                                            <input wire:model.deboundance.800ms="fracao" onchange="@this.set('fracao', this.value);" type="text" class="mascara_fracao border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                        <br>
-                                                        <div>
-                                                            <label for="">Cotação do dia Dollar:</label>
-                                                            <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
-                                                            <br>
-                                                            Exemplo: 1 USD = R$ 5,00
-                                                        </div>
-                                                        <br>
-                                                        <div>
-                                                            <label for="">Fonte:</label>
-                                                            <input wire:model="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                        <br>
-                                                        <div >
-                                                            <label for="">Observação:</label>
-                                                            <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                    </div>
-                                                @endif
-
-                                            @if($moeda == 'euro')
-                                                <div class="col-span-6 sm:col-span-4">
-                                                    <div>
-                                                        <label for="">Fração em EURO:</label>
-                                                        <input wire:model.deboundance.800ms="fracao" onchange="@this.set('fracao', this.value);" type="text" class="mascara_fracao border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Cotação do dia Euro:</label>
-                                                        <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
-                                                        <br>
-                                                        Exemplo: 1 € = 5,24 BRL
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Fonte:</label>
-                                                        <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Observação:</label>
-                                                        <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                </div>
-                                            @endif
-
-
-
-                                            @if($moeda == 'bnb')
-                                                <div class="col-span-6 sm:col-span-4">
-                                                    <div>
-                                                        <label for="">Fração de Binance Coin BNB:</label>
-                                                        <input wire:model.deboundance.800ms="fracao" onchange="@this.set('fracao', this.value);" type="text" class="mascara_fracao border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Cotação BNB:</label>
-                                                        <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
-                                                        <br>
-                                                        Exemplo: 1 BNB = 1.420,17 BRL
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Fonte:</label>
-                                                        <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Observação:</label>
-                                                        <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                </div>
-                                            @endif
-
-
-
-                                            @if($moeda == 'btc')
-                                                <div class="col-span-6 sm:col-span-4">
-                                                    <div>
-                                                        <label for="">Fração de Bitcoin BTC:</label>
-                                                        <input type="text" class="mascara_fracao border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="fracao" onchange="@this.set('fracao', this.value);">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Cotação BTC:</label>
-                                                        <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
-                                                        <br>
-                                                        Exemplo: 1 BTC = 144.826,49 BRL
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Fonte:</label>
-                                                        <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Observação:</label>
-                                                        <input wire:model.defer="observacao" type="text" name="" id="" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                            @endif
-
-                                        </div>
-
-
-                                            @if($cashflow == 'saida')
-                                                <div class="col-span-6 sm:col-span-4" id="divsaida">
-                                                    <div class="col-span-6 sm:col-span-4">
-                                                        <div class="form-control">
-                                                            <div>
-                                                                <div>
-                                                                    <label for="">Data</label>
-                                                                    <input wire:model.defer="data" type="date" class="border-2 border-neutral-500 rounded">
-                                                                </div>
-                                                            </div>
-                                                            <br>
-                                                            <div>
-                                                                <label> Selecione a categoria:</label>
-                                                                <select wire:model.defer="saida" class="border-2 border-neutral-500 rounded">
-                                                                    <option disabled >Selecione uma opção</option>
-                                                                    <option value="despesas">Despesas</option>
-                                                                    <option value="custos">Custos</option>
-                                                                    <option value="imobilizados">Imobilizados</option>
-                                                                </select>
-                                                            </div>
-                                                            <div >
-                                                                <label for="descricao">Descrição do gasto:</label>
-                                                            <div>
-                                                                <textarea class="w-full h-20 border-2 border-neutral-500 rounded" name="" id="" cols="100" rows="15"></textarea>
-                                                            </div>
-                                                            <br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                            <br>
-                                            <div class="col-span-6 sm:col-span-4">
-                                                <div>
-                                                    <label for="taxa">Taxa de Transação:</label>
-                                                    <input id="taxa" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="taxa" onchange="@this.set('taxa', this.value);">
-                                                </div>
+                                     <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Data de Nascimento:</label>
+                                                <input wire:model.defer="data_nasc" type="date" class="border-2 border-neutral-500 rounded">
                                             </div>
+                                    </div>
 
+                                    <div class="col-span-6 sm:col-span-4">
+                                             <div class="form-control">
+                                                <label> CPF:</label>
+                                                <input wire:model.deboundance.800ms="cpf" onchange="@this.set('cpf', this.value);" type="text" class="mask_cpf border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
 
-                                        <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA -->
+                                    <div class="col-span-6 sm:col-span-4">
+                                             <div class="form-control">
+                                                <label> Conta Bancaria:</label>
+                                                <input wire:model.defer="conta" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
 
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Codigo do Banco:</label>
+                                                <input wire:model.defer="codigo_bank" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
 
-                                            @if($cashflow == 'entrada')
-                                                <div class="col-span-6 sm:col-span-4" id="diventrada">
-                                                    <div class="form-control">
-                                                        <div>
-                                                            <div>
-                                                                <label for="">Data</label>
-                                                                <input wire:model.defer="data" type="date" class="border-2 border-neutral-500 rounded">
-                                                            </div>
-                                                        </div>
-                                                        <br>
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> RG:</label>
+                                                <input wire:model.defer="rg" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
 
-                                                    </div>
-                                                </div>
-                                            @endif
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Pix:</label>
+                                                <input wire:model.defer="pix" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Escolaridade:</label>
+                                                <input wire:model.defer="escolaridade" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> CNPJ:</label>
+                                                <input wire:model.deboundance.800ms="cnpj" onchange="@this.set('cnpj', this.value);" type="text" class="mask_cnpj border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Nacionalidade:</label>
+                                                <input wire:model.defer="nacionalidade" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Estado Civil:</label>
+                                                <select wire:model="estado_civil" class="border-2 border-neutral-500 rounded pppppp"> 
+                                                    <option disabled >Selecione uma opção</option>
+                                                    <option value="solteiro">Solteiro</option>
+                                                    <option value="casado">Casado</option>
+                                                </select>
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Sexo:</label>
+                                                <select wire:model="sexo" class="border-2 border-neutral-500 rounded pppppp"> 
+                                                    <option disabled >Selecione uma opção</option>
+                                                    <option value="masculino">Masculino</option>
+                                                    <option value="feminino">Feminino</option>
+                                                </select>
+                                            </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                            <div class="form-control">
+                                                <label> Tamanho da Roupa (Uniforme):</label>
+                                                <input wire:model.defer="tamanho_roupa" type="text" class="border-2 border-neutral-500 rounded">
+                                            </div>
                                     </div>
                                 </form>
                             </div>
-
-
 
                                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                     <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
@@ -261,18 +218,16 @@
 
 
                 </div>
-                <script type="text/javascript">
-                    $(".value_valor").maskMoney({prefix: "R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
-                    $(".value_valor_transacao").maskMoney({prefix: "R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
-                    $(".mascara_fracao").maskMoney({affixesStay: true, decimal:",", thousands:"", allowZero: false, allowNegative: false});
+                <!-- máscara nos campos -->
+                <script type="text/javascript">                    
+
+                    $(".mask_cpf").mask('999.999.999-99');
+                    $(".mask_cep").mask('99999-999');
+                    $(".mask_telefone").mask('(99) 99999-9999');
+                    $(".mask_cnpj").mask('99.999.999/9999-99');
+
                </script>
-
-
                <!-- conteudo da modal: FIM -->
-
-
-
-
             </div>
 
 

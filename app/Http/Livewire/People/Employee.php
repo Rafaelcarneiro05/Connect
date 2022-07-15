@@ -4,174 +4,154 @@ namespace App\Http\Livewire\People;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 //  MODELS UTILIZADAS
-use App\Models\Financial;
-
-
+use App\Models\User;
 
 
 class Employee extends Component
 {
-    public $updateMode = false;
-
-    //TELA DE PESQUISA
+    //ATRIBUTOS TELA DE PESQUISA
     use WithPagination;
 
-    public $cashflow = 'entrada';
-    public $from;
-    public $to;
-    public $items;
-    public $balanco;
-    public $balanco_entr;
-    public $balanco_saida;
-    public $balanco_taxa;
-    public $soma;
-
-
+    public $searchTerm;
+    public $confirmingItemDeletion = false;
+ 
     //TELA DE CADASTRO/EDIÇÃO
     public $isOpen = 0;
-    public $financial_id;
+    public $user_id;
 
-    public $FIELD_cashflow = 'entrada';
-    public $saida = 'despesas';
-    public $descricao;
-    public $valor;
-    public $moeda = 'brl';
-    public $fonte;
-    public $observacao;
-    public $data;
-    public $cotacaoEmBRL;
-    public $taxa;
-    public $fracao;
+    public $nome;
+    public $email;
+    public $senha;
+    public $cep;
+    public $endereco;
+    public $bairro;
+    public $complemento;
+    public $cidade;
+    public $estado;
+    public $role ='user';
+    public $telefone;
+    public $data_nasc;
+    public $cpf;
+    public $conta;
+    public $codigo_bank;
+    public $rg;
+    public $pix;
+    public $escolaridade;
+    public $cnpj;
+    public $nacionalidade;
+    public $estado_civil = 'solteiro';
+    public $sexo = 'masculino';
+    public $tamanho_roupa;
 
-    public $brl;
-
-
-    protected $financials;
 
     public function create() //abrir modal para cadastro ----
     {
         $this->resetInputFields();
         $this->openModal();
-
     }
-
 
     public function edit($id)   //abrir modal para edicao ----
     {
+        $user = User::find($id); 
+        
+        $this->user_id = $id;
 
-        $financial = Financial::find($id);
-
-        $this->financial_id = $id;
-
-        $this->FIELD_cashflow = $financial->cashflow;
-        $this->saida = $financial->saida;
-        $this->descricao = $financial->descriacao;
-        $this->valor = $financial->value;
-        $this->moeda = $financial->moeda;
-        $this->fonte = $financial->fonte;
-        $this->observacao = $financial->observacao;
-        $this->data = $financial->data;
-        $this->cotacaoEmBRL = $financial->cotacaoEmBRL;
-        $this->taxa = $financial->taxa;
-        $this->fracao = $financial->fracao;
-        $this->brl = $financial->brl;
+        $this->nome = $user->name;
+        $this->email = $user->email;
+        $this->cep = $user->cep;
+        $this->endereco = $user->endereco;
+        $this->bairro = $user->bairro;
+        $this->complemento = $user->complemento;
+        $this->cidade = $user->cidade;
+        $this->estado = $user->estado;
+        $this->role = $user->role;
+        $this->telefone = $user->phone;
+        $this->data_nasc= $user->birth_date;
+        $this->cpf = $user->cpf;
+        $this->conta = $user->bank_account;
+        $this->codigo_bank = $user->sort_code;
+        $this->rg = $user->rg;
+        $this->pix = $user->pix;
+        $this->escolaridade = $user->escolaridade;
+        $this->cnpj = $user->cnpj;
+        $this->nacionalidade = $user->nacionalidade;
+        $this->estado_civil = $user->estado_civil;
+        $this->sexo = $user->sexo;
+        $this->tamanho_roupa = $user->tamanho_roupa;
 
         $this->openModal();
     }
-
-
 
     public function openModal()
     {
         $this->isOpen = true;
     }
 
-
     public function closeModal()
     {
         $this->isOpen = false;
     }
 
-    private function resetInputFields()
+    private function resetInputFields()//reseta os campos
     {
-
         $this->reset();
-
-    }
-
+    }     
 
     public function store()  //PROCESSAMENTO do cadastrar ou editar: updateOrCreate
-
-    {
-
-        //converte valor do formato 15.120,00 para 15120.00
-
-        //VALOR//VALOR//VALOR//VALOR//VALOR//VALOR//VALOR//VALOR//VALOR
-        $valor_tratado = str_replace('.', '', $this->valor);
-        $valor_tratado = str_replace(',', '.', $valor_tratado);
-        $valor_tratado = str_replace('R$', '', $valor_tratado);
-        $valor_tratado = str_replace(' ', '', $valor_tratado);
-
-        //TAXA
-        $taxa_tratada = null;
-        if($this->taxa)
+    {       
+        if($this->user_id)//VERIFICA SE É UPDATE
         {
-            $taxa_tratada = str_replace('.', '', $this->taxa);
-            $taxa_tratada = str_replace(',', '.', $taxa_tratada);
-            $taxa_tratada = str_replace('R$', '', $taxa_tratada);
-            $taxa_tratada = str_replace(' ', '', $taxa_tratada);
+            if(!$this->senha)
+            {
+                $this->senha = DB::table('users')->where('name', $this->nome)->value('password');
+            }
+            else
+            {
+                $this->senha = Hash::make($this->senha);
+            }
         }
-
-        //FRACAO
-        $fracao_tratada = null;
-        if($this->fracao)
+        else
         {
-            $fracao_tratada = str_replace('.', '', $this->fracao);
-            $fracao_tratada = str_replace(',', '.', $fracao_tratada);
+            $this->senha = Hash::make($this->senha);
         }
-
-
-        //COTACAO
-        $cotacao_tratada = null;
-        if($this->cotacaoEmBRL)
-        {
-            $cotacao_tratada = str_replace('.', '', $this->cotacaoEmBRL);
-            $cotacao_tratada = str_replace(',', '.', $cotacao_tratada);
-            $cotacao_tratada = str_replace('R$', '', $cotacao_tratada);
-            $cotacao_tratada = str_replace(' ', '', $cotacao_tratada);
-        }
-
-
+        
         //EDIÇÃO OU CRIAÇÃO updateOrCreate
-
-        Financial::updateOrCreate(['id' => $this->financial_id], [
-            'cashflow' => $this->cashflow,
-            'value' => $valor_tratado,
-            'saida' => $this->saida,
-            'descricao' => $this->descricao,
-            'data' => $this->data,
-            'moeda' => $this->moeda,
-            'observacao' => $this->observacao,
-            'fonte' => $this->fonte,
-            'cotacaoEmBRL' => $cotacao_tratada,
-            'taxa' => $taxa_tratada,
-            'fracao' => $fracao_tratada,
-
-        ]);
-
-
+         User::updateOrCreate(['id' => $this->user_id], [
+            'name' => $this->nome,
+            'email' => $this->email,
+            'password' => $this ->senha,
+            'cep' => $this->cep,
+            'endereco' => $this->endereco,
+            'bairro' => $this->bairro,
+            'complemento' => $this->complemento,
+            'cidade' => $this->cidade,
+            'estado' => $this->estado,
+            'role' => $this->role,
+            'phone' => $this->telefone,
+            'birth_date' => $this->data_nasc,
+            'cpf' => $this->cpf,
+            'bank_account' => $this->conta,
+            'sort_code' => $this->codigo_bank,
+            'rg' => $this->rg,
+            'pix' => $this->pix,
+            'escolaridade' => $this->escolaridade,
+            'cnpj' => $this->cnpj,
+            'nacionalidade' => $this->nacionalidade,
+            'estado_civil' => $this->estado_civil,
+            'sexo' => $this->sexo,
+            'tamanho_roupa' => $this->tamanho_roupa,
+            ]);
 
         $this->resetInputFields();
 
-        session()->flash('message', 'Item registrado com sucesso.');
+        session()->flash('message', 'Pessoa registrado com sucesso.');
 
-        $this->closeModal();
+        $this->closeModal();     
     }
-
-
-    public $confirmingItemDeletion = false;
 
     public function confirmingItemDeletion($id)
     {
@@ -180,77 +160,17 @@ class Employee extends Component
 
     public function destroy($id)
     {
-
-        Financial::find($id)->delete();
+        User::find($id)->delete();
         $this->confirmingItemDeletion = false;
         session()->flash('message', 'Item deletado com sucesso.');
     }
 
-
-
-
     public function render()
     {
-
-        //BUSCAR DATA -- SOMA ENTRADA E SAIDA
-
-        $where = [];
-
-
-
-        if ($this->to) {
-
-            $to_explodido = explode('/', $this->to);
-            $to_explodido = array_reverse($to_explodido);
-            $to_explodido = implode('-', $to_explodido);
-
-            $where[] = ['created_at', '<=',   $to_explodido];
-        }
-
-        if ($this->from) {
-
-            $from_explodido = explode('/', $this->from);
-            $from_explodido = array_reverse($from_explodido);
-            $from_explodido = implode('-', $from_explodido);
-
-            $where[] = ['created_at', '>=',   $from_explodido];
-        }
-
-        $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [$this->cashflow];
-
-
-        $this->financials = Financial::where($where)->whereIn('cashflow', $filter)->orderBy('data', 'desc')->paginate(10);
-
-
-
-
-
-        if ($this->cashflow == 'entrada') {
-            $this->balanco_entr = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
-            $this->balanco_saida = '0';
-        } elseif ($this->cashflow == 'saida') {
-            $this->balanco_saida = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
-            $this->balanco_entr = '0';
-        }
-        else {
-            $this->balanco_entr = Financial::where($where)->whereIn('cashflow', ['entrada'])->sum('value');
-            $this->balanco_saida = Financial::where($where)->whereIn('cashflow', ['saida'])->sum('value');
-            $this->balanco_taxa = Financial::where($where)->sum('taxa');
-            $this->soma = $this->balanco_entr - $this->balanco_saida - $this->balanco_taxa;
-        }
-
-
-
-
+        $searchTerm = '%'.$this->searchTerm.'%';//busca
 
         return view('livewire.people.employee', [
-
-            'financials_retorno' =>  $this->financials,
-
-
-
-
-
+            'employees_retorno' => User::where('name', 'like', $searchTerm)->paginate(10)
         ]);
     }
 

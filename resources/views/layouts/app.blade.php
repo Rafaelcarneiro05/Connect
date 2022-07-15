@@ -25,7 +25,7 @@
         @stack('modals')
         @stack('js_scripts')
 
-        <!-- maskMoney e maskedInput -->
+        <!-- maskMoney e maskedInput --> 
         <script src="{{ asset('js/Jquery/JQuery.MaskMoney.js') }}"></script>
         <script src="{{ asset('js/Jquery/JQuery.MaskedInput.js') }}"></script>
 

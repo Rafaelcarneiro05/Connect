@@ -23,11 +23,12 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var string[]
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+
+    //public $table = 'user';
+    protected $guarded = [];
+
+    public $table = 'users';
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -57,4 +58,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+    
 }

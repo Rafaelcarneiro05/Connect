@@ -51,37 +51,33 @@ Route::middleware([
     })->name('register-day');
 });
 
-// ********************************************************************************************************
-// ********************************************************************************************************
-
-
-
-
-
-
 
 
 // ********************************************************************************************************
-// ROTAS DO MODLO PEOPLE
+//              ROTAS DO MODLO PEOPLE
 // ********************************************************************************************************
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
-])->group(function () {
-
-
+])->group(function ()
+{
     //ROTA QUE ABRE A VIEW MODULE, QUE POR SUA VEZ CHAMA O COMPONENTE LIVEWIRE
     Route::get('/people/employee-module', function (){
         return view('livewire/people/employee-module');
     })->name('employee-module');
 
+    Route::get('/people/projects-module', function () {
+        return view('livewire/people/projects-module');
+    })->name('projects-module');
 
-
+    Route::get('/people/effort-module', function () {
+        return view('livewire/people/effort-module');
+    })->name('effort-module');
 
 });
 
 
-// ********************************************************************************************************
-// ********************************************************************************************************
+
+
 

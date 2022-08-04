@@ -5,10 +5,10 @@ namespace App\Http\Livewire\People;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 
 //  MODELS UTILIZADAS
 use App\Models\User;
+use App\Models\UserProject;
 
 
 class Employee extends Component
@@ -19,7 +19,7 @@ class Employee extends Component
     public $searchTerm;
     public $confirmingItemDeletion = false;
  
-    //TELA DE CADASTRO/EDIÇÃO
+    //ATRIBUTOS TELA DE CADASTRO/EDIÇÃO
     public $isOpen = 0;
     public $user_id;
 
@@ -46,6 +46,7 @@ class Employee extends Component
     public $estado_civil = 'solteiro';
     public $sexo = 'masculino';
     public $tamanho_roupa;
+    public $informacoes_usuarios = [];
 
 
     public function create() //abrir modal para cadastro ----
@@ -103,11 +104,18 @@ class Employee extends Component
 
     public function store()  //PROCESSAMENTO do cadastrar ou editar: updateOrCreate
     {       
-        if($this->user_id)//VERIFICA SE É UPDATE
+        if($this->user_id)//VERIFICA SE É UPDATE OU CREATE E ADICIONA HASH NA SENHA
         {
             if(!$this->senha)
             {
-                $this->senha = DB::table('users')->where('name', $this->nome)->value('password');
+                $this->informacoes_usuarios = User::orderBy('name', 'asc')->get();
+                foreach($this->informacoes_usuarios as $informacao_usuario)
+                {
+                    if($informacao_usuario->id == $this->user_id)
+                    {
+                        $this->senha = $informacao_usuario->password;
+                    }
+                }  
             }
             else
             {
@@ -118,6 +126,8 @@ class Employee extends Component
         {
             $this->senha = Hash::make($this->senha);
         }
+        
+
         
         //EDIÇÃO OU CRIAÇÃO updateOrCreate
          User::updateOrCreate(['id' => $this->user_id], [
@@ -160,6 +170,8 @@ class Employee extends Component
 
     public function destroy($id)
     {
+        UserProject::where([['user_id', '=', $id]])->delete();//apaga os projetos relacionados ao user em questão
+        
         User::find($id)->delete();
         $this->confirmingItemDeletion = false;
         session()->flash('message', 'Item deletado com sucesso.');
@@ -168,7 +180,6 @@ class Employee extends Component
     public function render()
     {
         $searchTerm = '%'.$this->searchTerm.'%';//busca
-
         return view('livewire.people.employee', [
             'employees_retorno' => User::where('name', 'like', $searchTerm)->paginate(10)
         ]);

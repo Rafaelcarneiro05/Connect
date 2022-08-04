@@ -40,7 +40,10 @@
                                     {{ __('Employees') }}
                                 </x-jet-dropdown-link>
                                 <x-jet-dropdown-link href="{{ route('projects-module') }}">
-                                    {{ __('Projects ') }}
+                                    {{ __('Projects') }}
+                                </x-jet-dropdown-link>
+                                <x-jet-dropdown-link href="{{ route('effort-module') }}">
+                                    {{ __('Effort') }}
                                 </x-jet-dropdown-link>
                             </x-slot>
                         </x-jet-dropdown>

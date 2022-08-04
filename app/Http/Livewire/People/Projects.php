@@ -4,7 +4,6 @@ namespace App\Http\Livewire\People;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\DB;
 
 //Models Ultilizadas
 use App\Models\Project;
@@ -19,43 +18,38 @@ class Projects extends Component
 
     public $searchTerm;
     public $confirmingItemDeletion = false;
+    public $multi_equipe_todos;
+    public $users_projects = [];
 
     //ATRIBUTOS TELA CADASTRO/EDIÇÃO
     public $isOpen = 0;
     public $isOpen_equipe = 0;
-
     public $nome;
     public $descricao;
     public $data_inicio;
     public $data_termino;
-    public $equipe;
+    public $project_id;
 
     //ATRIBUTOS MODAL EQUIPE
     public $projeto_nome;
     public $multi_equipe_escolhidos = [];
-    public $multi_equipe_todos;
-    public $projeto_id;
-    public $membros = [];
-
+    public $projeto_id;   
     
-    
-    public function create()//abrir modal para cadastro ----
+    public function create()//abrir modal para cadastro 
     {
         $this->resetInputFields();
         $this->openModal();
     }
 
-    public function edit($id)//abrir modal para edicao ----
+    public function edit($id)//abrir modal para edicao
     {
         $project = Project::find($id); 
         
         $this->project_id = $id;
-
         $this->nome = $project->nome;
         $this->descricao = $project->descricao;
         $this->data_inicio = $project->data_inicio;
         $this->data_termino = $project->data_termino;
-        $this->equipe = $project->data_termino;
 
         $this->openModal();
     }
@@ -81,13 +75,20 @@ class Projects extends Component
         
         $project = Project::find($id);
         $this->projeto_nome = $project->nome;
-        $this->projeto_id = $project->id;
+        $this->projeto_id = $project->id;       
 
-        //consulta todos os usuarios
-        $this->multi_equipe_todos = User::orderBy('name', 'asc')->get();
-        //dd($this->multi_equipe_todos);
+        $users_ = User::pluck('id')->toArray();
+        $this->multi_equipe_escolhidos = array_fill_keys($users_, false);//inicialmente todos os chekbox estao desmarcados
+
+        foreach($this->multi_equipe_escolhidos as $key => $value)//atribuir true para as checkbox que serao marcadas
+        {
+                $verifica_user_no_projeto = UserProject::where([['user_id', '=', $key], ['project_id', '=', $this->projeto_id]])->first();
+                if($verifica_user_no_projeto)
+                {
+                    $this->multi_equipe_escolhidos[$key] = true;
+                }
+        }
         
-        $this->membros = DB::table('users_projects')->where('project_id', $this->projeto_id)->value('user_id');    
     }
 
     public function closeModal_equipe()//fecha modal equipe
@@ -95,19 +96,28 @@ class Projects extends Component
         $this->isOpen_equipe = false;
     }
 
-    public function save_equipe()//processamento modal equipe(delete tds)
+    public function save_equipe()//processamento modal equipe
     {
-        UserProject::where([['project_id', '=', $this->projeto_id]])->delete();
-        foreach($this->multi_equipe_escolhidos as $escolhidos){
-           UserProject::create(['user_id' => $escolhidos, 'project_id' => $this->projeto_id]);
-          }
-          $this->isOpen_equipe = false;        
+        UserProject::where([['project_id', '=', $this->projeto_id]])->delete();//Deleta todos primeiro
+
+        foreach($this->multi_equipe_escolhidos as $key => $escolhidos)//Salva as informações
+        {
+            if($escolhidos)
+            {
+                if($escolhidos == true)
+                {
+                    UserProject::create(['user_id' => $key, 'project_id' => $this->projeto_id]);
+                }
+                else
+                {
+                    UserProject::create(['user_id' => $escolhidos, 'project_id' => $this->projeto_id]);
+                }
+            }   
+        }
+        $this->isOpen_equipe = false;        
     }
 
-
-
-
-    public function store() //PROCESSAMENTO
+    public function store() //Processamento modal de cadastro/edicao
     {       
         Project::updateOrCreate(['id' => $this->project_id],[
             'nome' => $this->nome,
@@ -115,11 +125,9 @@ class Projects extends Component
             'data_inicio' => $this->data_inicio,
             'data_termino' => $this->data_termino,
         ]);
-        
+
         $this->resetInputFields();
-
         session()->flash('message', 'Projeto registrado com sucesso.');
-
         $this->closeModal(); 
     }
 
@@ -128,8 +136,10 @@ class Projects extends Component
         $this->confirmingItemDeletion = $id;
     }
 
-    public function destroy($id)
+    public function destroy($id)//Delete
     {
+        UserProject::where([['user_id', '=', $id]])->delete();
+
         Project::find($id)->delete();
         $this->confirmingItemDeletion = false;
         session()->flash('message', 'Projeto deletado com sucesso.');
@@ -137,6 +147,9 @@ class Projects extends Component
 
     public function render()
     {
+        $this->multi_equipe_todos = User::orderBy('name', 'asc')->get();//consulta todos os usuarios
+        $this->users_projects = UserProject::orderBy('user_id', 'asc')->get();//consulta as relações entre users e projects
+   
         $searchTerm = '%'.$this->searchTerm.'%';
         return view('livewire.people.projects',[
             'projects_retorno' => Project::where('nome', 'like', $searchTerm)->paginate(10)

@@ -32,7 +32,7 @@
                                     <thead>
                                         <tr>
                                             <th>Descrição</th>
-                                            <th>Data</th>
+                                            <th>Data de processamento</th>
                                         </tr>
                                     </thead>
                                     <tbody align="center">

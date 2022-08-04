@@ -24,7 +24,7 @@
                                         <div class="flex flex-col">
                                             <div class="form-control gap-8 flex flex-col" >
                                                 <div class="w-full">
-                                                    <label>Categoria:</label>
+                                                    <label>Categoria da saída(despesa):</label>
                                                     <select name="" id="" wire:model.defer="categoria" >
                                                         <option disabled>Selecione uma categoria</option>
                                                         <option value="despesas">Despesas</option>
@@ -47,6 +47,7 @@
 
 
                                                 <div class="w-full">
+                                                    <p>Valor em Reais (BRL)</p>
                                                     <label for="">Valor:</label>
                                                     <input id="value" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="value" onchange="@this.set('value', this.value);">
                                                 </div>
@@ -54,14 +55,14 @@
 
                                                 <div class="w-full">
                                                     <label for="">Fonte</label>
-                                                    <input id="" type="text" wire:model.defer="fonte">
+                                                    <input class="w-full h-20 border-2 border-neutral-500 rounded" type="text" wire:model.defer="fonte">
                                                 </div>
 
 
                                                 <div class="w-full">
                                                     <label for="">Observação:</label>
                                                     <div>
-                                                        <textarea class="w-full h-20 border-2 border-neutral-500 rounded" name="" id="" cols="100" rows="15" wire:model.defer="observacao"></textarea>
+                                                        <textarea class="w-full h-20 border-2 border-neutral-500 rounded" cols="100" rows="15" wire:model.defer="observacao"></textarea>
                                                     </div>
                                                 </div>
 

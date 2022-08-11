@@ -40,31 +40,28 @@
                                     
                             @foreach ($projects_retorno as $project)
                                 <tr>
-                                    <td class="border border-slate-300">{{$project->nome}} </td>
-                                    <td class="border border-slate-300">{{$project->descricao}} </td>
+                                    <td class="border border-slate-300">{{$project->nome}}</td>
+                                    <td class="border border-slate-300">{{App\Http\Livewire\People\Projects::substrwords($project->descricao)}}</td>
                                     <td class="border border-slate-300">{{date('d/m/Y',strtotime($project->data_inicio))}}</td>
                                     <td class="border border-slate-300">{{date('d/m/Y',strtotime($project->data_termino))}}</td>                                   
                                     <td class="border border-slate-300">
                                         @php
                                             $i = 0;
-                                        @endphp
-                                        @foreach ($users_projects as $user_project)
-                                            @php
-                                                if($i>2)
+                                            foreach ($users_projects as $user_project)
+                                            { 
+                                                if ($user_project->project_id == $project->id) 
                                                 {
-                                                    echo "...";
-                                                    break;
-                                                }
-                                            @endphp
-                                            @if ($user_project->project_id == $project->id)
-                                                @php
-                                                    $equipe_to = DB::table('users')->where('id', '=', $user_project->user_id)->first();
-                                                    $nome_equipe = $equipe_to->name;
                                                     $i++;
-                                                @endphp
-                                                {{$nome_equipe}}<br>
-                                            @endif                                        
-                                        @endforeach                    
+                                                    $equipe_to = DB::table('users')->where('id', '=', $user_project->user_id)->first();
+                                                    if($i>3)
+                                                    {
+                                                        echo "...";
+                                                        break;
+                                                    }
+                                                    echo App\Http\Livewire\People\Projects::subnome($equipe_to->name), '<br>';
+                                                }    
+                                            }
+                                        @endphp                                                         
                                     </td>
 
                                     <td>

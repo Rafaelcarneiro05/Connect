@@ -12,9 +12,6 @@
 
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 block mr-auto ml-auto">
 
-
-
-
                 <!-- CONTEUDO DA MODAL -->
                 <div>
                     <div class="mt-5 md:mt-0 md:col-span-2">
@@ -23,7 +20,6 @@
                             <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
                                 <div class="grid grid-cols-6 gap-6">    
 
-                                
                             <!-- campos -->
                             <div class="col-span-6 sm:col-span-6">
                                 <input type="text" name="" id="" wire:model="hora" value="{{ \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo')}}" >                                       
@@ -37,17 +33,14 @@
                                         @foreach ($projetos_usuario as $projeto_usuario)
                                             <option value="{{$projeto_usuario->project_id}}">
                                                 @php
-                                                    $projeto_atual = DB::table('projects')->where('id', '=', $projeto_usuario->project_id)->first();
-                                                    $projeto_nome = $projeto_atual->nome;
+                                                    $projeto = DB::table('projects')->where('id', '=', $projeto_usuario->project_id)->first();
                                                 @endphp
-                                                {{$projeto_atual->nome}}                                             
+                                                {{$projeto->nome}}                                             
                                             </option>                                                
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-
-                            
 
                             <div class="col-span-6 sm:col-span-6 bg-gray-50 gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -61,7 +54,6 @@
                                         Registrar Ponto
                                     </button>
                                 </span>
-                                
                             </div>
                     </div>
                 </div>

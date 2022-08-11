@@ -24,12 +24,12 @@
                             <!-- campos -->
                             <div class="form-control flex flex-col col-span-6">
                                 <label> Inicio:</label>
-                                <input wire:model.defer="inicio" type="datetime-local" class="border-2 border-neutral-500 rounded">
+                                <input wire:model.defer="inicio" name="asc" type="datetime-local" class="border-2 border-neutral-500 rounded">
                             </div>
 
                             <div class="form-control  flex flex-col col-span-6">
                                 <label> Fim:</label>
-                                <input wire:model.defer="fim" type="datetime-local" class="border-2 border-neutral-500 rounded">
+                                <input wire:model.defer="fim" name="asc1" type="datetime-local" class="border-2 border-neutral-500 rounded">
                             </div>                          
 
                             <div class="col-span-6 sm:col-span-6">
@@ -44,18 +44,29 @@
                                 </div>
                             </div>
 
+                            <div class="col-span-6 sm:col-span-6">
+                                <div class="form-control flex flex-col">
+                                    <label> Usuário:</label>
+                                    <select wire:model="usuario_id" class="border-2 border-neutral-500 rounded pppppp"> 
+                                        <option disabled >Selecione uma opção</option>
+                                        @foreach ($usuarios as $usuario)
+                                            <option value="{{$usuario->id}}">{{$usuario->name}}</option>                                                
+                                        @endforeach                                        
+                                    </select>
+                                </div>
+                            </div>
                             
 
                             <div class="col-span-6 sm:col-span-6 bg-gray-50 gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-                                    <button wire:click="closeModalEdit()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                    <button wire:click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                         Cancel
                                     </button>
                                 </span>
     
                                 <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                    <button wire:click.prevent="saveEdit()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                        Atualizar Ponto
+                                    <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                        Salvar
                                     </button>
                                 </span>
                                 

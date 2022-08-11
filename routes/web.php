@@ -71,7 +71,8 @@ Route::middleware([
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified'
+    'verified',
+    'is.admin'
 ])->group(function ()
 {
     //ROTA QUE ABRE A VIEW MODULE, QUE POR SUA VEZ CHAMA O COMPONENTE LIVEWIRE
@@ -83,11 +84,19 @@ Route::middleware([
         return view('livewire/people/projects-module');
     })->name('projects-module');
 
-    Route::get('/people/effort-module', function () {
-        return view('livewire/people/effort-module');
-    })->name('effort-module');
+    Route::get('/people/effort-admin-module', function () {
+        return view('livewire/people/effort-admin-module');
+    })->name('effort-admin-module');
 
 });
+
+
+
+
+//proteger essa rota!!
+Route::get('/people/effort-module', function () {
+    return view('livewire/people/effort-module');
+})->name('effort-module');
 
 
 

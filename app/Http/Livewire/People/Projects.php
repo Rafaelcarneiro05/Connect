@@ -4,6 +4,7 @@ namespace App\Http\Livewire\People;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 //Models Ultilizadas
 use App\Models\Project;
@@ -20,6 +21,8 @@ class Projects extends Component
     public $confirmingItemDeletion = false;
     public $multi_equipe_todos;
     public $users_projects = [];
+    public $tamanho = 0;
+    public $teste;
 
     //ATRIBUTOS TELA CADASTRO/EDIÇÃO
     public $isOpen = 0;
@@ -145,10 +148,82 @@ class Projects extends Component
         session()->flash('message', 'Projeto deletado com sucesso.');
     }
 
+    public function substrwords($descricao, $maxchar=35, $end='...')
+    {
+        if(strlen($descricao)>$maxchar || $descricao == '' )
+        {
+            $words = preg_split('/\s/', $descricao);      
+            $output = '';
+            $i = 0;
+            while (1) 
+            {
+                $length = strlen($output)+strlen($words[$i]);
+                if ($length > $maxchar) 
+                {
+                    break;
+                } 
+                else 
+                {
+                    $output .= " " . $words[$i];
+                    ++$i;
+                }
+            }
+            $output .= $end;
+        } 
+        else 
+        {
+            $output = $descricao;
+        }
+        return $output; 
+    }
+
+    public function subnome($nome)    
+    {
+        $subnome = explode(" ", $nome);
+        $output = '';
+        if(count($subnome)>1)
+        {
+            if($subnome[1] == 'de' or $subnome[1] == 'da' or $subnome[1] == 'do' or $subnome[1] == 'De' or $subnome[1] == 'Da' or $subnome[1] == 'Do')
+            {
+                $output .= $subnome[0].' '.$subnome[2];
+                return $output;  
+            }
+            else
+            {
+                $output .= $subnome[0].' '.$subnome[1];
+                return $output;
+            }    
+        }
+        else
+        {
+            return $subnome[0];
+        }
+    }
+
+    public function equipe($id)
+    {
+        $i = 0;
+        foreach ($this->users_projects as $user_project)
+        { 
+            if ($user_project->project_id == $id) 
+            {
+                $i++;
+                $equipe_to = DB::table('users')->where('id', '=', $user_project->user_id)->first();
+                if($i>3)
+                {
+                    echo "...";
+                    break;
+                }
+                echo($equipe_to->name), '<br>';
+            }    
+        }
+    }
+
     public function render()
     {
         $this->multi_equipe_todos = User::orderBy('name', 'asc')->get();//consulta todos os usuarios
         $this->users_projects = UserProject::orderBy('user_id', 'asc')->get();//consulta as relações entre users e projects
+        
    
         $searchTerm = '%'.$this->searchTerm.'%';
         return view('livewire.people.projects',[

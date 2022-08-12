@@ -57,16 +57,24 @@
                             </div>
 
                         <div class="overflow-x-auto">
-                            <table class="table-fixed w-full">
-                                <thead>
+                            <table >
+                                <thead align="left">
                                     <tr>
-                                        <th>Natureza</th>
-                                        <th>Valor</th>
                                         <th>Data</th>
+                                        <th>Natureza</th>
+                                        <th>Categoria</th>
+                                        <th>Descição</th>
+                                        <th>Fonte</th>
                                         <th>Empresa</th>
+                                        <th>Moeda</th>
+                                        <th>Cotação</th>
+                                        <th>Fração</th>
+                                        <th>Taxa</th>
+                                        <th>Observação</th>
+                                        <th>Valor</th>
                                     </tr>
                                 </thead>
-                                <tbody align="center">
+                                <tbody class="divide-y divide-gray-400" "align="left">
                                     @if ($financials_retorno)
 
 
@@ -79,13 +87,20 @@
                                             }
 
                                         @endphp
-                                            <tr>
+                                            <tr >
 
-                                                <td class="border border-slate-300">{{$financial->cashflow}} </td>
-                                                <td class="border border-slate-300">{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
-                                                <td class="border border-slate-300">{{date('d/m/Y',strtotime($financial->data))}}</td>
-                                                <td class="border border-slate-300">{{$nome_empresa}}</td>
-
+                                                <td class="border border-slate-400">{{date('d/m/Y',strtotime($financial->data))}}</td>
+                                                <td class="border border-slate-400">{{$financial->cashflow}} </td>
+                                                <td class="border border-slate-400">{{$financial->saida}} </td>
+                                                <td class="border border-slate-400">{{$financial->descricao}} </td>
+                                                <td class="border border-slate-400">{{$financial->fonte}} </td>
+                                                <td class="border border-slate-400">{{$nome_empresa}}</td>
+                                                <td class="border border-slate-400">{{$financial->moeda}} </td>
+                                                <td class="border border-slate-400">{{$financial->cotacaoEmBRL}} </td>
+                                                <td class="border border-slate-400">{{$financial->fracao}} </td>
+                                                <td class="border border-slate-400">{{$financial->taxa}} </td>
+                                                <td class="border border-slate-400">{{$financial->observacao}} </td>
+                                                <td class="border border-slate-400">{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
                                                 <td>
                                                     <x-jet-button
                                                         class=""

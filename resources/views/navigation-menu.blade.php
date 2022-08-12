@@ -42,7 +42,7 @@
                                     </x-jet-dropdown-link>
                                     <x-jet-dropdown-link href="{{ route('projects-module') }}">
                                         {{ __('Projects') }}
-                                    </x-jet-dropdown-link>                                
+                                    </x-jet-dropdown-link>
                                     <x-jet-dropdown-link href="{{ route('effort-admin-module') }}">
                                         {{ __('Effort Control') }}
                                     </x-jet-dropdown-link>
@@ -80,13 +80,13 @@
                                     {{ __('Departamento Financeiro') }}
                                 </div>
                                 <x-jet-dropdown-link href="{{ route('financial-brief') }}">
-                                    {{ __('Resumo financeiro') }}
+                                    {{ __('Fluxo de Caixa') }}
                                 </x-jet-dropdown-link>
                                 <x-jet-dropdown-link href="{{ route('list-empresa') }}">
                                     {{ __('Empresas') }}
                                 </x-jet-dropdown-link>
                                 <x-jet-dropdown-link href="{{ route('list-recorrentes') }}">
-                                    {{ __('Recorrentes') }}
+                                    {{ __('Cadastro pagamento') }}
                                 </x-jet-dropdown-link>
                             </x-slot>
                         </x-jet-dropdown>

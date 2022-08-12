@@ -2,16 +2,20 @@
     @if (session()->has('message'))
         <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
             <div class="flex">
-            <div>
-                <p class="text-sm">{{ session('message') }}</p>
-            </div>
+                <div>
+                    <p class="text-sm">{{ session('message') }}</p>
+                </div>
             </div>
         </div>
-    @endif    
+    @endif
+       
     <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded my-3">Cadastrar Novo Projeto</button>
     @if($isOpen)
         @include('livewire.people.projects-register')
     @endif
+    @if($isOpen_equipe)
+        @include('livewire.people.equipe')
+    @endif   
     
     <x-jet-section-border/>
     <div>
@@ -21,7 +25,7 @@
             <x-slot name="content">
 
                 <div class="overflow-x-auto">
-                    <input type="text"  class="form-control" placeholder="Search" wire:model="searchTerm" />
+                    <input type="text"  class="form-control" placeholder="Search" wire:model="searchTerm" />                    
                     <table class="table-fixed w-full">
                         <thead>
                             <tr>
@@ -29,20 +33,37 @@
                                 <th>Descrição</th>
                                 <th>Data de Início</th>
                                 <th>Data do Termino</th>
+                                <th>Equipe</th>
                             </tr>
                         </thead>
                         <tbody align="center">
                                     
                             @foreach ($projects_retorno as $project)
-
-
                                 <tr>
-                                    <td class="border border-slate-300">{{$project->nome}} </td>
-                                    <td class="border border-slate-300">{{$project->descricao}} </td>
+                                    <td class="border border-slate-300">{{$project->nome}}</td>
+                                    <td class="border border-slate-300">{{App\Http\Livewire\People\Projects::substrwords($project->descricao)}}</td>
                                     <td class="border border-slate-300">{{date('d/m/Y',strtotime($project->data_inicio))}}</td>
-                                    <td class="border border-slate-300">{{date('d/m/Y',strtotime($project->data_termino))}}</td>
-                                    
-                                   
+                                    <td class="border border-slate-300">{{date('d/m/Y',strtotime($project->data_termino))}}</td>                                   
+                                    <td class="border border-slate-300">
+                                        @php
+                                            $i = 0;
+                                            foreach ($users_projects as $user_project)
+                                            { 
+                                                if ($user_project->project_id == $project->id) 
+                                                {
+                                                    $i++;
+                                                    $equipe_to = DB::table('users')->where('id', '=', $user_project->user_id)->first();
+                                                    if($i>3)
+                                                    {
+                                                        echo "...";
+                                                        break;
+                                                    }
+                                                    echo App\Http\Livewire\People\Projects::subnome($equipe_to->name), '<br>';
+                                                }    
+                                            }
+                                        @endphp                                                         
+                                    </td>
+
                                     <td>
                                         <x-jet-button
                                             class=""
@@ -55,10 +76,8 @@
                                             wire:click="openModal_equipe({{ $project->id }})">
                                             {{__('Equipe')}}
                                         </x-jet-button>
-                                        @if($isOpen_equipe)
-                                            @include('livewire.people.equipe')
-                                        @endif
-                                        
+
+                                                                            
 
                                         <x-jet-danger-button type="button"
                                             class=""
@@ -94,11 +113,9 @@
                 </x-jet-danger-button>
             </x-slot>
         </x-jet-dialog-modal>
+
     </div>
     {{ $projects_retorno->links() }}
-
-
-    </div>
 </div>
 
 

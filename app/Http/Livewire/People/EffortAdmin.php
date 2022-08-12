@@ -14,26 +14,32 @@ use App\Models\Efforts;
 use App\Models\Project;
 use App\Models\UserProject;
 
-class Effort extends Component
-{   
+class EffortAdmin extends Component
+{
+    public $teste = 'testecontroler';
+
     //ATRIBUTOS TELA DE PESQUISA
     use WithPagination;
     public $confirmingItemDeletion;
     public $isOpen = 0;
-    public $ponto_aberto = 0;
     public $projetos;
+    public $usuarios;
     public $from;
     public $to;
     public $filtro_projeto;
-    public $projetos_usuario;
-    public $ver_horas = 0;
+    public $filtro_usuario;
 
     //ATRIBUTOS TELA DE CADASTRO/EDIÇÃO
     public $esforco_id;
+    public $inicio;
+    public $fim;
+    public $projeto_id = 1;
+    public $usuario_id = 49;
+
     public $hora;
     public $logado;
-    public $projeto_id = 1;
-    
+
+
     public function openModal()
     {
         $this->isOpen = true;
@@ -52,8 +58,22 @@ class Effort extends Component
     private function resetInputFields()//reseta os campos
     {
         $this->reset();
-    }     
-    
+    }
+
+    public function edit($id)   //abrir modal para edicao
+    {
+        $effort = Efforts::find($id); 
+        
+        $this->esforco_id = $id;
+
+        $this->inicio = $effort->inicio;
+        $this->fim = $effort->fim;
+        $this->projeto_id = $effort->projeto_id;
+        $this->usuario_id = $effort->usuario_id;        
+
+        $this->openModal();
+    }
+
     public function destroy($id)//apaga o esforço atual
     {
         $destruir = DB::table('efforts')->where([['id', '=', $id]])->first();
@@ -75,79 +95,47 @@ class Effort extends Component
     {
         Efforts::updateOrCreate(['id' => $this->esforco_id], 
         [
-            'inicio' => $this->hora,
+            'inicio' => $this->inicio,
+            'fim' => $this->fim,
             'projeto_id' => $this->projeto_id,
-            'usuario_id' => $this->logado,
+            'usuario_id' => $this->usuario_id,
         ]);
 
         $this->resetInputFields();
         session()->flash('message', 'Ponto registrado com sucesso.');
         $this->closeModal();
-        $this->ponto_aberto = true; 
-    }
-
-    public function fecharPonto()//fechar ponto
-    {   
-        Efforts::where([['usuario_id', '=', $this->logado],['fim', '=', NULL]])->update(['fim' => $this->hora]);
-        $this->ponto_aberto = false;
     }
 
     public function create() //abrir modal para registrar novos pontos
-    { 
-        if($this->ponto_aberto)
-        {
-            session()->flash('message', 'Feche o ponto em aberto antes de iniciar um novo.');
-        }
-        else
-        {
-            $this->resetInputFields();
-            $this->openModal();
-        }
-        $this->logado = Auth::user()->id;
-    }
-
-    public function verHoras()
     {
-        $this->ver_horas = true;
-    }
+        $this->resetInputFields();
+        $this->openModal();
+    }    
 
-    public function horasHoje()
-    {
-        $trabalhadas = DB::table('efforts')->where([['usuario_id', '=', $this->logado],['inicio', '>', Carbon::today()],['inicio', '<', Carbon::tomorrow()]])->get();
-        $total = 0;
-        foreach ($trabalhadas as $trabalho)
-        {
-            if($trabalho->fim)
-            {
-                $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $trabalho->inicio);
-                $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $trabalho->fim);
-            }
-            else
-            {
-                $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $trabalho->inicio);
-                $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->setTimezone('America/Sao_Paulo'));
-            }
-            $horas_trabalhadas = $hora_final->diffInSeconds($hora_inicial);
-            $total += $horas_trabalhadas;
-        }
-        return gmdate("H:i:s", $total);
-    }
-
-    public function contarHoras($inicio, $fim, $projeto)//conta as horas em determinado periodo
+    public function contarHoras($inicio, $fim, $usuario, $projeto)//conta as horas em relação a determinado periodo, projeto e usuario
     {
         $fim = Carbon::create($fim);
         $fim = $fim->addDays(1);
-        if($projeto)
+        //verifica quais filtros serão aplicados
+        if($projeto and $usuario)
         {
-            $horas = DB::table('efforts')->where([['inicio', '>=', $inicio],['fim', '<', $fim],['usuario_id', '=', $this->logado],['projeto_id', '=', $projeto]])->get();
+            $horas = DB::table('efforts')->where([['inicio', '>=', $inicio],['fim', '<', $fim],['usuario_id', '=', $usuario],['projeto_id', '=', $projeto]])->get();
+        }
+        elseif($projeto)
+        {
+            $horas = DB::table('efforts')->where([['inicio', '>=', $inicio],['fim', '<', $fim],['projeto_id', '=', $projeto]])->get();
+        }
+        elseif($usuario)
+        {
+            $horas = DB::table('efforts')->where([['inicio', '>=', $inicio],['fim', '<', $fim],['usuario_id', '=', $usuario]])->get();
         }
         else
         {
-            $horas = DB::table('efforts')->where([['inicio', '>=', $inicio],['fim', '<', $fim],['usuario_id', '=', $this->logado]])->get();
+            $horas = DB::table('efforts')->where([['inicio', '>=', $inicio],['fim', '<', $fim]])->get();
         }
-        
+
         $total_segundos = 0;
-        foreach($horas as $hora)//soma todos os segundos
+        foreach($horas as $hora)
         {
             $data_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $hora->inicio);
             $data_final = Carbon::createFromFormat('Y-m-d H:i:s', $hora->fim);
@@ -165,13 +153,15 @@ class Effort extends Component
 
     public function render()
     {
-        $this->logado = Auth::user()->id;//consultao usuario logado
-        $this->hora = Carbon::now()->setTimezone('America/Sao_Paulo');//consulta a hora atual              
-        $this->projetos_usuario = UserProject::where('user_id', '=', $this->logado)->get();//consulta os projetos relacionados ao user logado
         $this->projetos = Project::orderBy('id', 'asc')->get();
+        $this->usuarios = User::orderBy('id', 'asc')->get();
 
-        //FILTROS DE BUSCA
+        //FILTROS DE BUSCA      
         $filtros = [];
+        if($this->filtro_usuario)
+        {
+            $filtros[] = ['usuario_id', '=', $this->filtro_usuario];
+        }               
         if($this->filtro_projeto)
         {
             $filtros[] = ['projeto_id', '=', $this->filtro_projeto];
@@ -179,18 +169,17 @@ class Effort extends Component
         if ($this->from) 
         {
             $from = Carbon::create($this->from);
-            $filtros[] = ['inicio', '>=', $from];
+            $filtros[] = ['inicio', '>=',  $from];
         }
         if ($this->to) 
         {
             $to = Carbon::create($this->to);
             $to = $to->addDays(1);
-            $filtros[] = ['fim', '<',   $to];
+            $filtros[] = ['fim', '<',  $to];            
         }
-        $filtros[] = ['usuario_id', '=', $this->logado];
 
-        return view('livewire.people.effort', [
-            'efforts_retorno' => Efforts::where($filtros)->orderBy('id', 'desc')->paginate(10)
+        return view('livewire.people.effort-admin', [
+            'efforts_retorno_admin' => Efforts::where($filtros)->orderBy('id', 'desc')->paginate(10)
         ]);        
-    } 
+    }
 }

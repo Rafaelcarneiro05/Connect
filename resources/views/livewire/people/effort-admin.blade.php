@@ -8,14 +8,17 @@
             </div>
         </div>
     @endif
-    <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded my-3"> Novo registro de ponto</button>
+    <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded my-3">Adicionar Ponto Manualmente</button>
     @if($isOpen)
-        @include('livewire.people.effort-register')
+        @include('livewire.people.effort-edit')
     @endif
+    <br><button wire:click="fecharPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Ponto do Mês</button>
+     
 
     <x-jet-action-section>
-        <x-slot name="title">{{ __('Effort Register') }} </x-slot>
-        <x-slot name="description">{{ __('Registro Esforços')}}</x-slot>
+        <x-slot name="title">{{ __('Effort Control') }} </x-slot>
+        <x-slot name="description">{{ __('Controle Esforços')}}</x-slot>
+        
         <x-slot name="content">
             <div class="overflow-x-auto">
                 <div>
@@ -33,13 +36,20 @@
                         @foreach ($projetos as $projeto)
                             <option value="{{$projeto->id}}">{{$projeto->nome}}</option>
                         @endforeach                        
-                    </select><br>
+                    </select>  
+
+                    <label>Usuário</label>
+                    <select wire:model="filtro_usuario">
+                        <option value="">Todos</option>
+                        @foreach ($usuarios as $usuario)
+                            <option value="{{$usuario->id}}">{{$usuario->name}}</option>
+                        @endforeach                        
+                    </select><br> 
 
                     @if ($this->from and $this->to)
-                        <label><strong>Total de Horas Trabalhadas: {{App\Http\Livewire\People\Effort::contarHoras($this->from, $this->to, $this->filtro_projeto)}}</strong></label><br>
+                        <label><strong>Total de Horas Trabalhadas: {{App\Http\Livewire\People\EffortAdmin::contarHoras($this->from, $this->to, $this->filtro_usuario, $this->filtro_projeto)}}</strong></label><br>
                     @endif
                 </div>
-
                 <table class="table-fixed w-full">
                     <div class="col-span-6 sm:col-span-4">                                      
                     </div> 
@@ -48,11 +58,12 @@
                             <th>Inicio</th>
                             <th>Fim</th>
                             <th>Projeto</th>
+                            <th>Usuário</th>
                         </tr>                            
                     </thead>
                     
                     <tbody align="center">
-                        @foreach ($efforts_retorno as $effort)                           
+                        @foreach ($efforts_retorno_admin as $effort)                           
                             <tr>
                                 <td class="border border-slate-300">{{date('d/m/Y H:i:s',strtotime($effort->inicio))}}</td>
                                 
@@ -70,16 +81,21 @@
                                     @endphp
                                     {{$projeto_to->nome}}                          
                                 </td>
+
+                                <td class="border border-slate-300">
+                                    @php
+                                        $usuario_to = DB::table('users')->where('id', '=', $effort->usuario_id)->first();
+                                    @endphp
+                                    {{$usuario_to->name}}
+                                </td>
                                 
                                 <td>
-                                    @if ($effort->fim == NULL)<!-- Verifica de o ponto ainda está aberto -->
-                                        <x-jet-button
-                                            class=""
-                                            wire:click="fecharPonto()">
-                                            {{__('Finalizar Ponto')}}
-                                        </x-jet-button>
-                                    @endif                                    
-
+                                    <x-jet-button
+                                        class=""
+                                        wire:click="edit({{ $effort->id }})">
+                                        {{__('Edit')}}
+                                    </x-jet-button>
+                                    
                                     <x-jet-danger-button type="button"
                                         class=""
                                         wire:click="confirmingItemDeletion({{ $effort->id }})">
@@ -90,10 +106,6 @@
                         @endforeach
                     </tbody>
                 </table>
-                <button wire:click="verHoras()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Horas Hoje</button>
-                @if ($this->ver_horas)
-                    <label>{{App\Http\Livewire\People\Effort::horasHoje()}}</label>
-                @endif
             </div>
 
             <div>
@@ -118,10 +130,8 @@
                     </x-slot>
                 </x-jet-dialog-modal>
             </div>
-            {{ $efforts_retorno->links() }}
+            {{ $efforts_retorno_admin->links() }}
         </x-slot> 
     </x-jet-action-section>
-
+       
 </div>
-
-

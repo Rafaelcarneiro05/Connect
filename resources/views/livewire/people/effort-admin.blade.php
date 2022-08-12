@@ -14,12 +14,14 @@
     @endif
     <br><button wire:click="fecharPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Ponto do Mês</button>
      
+    
 
     <x-jet-action-section>
         <x-slot name="title">{{ __('Effort Control') }} </x-slot>
         <x-slot name="description">{{ __('Controle Esforços')}}</x-slot>
-        
         <x-slot name="content">
+            
+        <div><h1>teste</h1></div>
             <div class="overflow-x-auto">
                 <div>
                     <label><strong>Selecione o período para obter o total de horas</strong> </label><br>

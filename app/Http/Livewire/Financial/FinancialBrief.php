@@ -7,16 +7,19 @@ namespace App\Http\Livewire\Financial;
 use App\Http\Livewire\Empresas\EmpresasCreate;
 use App\Models\Financial;
 use App\Models\Empresas;
+use App\Models\Recorrentes;
+use Illuminate\Http\Request;
 
 
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FinancialBrief extends Component
 {
 
-
+    public $valor_recorrente;
     public $updateMode = false;
 
     //EMPRESA
@@ -203,15 +206,7 @@ class FinancialBrief extends Component
 
         $this->empresas = Empresas::get();
 
-
-
-
-        //BUSCAR DATA -- SOMA ENTRADA E SAIDA
-        /*$empresas_find = DB::table('empresas')
-                            ->join('financials', 'empresas.id', '=', 'financials.empresas_id')
-                            ->select('empresas.*', 'financials.*')
-                            ->get();*/
-
+        $this->recorretnes = Recorrentes::get();
 
         $where = [];
 
@@ -221,14 +216,13 @@ class FinancialBrief extends Component
         }
 
 
-
         if ($this->to) {
 
             $to_explodido = explode('/', $this->to);
             $to_explodido = array_reverse($to_explodido);
             $to_explodido = implode('-', $to_explodido);
 
-            $where[] = ['created_at', '<=',   $to_explodido];
+            $where[] = ['data', '<=',   $to_explodido];
         }
 
         if ($this->from) {
@@ -237,7 +231,7 @@ class FinancialBrief extends Component
             $from_explodido = array_reverse($from_explodido);
             $from_explodido = implode('-', $from_explodido);
 
-            $where[] = ['created_at', '>=',   $from_explodido];
+            $where[] = ['data', '>=',   $from_explodido];
         }
 
 
@@ -270,14 +264,10 @@ class FinancialBrief extends Component
         return view('livewire.financial.financial-brief', [
 
             'financials_retorno' => $financials_retorno,
-
-
-
-
-
-
-
-
         ]);
+
+        }
+
+
     }
-}
+

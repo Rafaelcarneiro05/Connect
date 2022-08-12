@@ -23,7 +23,9 @@
             <x-slot name="title">{{ __('Financial Brief') }} </x-slot>
             <x-slot name="description">{{ __('Cash Basis.')}}</x-slot>
             <x-slot name="content">
+
                     <div class="">
+
                         <div>
                             <label>Data Inicial</label>
                             <input wire:model="from" type="date">
@@ -47,8 +49,12 @@
 
                                         @endforeach
                                 </select>
+                                <div>
+                                    <a href={{route("financial_pdf")}}>
+                                        <button class="btn btn-secondary">PDF</button>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
                         <div class="overflow-x-auto">
                             <table class="table-fixed w-full">
@@ -61,35 +67,47 @@
                                     </tr>
                                 </thead>
                                 <tbody align="center">
-                                    @foreach ($financials_retorno as $financial)
-                                    @php
-                                        $nome_empresa = '';
-                                        if(!is_null($financial->empresas_id)){
-                                            $empresa_to = DB::table('empresas')->where('id', '=', $financial->empresas_id)->first();
-                                            $nome_empresa = $empresa_to->name;
-                                        }
-                                    @endphp
-                                        <tr>
+                                    @if ($financials_retorno)
 
-                                            <td class="border border-slate-300">{{$financial->cashflow}} </td>
-                                            <td class="border border-slate-300">{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
-                                            <td class="border border-slate-300">{{date('d/m/Y',strtotime($financial->data))}}</td>
-                                            <td class="border border-slate-300">{{$nome_empresa}}</td>
 
-                                            <td>
-                                                <x-jet-button
-                                                    class=""
-                                                    wire:click="edit({{ $financial->id }})">
-                                                    {{__('Edit')}}
-                                                </x-jet-button>
-                                                <x-jet-danger-button type="button"
-                                                    class=""
-                                                    wire:click="confirmingItemDeletion({{ $financial->id }})">
-                                                    {{__('Delete')}}
-                                                </x-jet-danger-button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                        @foreach ($financials_retorno as $financial)
+                                        @php
+                                            $nome_empresa = '';
+                                            if(!is_null($financial->empresas_id)){
+                                                $empresa_to = DB::table('empresas')->where('id', '=', $financial->empresas_id)->first();
+                                                $nome_empresa = $empresa_to->name;
+                                            }
+
+                                        @endphp
+                                            <tr>
+
+                                                <td class="border border-slate-300">{{$financial->cashflow}} </td>
+                                                <td class="border border-slate-300">{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
+                                                <td class="border border-slate-300">{{date('d/m/Y',strtotime($financial->data))}}</td>
+                                                <td class="border border-slate-300">{{$nome_empresa}}</td>
+
+                                                <td>
+                                                    <x-jet-button
+                                                        class=""
+                                                        wire:click="edit({{ $financial->id }})">
+                                                        {{__('Edit')}}
+                                                    </x-jet-button>
+                                                    <x-jet-danger-button type="button"
+                                                        class=""
+                                                        wire:click="confirmingItemDeletion({{ $financial->id }})">
+                                                        {{__('Delete')}}
+                                                    </x-jet-danger-button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+                                    @else
+                                    <tr>
+                                        <td colspan="2">Nenhum registro encontrado</td>
+                                    </tr>
+                                    @endif
+
+
 
                                 </tbody>
                             </table>
@@ -113,6 +131,7 @@
                                 @endphp
                             </div>
                         </div>
+
             </x-slot>
 
 

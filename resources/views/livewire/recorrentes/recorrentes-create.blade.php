@@ -21,8 +21,8 @@
         <div>
 
             <x-jet-action-section>
-                <x-slot name="title">{{ __('Empresas') }} </x-slot>
-                <x-slot name="description">{{ __('Registro de Empresas')}}</x-slot>
+                <x-slot name="title">{{ __('Gastos Rcorrentes') }} </x-slot>
+                <x-slot name="description">{{ __('Registro de Gastos Recorrentes')}}</x-slot>
                 <x-slot name="content">
 
                             <div class="overflow-x-auto">
@@ -33,6 +33,7 @@
                                         <tr>
                                             <th>Descrição</th>
                                             <th>Data de processamento</th>
+                                            <th>Valor</th>
                                         </tr>
                                     </thead>
                                     <tbody align="center">
@@ -42,7 +43,9 @@
                                             @foreach ($recorrentes_retorno as $recorrente)
                                                 <tr>
                                                     <td class="border border-slate-300">{{ $recorrente->descricao }} </td>
-                                                    <td class="border border-slate-300">{{date('d/m/Y',strtotime($recorrente->data))}}
+                                                    <td class="border border-slate-300">{{date('d/m/Y',strtotime($recorrente->data))}}</td>
+                                                    <td class="border border-slate-300">{{ 'R$' .number_format($recorrente->value, 2,',', '.')}}</td>
+
                                                     <td>
                                                         <x-jet-button
                                                             class=""

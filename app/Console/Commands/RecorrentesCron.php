@@ -29,15 +29,15 @@ class RecorrentesCron extends Command
     public function handle()
     {
 
-        die('aaaaaaaaaa');
 
-       /*
-       $a = DB::table('recorrente')::where([['', '=', date('Y-m-d') ]])->get();
 
-        foreach ($variable as $key => $value) {
-            # code...
-        }
+
+       /*$a = DB::table('recorrente')::where([['', '=', date('Y-m-d') ]])->get();
+
+        foreach ($a as $recorrente => $value) {
+            $recorrente->format('Y M d')
+        };
+
         */
-
     }
 }

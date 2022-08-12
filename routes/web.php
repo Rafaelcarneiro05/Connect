@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ExportPDF;
+use App\Http\Controllers\FinancialPDFController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,9 +48,12 @@ Route::middleware([
     Route::get('/financial/brief', function () {
         return view('livewire/financial/brief');
     })->name('financial-brief');
-    Route::get('/working-day/register-day', function () {
-        return view('livewire/working-day/register-working-day');
-    })->name('register-day');
+
+    //DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF
+    Route::get('/financial/brief/financial_pdf',[FinancialPDFController::class, 'exportPDF'])
+    ->name('financial_pdf');
+
+
 
     //EMPRESAS//EMPRESAS//EMPRESAS
     Route::get('/financial/empresas', function () {
@@ -89,7 +94,7 @@ Route::middleware([
     })->name('effort-admin-module');
 
 });
-
+// aplicar middleware para rotas desprotegidas 
 
 
 

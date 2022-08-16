@@ -90,12 +90,12 @@ class EmpresasCreate extends Component
     }
     public $confirmingItemDeletion = false;
 
-    public function confirmingItemDeletion($id)
+    public function confirmingItemDeletion($id) //CONFIRMAÇÃO DE DELETE EMPRESAS
     {
         $this->confirmingItemDeletion = $id;
     }
 
-    public function destroy($id)
+    public function destroy($id) //DELETAR EMPRESAS
     {
 
         Empresas::find($id)->delete();
@@ -105,8 +105,8 @@ class EmpresasCreate extends Component
 
     public function render()
     {
-        $searchTerm = '%'.$this->searchTerm.'%';
-        //dd($this-> empresas);
+        $searchTerm = '%'.$this->searchTerm.'%'; // BUSCA DE EMPRESA POR NOME
+
         return view('livewire.empresas.empresas-create', [
 
             'empresas_retorno' => Empresas::where('name','like', $searchTerm)->paginate(5)

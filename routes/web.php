@@ -23,12 +23,13 @@ Route::resource('/admin/users', AuthController::class);
 
 
 // ********************************************************************************************************
-// ROTAS DO MODULO financial
+// ROTAS DO MODULO financial----> TODAS ACESSADAS PELO ADMIN
 // ********************************************************************************************************
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified'
+    'verified',
+    'is.admin'
 ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');

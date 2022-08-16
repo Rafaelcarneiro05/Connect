@@ -22,7 +22,7 @@ class FinancialPDFController extends Controller
 
         $financials_retorno = Financial::orderBy('data')->get();
         $pdf = PDF::loadView('livewire.financial.financial_pdf', ['financials_retorno' => $financials_retorno]);
-        return $pdf->download('resumo_financeiro' . rand(1, 1000) . '.pdf');
+        return $pdf->download('resumo_financeiro_connect' . rand(1, 1000) . '.pdf');
 
     }
 }

@@ -98,18 +98,18 @@ class FinancialBrief extends Component
 
 
 
-    public function openModal()
+    public function openModal() // ABRIR MODAL DE CADASTRO
     {
         $this->isOpen = true;
     }
 
 
-    public function closeModal()
+    public function closeModal() //FECHAR MODAL DE CADASTRO
     {
         $this->isOpen = false;
     }
 
-    private function resetInputFields()
+    private function resetInputFields() //RESETAR CAMPOS PARA NOVO CADASTRO
     {
 
         $this->reset();
@@ -186,12 +186,12 @@ class FinancialBrief extends Component
 
     public $confirmingItemDeletion = false;
 
-    public function confirmingItemDeletion($id)
+    public function confirmingItemDeletion($id) //CONFIRMAR DELETE
     {
         $this->confirmingItemDeletion = $id;
     }
 
-    public function destroy($id)
+    public function destroy($id) //DELETAR
     {
 
         Financial::find($id)->delete();
@@ -205,8 +205,6 @@ class FinancialBrief extends Component
         //SELECT EMPRESAS
 
         $this->empresas = Empresas::get();
-
-        $this->recorretnes = Recorrentes::get();
 
         $where = [];
 

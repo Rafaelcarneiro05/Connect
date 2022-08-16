@@ -24,7 +24,7 @@
                                         <div class="flex flex-col">
                                             <div class="form-control gap-8 flex flex-col" >
                                                 <div class="w-full">
-                                                    <label>Categoria da saída(despesa):</label>
+                                                    <label>Categoria da saída:</label>
                                                     <select name="" id="" wire:model.defer="categoria" >
                                                         <option disabled>Selecione uma categoria</option>
                                                         <option value="despesas">Despesas</option>
@@ -52,25 +52,6 @@
                                                     <input id="value" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="value" onchange="@this.set('value', this.value);">
                                                 </div>
 
-
-                                                <div class="w-full">
-                                                    <label for="">Fonte</label>
-                                                    <input class="w-full h-20 border-2 border-neutral-500 rounded" type="text" wire:model.defer="fonte">
-                                                </div>
-
-
-                                                <div class="w-full">
-                                                    <label for="">Observação:</label>
-                                                    <div>
-                                                        <textarea class="w-full h-20 border-2 border-neutral-500 rounded" cols="100" rows="15" wire:model.defer="observacao"></textarea>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="w-full">
-                                                    <label for="taxa">Taxa de Transação:</label>
-                                                    <input id="taxa" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="taxa" onchange="@this.set('taxa', this.value);">
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

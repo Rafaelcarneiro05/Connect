@@ -45,11 +45,20 @@
                     }
                 @endphp
                     <tr>
-
-                        <td class=>{{$financial->cashflow}} </td>
-                        <td class=>{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
                         <td class=>{{date('d/m/Y',strtotime($financial->data))}}</td>
+                        <td class=>{{$financial->cashflow}} </td>
+                        <td class=>{{$financial->saida}} </td>
+                        <td class=>{{$financial->descricao}} </td>
+                        <td class=>{{$financial->fonte}} </td>
+                        <td class=>{{$financial->moeda}} </td>
+                        <td class=>{{$financial->cotacaoEmBRL}} </td>
+                        <td class=>{{$financial->fracao}} </td>
+                        <td class=>{{$financial->taxa}} </td>
+                        <td class=>{{$financial->observacao}} </td>
+                        <td class=>{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
+
                         <td class=>{{$nome_empresa}}</td>
+
                     </tr>
                 @endforeach
 

@@ -20,8 +20,6 @@
         <x-slot name="title">{{ __('Effort Control') }} </x-slot>
         <x-slot name="description">{{ __('Controle Esforços')}}</x-slot>
         <x-slot name="content">
-            
-        <div><h1>teste</h1></div>
             <div class="overflow-x-auto">
                 <div>
                     <label><strong>Selecione o período para obter o total de horas</strong> </label><br>
@@ -51,6 +49,7 @@
                     @if ($this->from and $this->to)
                         <label><strong>Total de Horas Trabalhadas: {{App\Http\Livewire\People\EffortAdmin::contarHoras($this->from, $this->to, $this->filtro_usuario, $this->filtro_projeto)}}</strong></label><br>
                     @endif
+
                 </div>
                 <table class="table-fixed w-full">
                     <div class="col-span-6 sm:col-span-4">                                      
@@ -61,6 +60,7 @@
                             <th>Fim</th>
                             <th>Projeto</th>
                             <th>Usuário</th>
+                            <th>Horas</th>
                         </tr>                            
                     </thead>
                     
@@ -71,7 +71,7 @@
                                 
                                 <td class="border border-slate-300">
                                     @if (!$effort->fim) 
-                                        Em Aberto...                                         
+                                    <strong>Em Aberto...</strong>                                        
                                     @else
                                         {{date('d/m/Y H:i:s',strtotime($effort->fim))}}
                                     @endif
@@ -89,6 +89,10 @@
                                         $usuario_to = DB::table('users')->where('id', '=', $effort->usuario_id)->first();
                                     @endphp
                                     {{$usuario_to->name}}
+                                </td>
+
+                                <td class="border border-slate-300">
+                                    {{App\Http\Livewire\People\EffortAdmin::horasDiarias($effort->id)}}
                                 </td>
                                 
                                 <td>

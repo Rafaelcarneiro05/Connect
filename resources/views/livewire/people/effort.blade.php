@@ -58,7 +58,7 @@
                                 
                                 <td class="border border-slate-300">
                                     @if (!$effort->fim) 
-                                        Em Aberto...                                         
+                                    <strong>Em Aberto...</strong>                                                
                                     @else
                                         {{date('d/m/Y H:i:s',strtotime($effort->fim))}}
                                     @endif

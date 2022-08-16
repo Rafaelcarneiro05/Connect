@@ -73,6 +73,7 @@ Route::middleware([
 // ********************************************************************************************************
 //              ROTAS DO MODLO PEOPLE
 // ********************************************************************************************************
+//rotas modo people para admin
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -94,15 +95,19 @@ Route::middleware([
     })->name('effort-admin-module');
 
 });
-// aplicar middleware para rotas desprotegidas 
-
-
-
-//proteger essa rota!!
-Route::get('/people/effort-module', function () {
-    return view('livewire/people/effort-module');
-})->name('effort-module');
-
+//rotas modo people para users
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'is.user'
+])->group(function ()
+{
+    Route::get('/people/effort-module', function () {
+        return view('livewire/people/effort-module');
+    })->name('effort-module');
+    
+});
 
 
 

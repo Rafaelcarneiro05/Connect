@@ -110,12 +110,30 @@ class EffortAdmin extends Component
     {
         $this->resetInputFields();
         $this->openModal();
-    }    
+    }
+    
+    public function horasDiarias($id)
+    {
+        $esforco = DB::table('efforts')->where([['id', '=', $id]])->first();
+        $inicio = Carbon::createFromFormat('Y-m-d H:i:s', $esforco->inicio);
+        if($esforco->fim == NULL)
+        {
+            $final = Carbon::now()->setTimezone('America/Sao_Paulo');
+            $final = Carbon::createFromFormat('Y-m-d H:i:s', $final);
+        }
+        else
+        {
+            $final = Carbon::createFromFormat('Y-m-d H:i:s', $esforco->fim);
+        }
+        $segundos = $final->diffInSeconds($inicio);
+        return gmdate("H:i:s", $segundos);
+    }
 
     public function contarHoras($inicio, $fim, $usuario, $projeto)//conta as horas em relação a determinado periodo, projeto e usuario
     {
         $fim = Carbon::create($fim);
         $fim = $fim->addDays(1);
+
         //verifica quais filtros serão aplicados
         if($projeto and $usuario)
         {

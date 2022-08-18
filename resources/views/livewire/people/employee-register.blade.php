@@ -198,6 +198,14 @@
                                                 <input wire:model.defer="tamanho_roupa" type="text" class="border-2 border-neutral-500 rounded">
                                             </div>
                                     </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <div class="form-control">
+                                            <label> Data de Admissão:</label>
+                                            <input wire:model.defer="data_admissao" type="date" class="border-2 border-neutral-500 rounded">
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
 

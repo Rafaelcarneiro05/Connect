@@ -71,6 +71,7 @@ Route::middleware([
 // ********************************************************************************************************
 //              ROTAS DO MODLO PEOPLE
 // ********************************************************************************************************
+//rotas modo people para admin
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -91,11 +92,12 @@ Route::middleware([
         return view('livewire/people/effort-admin-module');
     })->name('effort-admin-module');
 
+    //DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF
+    Route::get('/people/effort_pdf',[App\Http\Controllers\EffortPdfController::class, 'exportPDF'])
+    ->name('effort_pdf');
+
 });
-
-
-
-//ROTAS USER PROTEGIDA
+//rotas modo people para users
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -103,14 +105,13 @@ Route::middleware([
     'is.user'
 ])->group(function ()
 {
-Route::get('/people/effort-module', function () {
-    return view('livewire/people/effort-module');
-})->name('effort-module');
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+    Route::get('/people/effort-module', function () {
+        return view('livewire/people/effort-module');
+    })->name('effort-module');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
-
 
 
 

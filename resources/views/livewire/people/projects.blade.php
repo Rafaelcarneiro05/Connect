@@ -58,7 +58,7 @@
                                                         echo "...";
                                                         break;
                                                     }
-                                                    echo App\Http\Livewire\People\Projects::subnome($equipe_to->name), '<br>';
+                                                    echo App\Http\Livewire\People\Projects::subnome($equipe_to->name),'<br>';
                                                 }    
                                             }
                                         @endphp                                                         

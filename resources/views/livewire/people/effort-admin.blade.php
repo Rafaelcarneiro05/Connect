@@ -14,11 +14,11 @@
     @endif
     <br><button wire:click="fecharPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Ponto do Mês</button>
      
+    
 
     <x-jet-action-section>
         <x-slot name="title">{{ __('Effort Control') }} </x-slot>
         <x-slot name="description">{{ __('Controle Esforços')}}</x-slot>
-        
         <x-slot name="content">
             <div class="overflow-x-auto">
                 <div>
@@ -49,6 +49,13 @@
                     @if ($this->from and $this->to)
                         <label><strong>Total de Horas Trabalhadas: {{App\Http\Livewire\People\EffortAdmin::contarHoras($this->from, $this->to, $this->filtro_usuario, $this->filtro_projeto)}}</strong></label><br>
                     @endif
+
+                    <div>
+                        <a href={{route("effort_pdf")}} >                            
+                            <button class="btn btn-secondary">Pdf</button>
+                        </a>
+                    </div>
+
                 </div>
                 <table class="table-fixed w-full">
                     <div class="col-span-6 sm:col-span-4">                                      
@@ -59,6 +66,7 @@
                             <th>Fim</th>
                             <th>Projeto</th>
                             <th>Usuário</th>
+                            <th>Trabalhadas</th>
                         </tr>                            
                     </thead>
                     
@@ -69,7 +77,7 @@
                                 
                                 <td class="border border-slate-300">
                                     @if (!$effort->fim) 
-                                        Em Aberto...                                         
+                                    <strong>Em Aberto...</strong>                                        
                                     @else
                                         {{date('d/m/Y H:i:s',strtotime($effort->fim))}}
                                     @endif
@@ -87,6 +95,14 @@
                                         $usuario_to = DB::table('users')->where('id', '=', $effort->usuario_id)->first();
                                     @endphp
                                     {{$usuario_to->name}}
+                                </td>
+
+                                <td class="border border-slate-300">
+                                    @if ($effort->fim)
+                                        <label>{{App\Http\Livewire\People\EffortAdmin::diffHoras($effort->inicio, $effort->fim)}}</label>
+                                    @else
+                                        <label>{{App\Http\Livewire\People\EffortAdmin::diffHoras($effort->inicio)}}</label>
+                                    @endif
                                 </td>
                                 
                                 <td>
@@ -116,7 +132,6 @@
         
                     <x-slot name="content">
                         {{ __('Você tem certeza que deseja apagar esse item?') }}
-        
                     </x-slot>
         
                     <x-slot name="footer">

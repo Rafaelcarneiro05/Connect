@@ -48,6 +48,7 @@
                             <th>Inicio</th>
                             <th>Fim</th>
                             <th>Projeto</th>
+                            <th>Trabalhadas</th>
                         </tr>                            
                     </thead>
                     
@@ -58,7 +59,7 @@
                                 
                                 <td class="border border-slate-300">
                                     @if (!$effort->fim) 
-                                        Em Aberto...                                         
+                                    <strong>Em Aberto...</strong>                                                
                                     @else
                                         {{date('d/m/Y H:i:s',strtotime($effort->fim))}}
                                     @endif
@@ -69,6 +70,15 @@
                                         $projeto_to = DB::table('projects')->where('id', '=', $effort->projeto_id)->first();
                                     @endphp
                                     {{$projeto_to->nome}}                          
+                                </td>
+
+                                <td class="border border-slate-300">
+                                    @if ($effort->fim)
+                                        <label>{{App\Http\Livewire\People\Effort::diffHoras($effort->inicio, $effort->fim)}}</label>
+                                    @else
+                                        <label>{{App\Http\Livewire\People\Effort::diffHoras($effort->inicio)}}</label>
+                                    @endif
+                                    
                                 </td>
                                 
                                 <td>
@@ -90,10 +100,6 @@
                         @endforeach
                     </tbody>
                 </table>
-                <button wire:click="verHoras()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Horas Hoje</button>
-                @if ($this->ver_horas)
-                    <label>{{App\Http\Livewire\People\Effort::horasHoje()}}</label>
-                @endif
             </div>
 
             <div>

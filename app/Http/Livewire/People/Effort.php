@@ -26,13 +26,13 @@ class Effort extends Component
     public $to;
     public $filtro_projeto;
     public $projetos_usuario;
-    public $ver_horas = 0;
 
     //ATRIBUTOS TELA DE CADASTRO/EDIÇÃO
     public $esforco_id;
     public $hora;
     public $logado;
-    public $projeto_id = 1;
+    public $projeto_id;
+    public $campo_nulo;
     
     public function openModal()
     {
@@ -73,17 +73,24 @@ class Effort extends Component
     
     public function store() //Processamento do registro de novo ponto
     {
-        Efforts::updateOrCreate(['id' => $this->esforco_id], 
-        [
-            'inicio' => $this->hora,
-            'projeto_id' => $this->projeto_id,
-            'usuario_id' => $this->logado,
-        ]);
+        if($this->projeto_id == NULL)
+        {
+            $this->campo_nulo = true;
+        }
+        else
+        {
+            Efforts::updateOrCreate(['id' => $this->esforco_id], 
+            [
+                'inicio' => $this->hora,
+                'projeto_id' => $this->projeto_id,
+                'usuario_id' => $this->logado,
+            ]);
 
-        $this->resetInputFields();
-        session()->flash('message', 'Ponto registrado com sucesso.');
-        $this->closeModal();
-        $this->ponto_aberto = true; 
+            $this->resetInputFields();
+            session()->flash('message', 'Ponto registrado com sucesso.');
+            $this->closeModal();
+            $this->ponto_aberto = true; 
+        }
     }
 
     public function fecharPonto()//fechar ponto
@@ -106,31 +113,22 @@ class Effort extends Component
         $this->logado = Auth::user()->id;
     }
 
-    public function verHoras()
+    public function diffHoras($inicio, $fim = 'nulo')
     {
-        $this->ver_horas = true;
-    }
-
-    public function horasHoje()
-    {
-        $trabalhadas = DB::table('efforts')->where([['usuario_id', '=', $this->logado],['inicio', '>', Carbon::today()],['inicio', '<', Carbon::tomorrow()]])->get();
-        $total = 0;
-        foreach ($trabalhadas as $trabalho)
+        if($fim == 'nulo')
         {
-            if($trabalho->fim)
-            {
-                $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $trabalho->inicio);
-                $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $trabalho->fim);
-            }
-            else
-            {
-                $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $trabalho->inicio);
-                $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->setTimezone('America/Sao_Paulo'));
-            }
-            $horas_trabalhadas = $hora_final->diffInSeconds($hora_inicial);
-            $total += $horas_trabalhadas;
+            $fim = Carbon::now()->setTimezone('America/Sao_Paulo');
         }
-        return gmdate("H:i:s", $total);
+        $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $inicio);
+        $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $fim);
+        $segundos_trabalhadas = $hora_final->diffInSeconds($hora_inicial);
+
+        $total_horas[0] = str_pad(intval($segundos_trabalhadas / 3600) , 2 , '0' , STR_PAD_LEFT);
+        $total_horas[1] = str_pad(intval(($segundos_trabalhadas - ($total_horas[0] * 3600)) / 60) , 2 , '0' , STR_PAD_LEFT);
+        $total_horas[2] = str_pad(intval($segundos_trabalhadas % 60) , 2 , '0' , STR_PAD_LEFT);
+
+        $hours = implode(':',  $total_horas);//coloca numa string no fomrato H:i:s     
+        return $hours;
     }
 
     public function contarHoras($inicio, $fim, $projeto)//conta as horas em determinado periodo

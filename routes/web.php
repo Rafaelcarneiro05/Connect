@@ -31,9 +31,6 @@ Route::middleware([
     'verified',
     'is.admin'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
     Route::get('/contacts', function () {
         return view('contacts.index');
     })->name('contacts.index');
@@ -109,6 +106,9 @@ Route::middleware([
 Route::get('/people/effort-module', function () {
     return view('livewire/people/effort-module');
 })->name('effort-module');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
 });
 
 

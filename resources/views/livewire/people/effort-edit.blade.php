@@ -36,7 +36,7 @@
                                 <div class="form-control flex flex-col">
                                     <label> Projeto:</label>
                                     <select wire:model="projeto_id" class="border-2 border-neutral-500 rounded pppppp"> 
-                                        <option disabled >Selecione uma opção</option>
+                                        <option value="">Selecione uma opção</option>
                                         @foreach ($projetos as $projeto)
                                             <option value="{{$projeto->id}}">{{$projeto->nome}}</option>                                                
                                         @endforeach
@@ -48,14 +48,17 @@
                                 <div class="form-control flex flex-col">
                                     <label> Usuário:</label>
                                     <select wire:model="usuario_id" class="border-2 border-neutral-500 rounded pppppp"> 
-                                        <option disabled >Selecione uma opção</option>
+                                        <option value="">Selecione uma opção</option>
                                         @foreach ($usuarios as $usuario)
                                             <option value="{{$usuario->id}}">{{$usuario->name}}</option>                                                
                                         @endforeach                                        
                                     </select>
                                 </div>
                             </div>
-                            
+
+                            @if ($this->campo_nulo)
+                                <strong><label><font color="#d2291e">Preencha todos os campos antes de prosseguir</font></label> </strong>                               
+                            @endif
 
                             <div class="col-span-6 sm:col-span-6 bg-gray-50 gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -68,13 +71,9 @@
                                     <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                         Salvar
                                     </button>
-                                </span>
-                                
+                                </span>                                
                             </div>
-                            
-
-                        
-                    </div>
+                    </div>       
                 </div>
             </div>   
         </div>  

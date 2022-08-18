@@ -95,6 +95,10 @@ Route::middleware([
         return view('livewire/people/effort-admin-module');
     })->name('effort-admin-module');
 
+    //DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF
+    Route::get('/people/effort_pdf',[App\Http\Controllers\EffortPdfController::class, 'exportPDF'])
+    ->name('effort_pdf');
+
 });
 //rotas modo people para users
 Route::middleware([

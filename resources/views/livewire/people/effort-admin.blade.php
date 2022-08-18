@@ -50,6 +50,12 @@
                         <label><strong>Total de Horas Trabalhadas: {{App\Http\Livewire\People\EffortAdmin::contarHoras($this->from, $this->to, $this->filtro_usuario, $this->filtro_projeto)}}</strong></label><br>
                     @endif
 
+                    <div>
+                        <a href={{route("effort_pdf")}} >                            
+                            <button class="btn btn-secondary">Pdf</button>
+                        </a>
+                    </div>
+
                 </div>
                 <table class="table-fixed w-full">
                     <div class="col-span-6 sm:col-span-4">                                      
@@ -60,7 +66,7 @@
                             <th>Fim</th>
                             <th>Projeto</th>
                             <th>Usuário</th>
-                            <th>Horas</th>
+                            <th>Trabalhadas</th>
                         </tr>                            
                     </thead>
                     
@@ -92,7 +98,11 @@
                                 </td>
 
                                 <td class="border border-slate-300">
-                                    {{App\Http\Livewire\People\EffortAdmin::horasDiarias($effort->id)}}
+                                    @if ($effort->fim)
+                                        <label>{{App\Http\Livewire\People\EffortAdmin::diffHoras($effort->inicio, $effort->fim)}}</label>
+                                    @else
+                                        <label>{{App\Http\Livewire\People\EffortAdmin::diffHoras($effort->inicio)}}</label>
+                                    @endif
                                 </td>
                                 
                                 <td>
@@ -122,7 +132,6 @@
         
                     <x-slot name="content">
                         {{ __('Você tem certeza que deseja apagar esse item?') }}
-        
                     </x-slot>
         
                     <x-slot name="footer">

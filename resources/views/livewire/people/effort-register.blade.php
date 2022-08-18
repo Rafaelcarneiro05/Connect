@@ -22,14 +22,17 @@
 
                             <!-- campos -->
                             <div class="col-span-6 sm:col-span-6">
-                                <input type="text" name="" id="" wire:model="hora" value="{{ \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo')}}" >                                       
+                                @php
+                                    //<input type="text" name="" id="" wire:model="hora" value="{{ \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo')}}" > 
+                                @endphp
+                                {{\Carbon\Carbon::now()->setTimezone('America/Sao_Paulo')}}
                             </div>                                                             
 
                             <div class="col-span-6 sm:col-span-6">
                                 <div class="form-control">
                                     <label> Projeto:</label>
                                     <select wire:model="projeto_id" class="border-2 border-neutral-500 rounded pppppp"> 
-                                        <option disabled >Selecione uma opção</option>
+                                        <option value="">Selecione uma opção</option>
                                         @foreach ($projetos_usuario as $projeto_usuario)
                                             <option value="{{$projeto_usuario->project_id}}">
                                                 @php
@@ -41,6 +44,11 @@
                                     </select>
                                 </div>
                             </div>
+
+                            @if ($this->campo_nulo)
+                                <strong><label><font color="#d2291e">Selecione um projeto antes de prosseguir</font></label> </strong>                               
+                            @endif
+                            
 
                             <div class="col-span-6 sm:col-span-6 bg-gray-50 gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">

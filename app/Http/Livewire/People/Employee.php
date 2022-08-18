@@ -46,6 +46,8 @@ class Employee extends Component
     public $estado_civil = 'solteiro';
     public $sexo = 'masculino';
     public $tamanho_roupa;
+    public $data_admissao;
+
     public $informacoes_usuarios = [];
 
 
@@ -83,6 +85,7 @@ class Employee extends Component
         $this->estado_civil = $user->estado_civil;
         $this->sexo = $user->sexo;
         $this->tamanho_roupa = $user->tamanho_roupa;
+        $this->data_admissao = $user->admission_date;
 
         $this->openModal();
     }
@@ -125,9 +128,7 @@ class Employee extends Component
         else
         {
             $this->senha = Hash::make($this->senha);
-        }
-        
-
+        }       
         
         //EDIÇÃO OU CRIAÇÃO updateOrCreate
          User::updateOrCreate(['id' => $this->user_id], [
@@ -154,6 +155,7 @@ class Employee extends Component
             'estado_civil' => $this->estado_civil,
             'sexo' => $this->sexo,
             'tamanho_roupa' => $this->tamanho_roupa,
+            'admission_date' =>	$this->data_admissao
             ]);
 
         $this->resetInputFields();

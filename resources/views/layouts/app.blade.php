@@ -16,18 +16,27 @@
         <script src="{{ url('/js/vendor.js') }}"></script>
         <script src="{{ mix('/js/app.js') }}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css">
         @livewireStyles
 
         <!-- Scripts -->
-        <script src="{{ mix('js/app.js') }}" defer></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-        @stack('modals')
-        @stack('js_scripts')
 
-        <!-- maskMoney e maskedInput --> 
+        <script src="{{ mix('js/app.js') }}" defer></script>
+
+
+
+        <!-- JQUERY -->
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+        <!-- maskMoney e maskedInput -->
         <script src="{{ asset('js/Jquery/JQuery.MaskMoney.js') }}"></script>
         <script src="{{ asset('js/Jquery/JQuery.MaskedInput.js') }}"></script>
+
+
+        <!--FULLCALLENDAR-->
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/locales-all.min.js"></script>
+
 
 
     </head>
@@ -55,5 +64,6 @@
 
 
         @livewireScripts
+        @stack('script')
     </body>
 </html>

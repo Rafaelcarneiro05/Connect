@@ -12,6 +12,9 @@
     @if($isOpen)
         @include('livewire.people.effort-edit')
     @endif
+    @if($isOpenPonto)
+        @include('livewire.people.effort-fecharponto')
+    @endif
     <br><button wire:click="fecharPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Ponto do Mês</button>
      
     

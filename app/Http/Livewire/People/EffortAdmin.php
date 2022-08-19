@@ -22,6 +22,7 @@ class EffortAdmin extends Component
     use WithPagination;
     public $confirmingItemDeletion;
     public $isOpen = 0;
+    public $isOpenPonto = 0;
     public $projetos;
     public $usuarios;
     public $from;
@@ -45,9 +46,19 @@ class EffortAdmin extends Component
         $this->isOpen = true;
     }
 
+    public function openModalPonto()
+    {
+        $this->isOpenPonto = true;
+    }
+
     public function closeModal()
     {
         $this->isOpen = false;
+    }
+
+    public function closeModalPonto()
+    {
+        $this->isOpenPonto = false;
     }
      
     public function confirmingItemDeletion($id)
@@ -117,6 +128,10 @@ class EffortAdmin extends Component
     {
         $this->resetInputFields();
         $this->openModal();
+    }
+    public function fecharPonto() //abrir modal para registrar novos pontos
+    {
+        $this->openModalPonto();
     }
 
     public function diffHoras($inicio, $fim = 'nulo')

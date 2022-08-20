@@ -26,183 +26,210 @@
                                         
                                     <!-- campos -->
                                     <div class="col-span-6 sm:col-span-4">
-                                             <div class="form-control">
-                                                <label> Nome:</label>
-                                                <input wire:model.defer="nome" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Nome:</label>
+                                            <input wire:model.defer="nome" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Email:</label>
-                                                <input wire:model.defer="email" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Email:</label>
+                                            <input wire:model.defer="email" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                             <div class="form-control">
-                                                <label> Senha:</label>
-                                                <input wire:model.defer="senha" type="password" class="border-2 border-neutral-500 rounded" value="">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Senha:</label>
+                                            <input wire:model.defer="senha" type="password" class="border-2 border-neutral-500 rounded" value="">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Cep:</label>
-                                                <input wire:model.deboundance.800ms="cep" onchange="@this.set('cep', this.value);" type="text" class="mask_cep border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Cep:</label>
+                                            <input wire:model.deboundance.800ms="cep" onchange="@this.set('cep', this.value);" type="text" class="mask_cep border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Endereço:</label>
-                                                <input wire:model.defer="endereco" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Endereço:</label>
+                                            <input wire:model.defer="endereco" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                      <div class="col-span-6 sm:col-span-4">
-                                             <div class="form-control">
-                                                <label> Bairro:</label>
-                                                <input wire:model.defer="bairro" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Bairro:</label>
+                                            <input wire:model.defer="bairro" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Complemento:</label>
-                                                <input wire:model.defer="complemento" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Complemento:</label>
+                                            <input wire:model.defer="complemento" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Cidade:</label>
-                                                <input wire:model.defer="cidade" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Cidade:</label>
+                                            <input wire:model.defer="cidade" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Estado:</label>
-                                                <input wire:model.defer="estado" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
-                                     </div>
+                                        <div class="form-control">
+                                            <label> Estado:</label>
+                                            <input wire:model.defer="estado" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
+                                    </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Perfil:</label>
-                                                <select wire:model="role" class="border-2 border-neutral-500 rounded pppppp"> 
-                                                    <option disabled >Selecione uma opção</option>
-                                                    <option value="admin">Administrador</option>
-                                                    <option value="user">Colaborador</option>
-                                                </select>
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Perfil:</label>
+                                            <select wire:model="role" class="border-2 border-neutral-500 rounded pppppp"> 
+                                                <option disabled >Selecione uma opção</option>
+                                                <option value="admin">Administrador</option>
+                                                <option value="user">Colaborador</option>
+                                            </select>
+                                        </div>
                                     </div>
 
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Telefone:</label>
-                                                <input wire:model.deboundance.800ms="telefone" onchange="@this.set('telefone', this.value);" type="text" class="mask_telefone border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Telefone:</label>
+                                            <input wire:model.deboundance.800ms="telefone" onchange="@this.set('telefone', this.value);" type="text" class="mask_telefone border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                      <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Data de Nascimento:</label>
-                                                <input wire:model.defer="data_nasc" type="date" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Data de Nascimento:</label>
+                                            <input wire:model.defer="data_nasc" type="date" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                             <div class="form-control">
-                                                <label> CPF:</label>
-                                                <input wire:model.deboundance.800ms="cpf" onchange="@this.set('cpf', this.value);" type="text" class="mask_cpf border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> CPF:</label>
+                                            <input wire:model.deboundance.800ms="cpf" onchange="@this.set('cpf', this.value);" type="text" class="mask_cpf border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                             <div class="form-control">
-                                                <label> Conta Bancaria:</label>
-                                                <input wire:model.defer="conta" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Conta Bancaria:</label>
+                                            <input wire:model.defer="conta" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Codigo do Banco:</label>
-                                                <input wire:model.defer="codigo_bank" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Codigo do Banco:</label>
+                                            <input wire:model.defer="codigo_bank" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> RG:</label>
-                                                <input wire:model.defer="rg" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> RG:</label>
+                                            <input wire:model.defer="rg" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Pix:</label>
-                                                <input wire:model.defer="pix" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Pix:</label>
+                                            <input wire:model.defer="pix" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Escolaridade:</label>
-                                                <input wire:model.defer="escolaridade" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Escolaridade:</label>
+                                            <input wire:model.defer="escolaridade" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> CNPJ:</label>
-                                                <input wire:model.deboundance.800ms="cnpj" onchange="@this.set('cnpj', this.value);" type="text" class="mask_cnpj border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> CNPJ:</label>
+                                            <input wire:model.deboundance.800ms="cnpj" onchange="@this.set('cnpj', this.value);" type="text" class="mask_cnpj border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Nacionalidade:</label>
-                                                <input wire:model.defer="nacionalidade" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Nacionalidade:</label>
+                                            <input wire:model.defer="nacionalidade" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Estado Civil:</label>
-                                                <select wire:model="estado_civil" class="border-2 border-neutral-500 rounded pppppp"> 
-                                                    <option disabled >Selecione uma opção</option>
-                                                    <option value="solteiro">Solteiro</option>
-                                                    <option value="casado">Casado</option>
-                                                </select>
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Estado Civil:</label>
+                                            <select wire:model="estado_civil" class="border-2 border-neutral-500 rounded pppppp"> 
+                                                <option disabled >Selecione uma opção</option>
+                                                <option value="solteiro">Solteiro</option>
+                                                <option value="casado">Casado</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Sexo:</label>
-                                                <select wire:model="sexo" class="border-2 border-neutral-500 rounded pppppp"> 
-                                                    <option disabled >Selecione uma opção</option>
-                                                    <option value="masculino">Masculino</option>
-                                                    <option value="feminino">Feminino</option>
-                                                </select>
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Sexo:</label>
+                                            <select wire:model="sexo" class="border-2 border-neutral-500 rounded pppppp"> 
+                                                <option disabled >Selecione uma opção</option>
+                                                <option value="masculino">Masculino</option>
+                                                <option value="feminino">Feminino</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
-                                            <div class="form-control">
-                                                <label> Tamanho da Roupa (Uniforme):</label>
-                                                <input wire:model.defer="tamanho_roupa" type="text" class="border-2 border-neutral-500 rounded">
-                                            </div>
+                                        <div class="form-control">
+                                            <label> Tamanho da Roupa (Uniforme):</label>
+                                            <input wire:model.defer="tamanho_roupa" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
                                         <div class="form-control">
                                             <label> Data de Admissão:</label>
                                             <input wire:model.defer="data_admissao" type="date" class="border-2 border-neutral-500 rounded">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <div class="form-control">
+                                            <label> Tipo de Contrato:</label>
+                                            <select wire:model="tipo_contrato" class="border-2 border-neutral-500 rounded pppppp"> 
+                                                <option disabled >Selecione uma opção</option>
+                                                <option value="colaborador">Colaborador</option>
+                                                <option value="clt">CLT</option>
+                                                <option value="freelancer">Freelancer</option>
+                                                <option value="estagiario">Estagiário</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <div class="form-control">
+                                            <label> Habilidade:</label>
+                                            <input wire:model.defer="habilidade" type="text" class="border-2 border-neutral-500 rounded">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <div class="form-control">
+                                            <label> Valor da hora:</label>
+                                            <input wire:model.deboundance.800ms="valor_hora" onchange="@this.set('valor_hora', this.value);" type="text" class="mask_valor_hora border-2 border-neutral-500 rounded">
                                         </div>
                                     </div>
 
@@ -233,6 +260,7 @@
                     $(".mask_cep").mask('99999-999');
                     $(".mask_telefone").mask('(99) 99999-9999');
                     $(".mask_cnpj").mask('99.999.999/9999-99');
+                    $(".mask_valor_hora").maskMoney({prefix: "R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
 
                </script>
                <!-- conteudo da modal: FIM -->

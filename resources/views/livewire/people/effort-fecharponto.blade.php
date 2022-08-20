@@ -14,16 +14,66 @@
 
                 <!-- CONTEUDO DA MODAL -->
                 <div>
-                    <div><label>Fechar Ponto</label></div>
+                    <label class="font-bold">Fechar Ponto</label>
 
                     <div class="mt-5 md:mt-0 md:col-span-2">
                         <form> <!-- (FORMULARIO COM CAMPOS) wire:submit.prevent="store"-->
 
                             <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
-                                <div class="grid grid-cols-6 gap-6">    
+           
+                                <table class="table-fixed w-full">
+                                    <div class="col-span-6 sm:col-span-4">                                      
+                                    </div> 
+                                    <thead>
+                                        <tr>
+                                            <br><th class="">Colaborador</th>
+                                            <br><th class="">Horas Feitas</th>
+                                            <br><th class="">Valor por Hora</th>
+                                            <br><th class="">Total</th>
+                                        </tr>                            
+                                    </thead>
+                                    
+                                    <tbody align="center">
+                                        @foreach ($colaboradores as $colaborador)                           
+                                            <tr>
+                                                <td class="border border-slate-300">{{$colaborador->name}}</td>
+
+                                                <td class="border border-slate-300">
+                                                    <label>{{App\Http\Livewire\People\EffortAdmin::horasTotais($colaborador->id)}}</label>
+                                                </td>
+
+                                                <td class="border border-slate-300">
+                                                    {{'R$ ' .number_format($colaborador->valor_hora, 2,',', '.')}}  
+                                                </td>
+
+                                                <td class="border border-slate-300">
+                                                    {{'R$ ' .number_format(App\Http\Livewire\People\EffortAdmin::total(App\Http\Livewire\People\EffortAdmin::horasTotais($colaborador->id), $colaborador->valor_hora), 2,',', '.')}}
+                                                    
+                                                </td>
+                                            
+                                                <td>
+                                                    <x-jet-button
+                                                        class=""
+                                                        wire:click="">
+                                                        {{__('Folha de Ponto')}}
+                                                    </x-jet-button>
+                                                </td>
+                                            </tr>
+
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
 
                             <!-- campos -->                                                          
-                            <label class="text-red-600 w-full font-bold col-span-6 flex gap-1"><svg xmlns="http://www.w3.org/2000/svg" class='w-5' viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill='currentColor' d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM232 152C232 138.8 242.8 128 256 128s24 10.75 24 24v128c0 13.25-10.75 24-24 24S232 293.3 232 280V152zM256 400c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"/></svg> Não tem nada importante aqui ainda.</label>
+                     </div>
+                    <div class="col-span-6 sm:col-span-6 bg-gray-50 gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                            <button wire:click="closeModalPonto()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                Cancel
+                            </button>
+                        </span>
+                        </span>                                
                     </div>
                 </div>
             </div>   

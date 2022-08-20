@@ -1,5 +1,5 @@
 <div>
-    @if (session()->has('message'))
+    @if (session()->has('message'))<!--mensagem na tela-->
         <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
             <div class="flex">
             <div>
@@ -9,13 +9,16 @@
         </div>
     @endif
     <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded my-3">Adicionar Ponto Manualmente</button>
+    <br><button wire:click="createPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Ponto do Mês</button>
+    <!--abri modal de edição-->
     @if($isOpen)
         @include('livewire.people.effort-edit')
     @endif
+    <!--abri modal de fechar ponto do mes-->
     @if($isOpenPonto)
         @include('livewire.people.effort-fecharponto')
     @endif
-    <br><button wire:click="fecharPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Ponto do Mês</button>
+    
      
     
 
@@ -26,7 +29,7 @@
             <div class="overflow-x-auto">
                 <div>
                     <label><strong>Selecione o período para obter o total de horas</strong> </label><br>
-
+                     <!--filtros de listagem-->
                     <label>De:</label>
                     <input wire:model="from" type="date">
 
@@ -49,15 +52,20 @@
                         @endforeach                        
                     </select><br> 
 
+                     <!--total de horas-->
                     @if ($this->from and $this->to)
                         <label><strong>Total de Horas Trabalhadas: {{App\Http\Livewire\People\EffortAdmin::contarHoras($this->from, $this->to, $this->filtro_usuario, $this->filtro_projeto)}}</strong></label><br>
                     @endif
 
-                    <div>
-                        <a href={{route("effort_pdf")}} >                            
-                            <button class="btn btn-secondary">Pdf</button>
-                        </a>
-                    </div>
+                    <!--abri modal de fechar ponto do mes-->
+                    @php
+                        /*<div>
+                            <a href={{route("effort_pdf")}} >                            
+                                <button class="btn btn-secondary">Pdf</button>
+                            </a>
+                        </div>*/
+                    @endphp
+                    
 
                 </div>
                 <table class="table-fixed w-full">

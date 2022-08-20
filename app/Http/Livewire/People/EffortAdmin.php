@@ -40,6 +40,11 @@ class EffortAdmin extends Component
     public $hora;
     public $logado;
 
+    //ATRIBUTOS TELA DE FECHAR PONTO
+    public $horas_totais;
+    public $horas_calculadas = 0;
+    public $colaboradores;
+
 
     public function openModal()
     {
@@ -129,9 +134,34 @@ class EffortAdmin extends Component
         $this->resetInputFields();
         $this->openModal();
     }
-    public function fecharPonto() //abrir modal para registrar novos pontos
+    public function createPonto() //abrir modal para registrar novos pontos
     {
         $this->openModalPonto();
+    }
+
+    public function secondsToHours($seg) //transorma segundos em horas
+    {
+        $total_horas[0] = str_pad(intval($seg / 3600) , 2 , '0' , STR_PAD_LEFT);
+        $total_horas[1] = str_pad(intval(($seg - ($total_horas[0] * 3600)) / 60) , 2 , '0' , STR_PAD_LEFT);
+        $total_horas[2] = str_pad(intval($seg % 60) , 2 , '0' , STR_PAD_LEFT);
+
+        $horas = implode(':',  $total_horas);
+        return $horas;
+    }
+
+    public function horasTotais($id)
+    {
+        $horas_usuarios = DB::table('efforts')->where([['usuario_id', '=', $id]])->get();
+        $total_segundos = 0;
+        foreach($horas_usuarios as $hora_usuario)
+        {
+            $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $hora_usuario->inicio);
+            $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $hora_usuario->fim);
+            $segundos_ponto = $hora_final->diffInSeconds($hora_inicial);
+            $total_segundos += $segundos_ponto;
+        }
+        
+        return EffortAdmin::secondsToHours($total_segundos);
     }
 
     public function diffHoras($inicio, $fim = 'nulo')
@@ -142,14 +172,9 @@ class EffortAdmin extends Component
         }
         $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $inicio);
         $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $fim);
-        $segundos_trabalhadas = $hora_final->diffInSeconds($hora_inicial);
+        $segundos_trabalhados = $hora_final->diffInSeconds($hora_inicial);
 
-        $total_horas[0] = str_pad(intval($segundos_trabalhadas / 3600) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[1] = str_pad(intval(($segundos_trabalhadas - ($total_horas[0] * 3600)) / 60) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[2] = str_pad(intval($segundos_trabalhadas % 60) , 2 , '0' , STR_PAD_LEFT);
-
-        $hours = implode(':',  $total_horas);//coloca numa string no fomrato H:i:s     
-        return $hours;
+        return EffortAdmin::secondsToHours($segundos_trabalhados);
     }
 
     public function contarHoras($inicio, $fim, $usuario, $projeto)//conta as horas em relação a determinado periodo, projeto e usuario
@@ -183,19 +208,22 @@ class EffortAdmin extends Component
             $segundos_trabalhados = $data_final->diffInSeconds($data_inicial);
             $total_segundos += $segundos_trabalhados;
         }
-        //tranforma os segundos em horas, minutos e segundos
-        $total_horas[0] = str_pad(intval($total_segundos / 3600) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[1] = str_pad(intval(($total_segundos - ($total_horas[0] * 3600)) / 60) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[2] = str_pad(intval($total_segundos % 60) , 2 , '0' , STR_PAD_LEFT);
+        return EffortAdmin::secondsToHours($total_segundos);
+    }
 
-        $hours = implode(':',  $total_horas);//coloca numa string no fomrato H:i:s     
-        return $hours;
+
+    public function total($horas_totais, $valor_hora)
+    {
+        $horas_decimal = explode(':',$horas_totais);
+        $total_horas = $horas_decimal[0] + $horas_decimal[1]/60 + $horas_decimal[2]/3600;
+        return round(($total_horas*$valor_hora), 2);
     }
 
     public function render()
     {
         $this->projetos = Project::orderBy('id', 'asc')->get();
         $this->usuarios = User::orderBy('id', 'asc')->get();
+        $this->colaboradores = DB::table('users')->where([['tipo_contrato', '=', 'colaborador']])->get();
 
         //FILTROS DE BUSCA      
         $filtros = [];

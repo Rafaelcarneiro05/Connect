@@ -26,6 +26,20 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function ()
+{
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
+
+
 // ********************************************************************************************************
 // ROTAS DO MODULO financial----> TODAS ACESSADAS PELO ADMIN
 // ********************************************************************************************************
@@ -113,6 +127,8 @@ Route::middleware([
         return view('livewire/people/effort-module');
     })->name('effort-module');
 });
+
+
 
 
 

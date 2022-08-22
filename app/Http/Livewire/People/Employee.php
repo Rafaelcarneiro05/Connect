@@ -47,6 +47,9 @@ class Employee extends Component
     public $sexo = 'masculino';
     public $tamanho_roupa;
     public $data_admissao;
+    public $tipo_contrato = 'colaborador';
+    public $habilidade;
+    public $valor_hora;
 
     public $informacoes_usuarios = [];
 
@@ -86,6 +89,9 @@ class Employee extends Component
         $this->sexo = $user->sexo;
         $this->tamanho_roupa = $user->tamanho_roupa;
         $this->data_admissao = $user->admission_date;
+        $this->tipo_contrato = $user->tipo_contrato;
+        $this->habilidade = $user->habilidade;
+        $this->valor_hora = $user->valor_hora;
 
         $this->openModal();
     }
@@ -130,8 +136,14 @@ class Employee extends Component
             $this->senha = Hash::make($this->senha);
         }       
         
+        
+        //converte valor do formato 15.120,00 para 15120.00
+        $valor_tratado = str_replace('R$', '', $this->valor_hora);
+        $valor_tratado = str_replace('.', '', $valor_tratado);
+        $valor_tratado = str_replace(',', '.', $valor_tratado);
+
         //EDIÇÃO OU CRIAÇÃO updateOrCreate
-         User::updateOrCreate(['id' => $this->user_id], [
+        User::updateOrCreate(['id' => $this->user_id], [
             'name' => $this->nome,
             'email' => $this->email,
             'password' => $this ->senha,
@@ -155,7 +167,10 @@ class Employee extends Component
             'estado_civil' => $this->estado_civil,
             'sexo' => $this->sexo,
             'tamanho_roupa' => $this->tamanho_roupa,
-            'admission_date' =>	$this->data_admissao
+            'admission_date' =>	$this->data_admissao,
+            'tipo_contrato' =>	$this->tipo_contrato,
+            'habilidade' =>	$this->habilidade,
+            'valor_hora' =>	$valor_tratado,
             ]);
 
         $this->resetInputFields();

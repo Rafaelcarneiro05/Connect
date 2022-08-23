@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\CalendarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +38,6 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 
 
 });
+
+
+Route::get('/calendar/recorrentes', [CalendarController::class, 'index']);

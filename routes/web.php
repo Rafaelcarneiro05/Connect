@@ -21,6 +21,10 @@ Route::get('/', function () {
 });
 Route::resource('/admin/users', AuthController::class);
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
 
 
 Route::middleware([

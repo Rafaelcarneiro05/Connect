@@ -54,17 +54,8 @@
 
                      <!--total de horas-->
                     @if ($this->from and $this->to)
-                        <label><strong>Total de Horas Trabalhadas: {{App\Http\Livewire\People\EffortAdmin::contarHoras($this->from, $this->to, $this->filtro_usuario, $this->filtro_projeto)}}</strong></label><br>
+                        <label class="font-bold">Total de Horas Trabalhadas: {{App\Http\Livewire\People\EffortAdmin::contarHoras($this->from, $this->to, $this->filtro_usuario, $this->filtro_projeto)}}</label><br>
                     @endif
-
-                    <!--abri modal de fechar ponto do mes-->
-                    @php
-                        /*<div>
-                            <a href={{route("effort_pdf")}} >                            
-                                <button class="btn btn-secondary">Pdf</button>
-                            </a>
-                        </div>*/
-                    @endphp
                     
 
                 </div>

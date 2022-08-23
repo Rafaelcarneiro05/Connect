@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Efforts;
 use App\Models\Project;
 use App\Models\UserProject;
+use App\Http\Controllers\EffortPdfController;
 
 class EffortAdmin extends Component
 {
@@ -44,8 +45,14 @@ class EffortAdmin extends Component
     public $horas_totais;
     public $horas_calculadas = 0;
     public $colaboradores;
+    public $total_geral = 0;
+    public $from_fechar;
+    public $to_fechar;
+    public $colab_id;
 
-
+    static $colab;
+    
+    
     public function openModal()
     {
         $this->isOpen = true;
@@ -136,6 +143,7 @@ class EffortAdmin extends Component
     }
     public function createPonto() //abrir modal para registrar novos pontos
     {
+        $this->resetInputFields();
         $this->openModalPonto();
     }
 
@@ -151,7 +159,11 @@ class EffortAdmin extends Component
 
     public function horasTotais($id)
     {
-        $horas_usuarios = DB::table('efforts')->where([['usuario_id', '=', $id]])->get();
+        
+        $from_fechar = Carbon::create($this->from_fechar);
+        $to_fechar = Carbon::create($this->to_fechar)->addDays(1);
+        
+        $horas_usuarios = DB::table('efforts')->where([['usuario_id', '=', $id],['inicio', '>=',  $from_fechar], ['fim', '<',  $to_fechar]])->get();
         $total_segundos = 0;
         foreach($horas_usuarios as $hora_usuario)
         {
@@ -179,8 +191,7 @@ class EffortAdmin extends Component
 
     public function contarHoras($inicio, $fim, $usuario, $projeto)//conta as horas em relação a determinado periodo, projeto e usuario
     {
-        $fim = Carbon::create($fim);
-        $fim = $fim->addDays(1);
+        $fim = Carbon::create($fim)->addDays(1);
 
         //verifica quais filtros serão aplicados
         if($projeto and $usuario)
@@ -211,13 +222,27 @@ class EffortAdmin extends Component
         return EffortAdmin::secondsToHours($total_segundos);
     }
 
-
     public function total($horas_totais, $valor_hora)
     {
-        $horas_decimal = explode(':',$horas_totais);
-        $total_horas = $horas_decimal[0] + $horas_decimal[1]/60 + $horas_decimal[2]/3600;
+        $horas_totais = explode(':',$horas_totais);
+        $total_horas = $horas_totais[0] + $horas_totais[1]/60 + $horas_totais[2]/3600;
+        $this->total_geral = ($this->total_geral) + round(($total_horas*$valor_hora), 2);
         return round(($total_horas*$valor_hora), 2);
     }
+
+    public function folhaPonto($id)
+    {
+        //EffortPdfController::teste2($id);
+        //redirect()->route("effort_pdf");
+    }
+    
+    public static function dale()
+    {
+        //dd(self::$colab);
+        //$colab_id = self::$colab;
+        //return $colab_id;
+    }
+
 
     public function render()
     {
@@ -242,8 +267,7 @@ class EffortAdmin extends Component
         }
         if ($this->to) 
         {
-            $to = Carbon::create($this->to);
-            $to = $to->addDays(1);
+            $to = Carbon::create($this->to)->addDays(1);
             $filtros[] = ['fim', '<',  $to];            
         }
 

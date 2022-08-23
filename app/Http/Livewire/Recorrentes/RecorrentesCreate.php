@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Recorrentes;
 
+use App\Http\Livewire\Empresas\EmpresasCreate;
 use App\Models\Recorrentes;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -92,12 +93,13 @@ class RecorrentesCreate extends Component
 
     public function effect()
     {
-        return Redirect::route('financial-brief');
+        $efective = FinancialBrief::openModal();
+
+        return redirect()->route('financial-flow', compact('efetive'));
     }
     public function render()
     {
 
         return view('livewire.recorrentes.recorrentes-create');
-
     }
 }

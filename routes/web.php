@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ExportPDF;
 use App\Http\Controllers\FinancialPDFController;
+use App\Http\Livewire\Financial\FinancialBrief;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,11 +21,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('/admin/users', AuthController::class);
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
 
 
 Route::middleware([
@@ -81,7 +77,6 @@ Route::middleware([
         return view('livewire/recorrentes/list-recorrentes');
     })->name('list-recorrentes');
 
-
 });
 
 
@@ -130,6 +125,22 @@ Route::middleware([
 
 
 
+
+
+
+//HENRIQUE
+// ********************************************************************************************************
+//              ROTAS DO MODULO PROJECTS
+// ********************************************************************************************************
+//rotas modo PROJECTS para admin
+
+
+
+
+
+
+
+//rotas modo PROJECTS para users
 
 
 

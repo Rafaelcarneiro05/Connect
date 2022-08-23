@@ -2,19 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Livewire\People\EffortAdmin as PeopleEffortAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
 use App\Models\Efforts;
+use App\Http\Livewire\People\EffortAdmin;
 
 
 class EffortPdfController extends Controller
 {
+    static $colab;
+
+    public static function folhaPonto($id)
+    {
+        self::$colab = $id;
+        dd(self::$colab);
+        redirect()->route("effort_pdf");
+    }
+    public function colab()
+    {
+        dd(self::$colab);
+        return self::$colab;
+    }
+
     public function index()
     {
+        //$colab = self::$colab;
+        //dd($colab);
         $efforts = Efforts::orderBy('id', 'desc')->get();
-        //dd($efforts);
         return view('livewire.people.effort_pdf', compact('efforts'));
     }
 
@@ -35,17 +52,13 @@ class EffortPdfController extends Controller
         return gmdate("H:i:s", $segundos);
     }
 
-    public static function teste()
-    {
-        dd("daleeee");
-    }
-
     public function exportPDF()
     {
-
-        $efforts = Efforts::orderBy('id', 'desc')->get();
+        $colab2 = self::colab();
+        //redirect()->route("effort_pdf");
+        $efforts = Efforts::where([['usuario_id', '=', $colab2]])->orderBy('id', 'desc')->get();
         $pdf = PDF::loadView('livewire.people.effort_pdf', ['efforts' => $efforts]);
-        return $pdf->stream('folha-ponto' . rand(1, 1000) . '.pdf');
+        return $pdf->download('folha-ponto' . rand(1, 1000) . '.pdf');
 
     }
 }

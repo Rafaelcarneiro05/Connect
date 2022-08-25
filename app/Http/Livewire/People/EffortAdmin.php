@@ -49,23 +49,34 @@ class EffortAdmin extends Component
     public $from_fechar;
     public $to_fechar;
     public $colab_id;
+    public $isOpenPdf = 0;
 
     static $colab;
     
     
-    public function openModal()
+    public function openModal()//abrir modal de registro
     {
         $this->isOpen = true;
     }
 
-    public function openModalPonto()
+    public function openModalPonto()//abrir modal de fechar ponto do mes
     {
         $this->isOpenPonto = true;
+    }
+
+    public function openPdf()//abrir pdf
+    {
+        $this->isOpenPdf = true;
     }
 
     public function closeModal()
     {
         $this->isOpen = false;
+    }
+
+    public function closePdf()
+    {
+        $this->isOpenPdf = false;
     }
 
     public function closeModalPonto()
@@ -143,7 +154,7 @@ class EffortAdmin extends Component
     }
     public function createPonto() //abrir modal para registrar novos pontos
     {
-        $this->resetInputFields();
+        //$this->resetInputFields();
         $this->openModalPonto();
     }
 
@@ -230,19 +241,13 @@ class EffortAdmin extends Component
         return round(($total_horas*$valor_hora), 2);
     }
 
-    public function folhaPonto($id)
+    public function folhaPonto($id)//redireciona para a rota do pdf passando o id
     {
-        //EffortPdfController::teste2($id);
-        //redirect()->route("effort_pdf");
+        $user_id = $id;
+        $from_fechar = $this->from_fechar;
+        $to_fechar = $this->to_fechar;
+        redirect()->route("effort_pdf", ['id_user' => $user_id, 'from' => $from_fechar, 'to' =>$to_fechar]);
     }
-    
-    public static function dale()
-    {
-        //dd(self::$colab);
-        //$colab_id = self::$colab;
-        //return $colab_id;
-    }
-
 
     public function render()
     {

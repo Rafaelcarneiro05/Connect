@@ -9,7 +9,7 @@
         </div>
     @endif
     <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded my-3">Adicionar Ponto Manualmente</button>
-    <br><button wire:click="createPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Ponto do Mês</button>
+    <br><button wire:click="createPonto()" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded my-3"> Fechar Mês</button>
     <!--abri modal de edição-->
     @if($isOpen)
         @include('livewire.people.effort-edit')

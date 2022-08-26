@@ -196,7 +196,6 @@ class Employee extends Component
 
     public function render()
     {
-        dd($this);
         $searchTerm = '%'.$this->searchTerm.'%';//busca
         return view('livewire.people.employee', [
             'employees_retorno' => User::where('name', 'like', $searchTerm)->paginate(10)

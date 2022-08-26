@@ -40,7 +40,6 @@
                                             </tr>                            
                                         </thead>                                    
                                         <tbody align="center">
-                                        
                                             @foreach ($colaboradores as $colaborador)                           
                                                 <tr>
                                                     <td class="border border-slate-300">{{$colaborador->name}}</td>
@@ -55,24 +54,19 @@
 
                                                     <td class="border border-slate-300">
                                                         {{'R$ ' .number_format(App\Http\Livewire\People\EffortAdmin::total(App\Http\Livewire\People\EffortAdmin::horasTotais($colaborador->id), $colaborador->valor_hora), 2,',', '.')}}
-
+                                                        
                                                     </td>
                                                 
                                                     <td>
-                                                        <button wire:click="{{App\Http\Controllers\EffortPdfController::folhaPonto($colaborador->id)}}" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                                            Folha de ponto
-                                                        </button>                                                       
-                                                    </td>
+                                                        <button wire:click="folhaPonto({{$colaborador->id}})" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                                            Folha de Ponto
+                                                        </button> 
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                     <div class="font-bold w-full text-right">Total Geral: {{'R$ ' .number_format($this->total_geral, 2,',', '.')}}</div>
-                                    
                                 @endif
-                                
-
-
                             <!-- campos -->                                                          
                      </div>
                     <div class="col-span-6 sm:col-span-6 bg-gray-50 gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

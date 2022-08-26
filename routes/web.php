@@ -68,13 +68,13 @@ Route::middleware([
 
 
     //EMPRESAS//EMPRESAS//EMPRESAS
-    Route::get('/financial/empresas', function () {
-        return view('livewire/empresas/list-empresas');
+    Route::get('/financial/company', function () {
+        return view('livewire/financial/company-list');
     })->name('list-empresa');
 
-    //RECORRENTES//RECORRENTES//RECORRENTES
-    Route::get('/financial/recorrentes', function () {
-        return view('livewire/recorrentes/list-recorrentes');
+    //CALENDARIO//CALENDARIO//CALENDARIO
+    Route::get('/financial/calendar', function () {
+        return view('livewire/financial/calendar-list');
     })->name('list-recorrentes');
 
 });

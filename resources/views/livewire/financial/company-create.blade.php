@@ -1,5 +1,4 @@
 <div>
-
     @if (session()->has('message'))
         <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
             <div class="flex">
@@ -11,7 +10,7 @@
     @endif
     <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded my-3">Cadastrar Novo item</button>
     @if($isOpen)
-        @include('livewire.empresas.register-empresas')
+        @include('livewire.financial.company-register')
     @endif
 
 

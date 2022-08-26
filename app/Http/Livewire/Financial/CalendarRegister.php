@@ -1,20 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\Recorrentes;
+namespace App\Http\Livewire\Financial;
 
-use App\Http\Livewire\Empresas\EmpresasCreate;
-use App\Models\Recorrentes;
 use Livewire\Component;
+use App\Models\Recorrentes;
 use Livewire\WithPagination;
-use App\Http\Livewire\Financial;
-use App\Http\Livewire\Financial\FinancialBrief;
-use Illuminate\Support\Facades\Redirect;
 
-class RecorrentesCreate extends Component
+class CalendarRegister extends Component
 {
-
     use WithPagination;
-
 
     //TELA DE REGISTRO
     public $categoria;
@@ -93,13 +87,11 @@ class RecorrentesCreate extends Component
 
     public function effect()
     {
-        $efective = FinancialBrief::openModal();
 
-        return redirect()->route('financial-flow', compact('efetive'));
+        return redirect()->route('financial-brief');
     }
     public function render()
     {
-
-        return view('livewire.recorrentes.recorrentes-create');
+        return view('livewire.financial.calendar-register');
     }
 }

@@ -50,6 +50,7 @@ class Employee extends Component
     public $tipo_contrato = 'colaborador';
     public $habilidade;
     public $valor_hora;
+    public $campo_nulo;
 
     public $informacoes_usuarios = [];
 
@@ -113,71 +114,83 @@ class Employee extends Component
 
     public function store()  //PROCESSAMENTO do cadastrar ou editar: updateOrCreate
     {       
-        if($this->user_id)//VERIFICA SE É UPDATE OU CREATE E ADICIONA HASH NA SENHA
+        if($this->nome == NULL or $this->email == NULL)
         {
-            if(!$this->senha)
+            $this->campo_nulo = true;
+        }
+        else
+        {
+        
+            if($this->user_id)//VERIFICA SE É UPDATE OU CREATE E ADICIONA HASH NA SENHA
             {
-                $this->informacoes_usuarios = User::orderBy('name', 'asc')->get();
-                foreach($this->informacoes_usuarios as $informacao_usuario)
+                if(!$this->senha)
                 {
-                    if($informacao_usuario->id == $this->user_id)
+                    $this->informacoes_usuarios = User::orderBy('name', 'asc')->get();
+                    foreach($this->informacoes_usuarios as $informacao_usuario)
                     {
-                        $this->senha = $informacao_usuario->password;
-                    }
-                }  
+                        if($informacao_usuario->id == $this->user_id)
+                        {
+                            $this->senha = $informacao_usuario->password;
+                        }
+                    }  
+                }
+                else
+                {
+                    $this->senha = Hash::make($this->senha);
+                }
             }
             else
             {
                 $this->senha = Hash::make($this->senha);
+            }       
+            
+            
+            //converte valor do formato 15.120,00 para 15120.00
+            $valor_tratado = str_replace('R$', '', $this->valor_hora);
+            $valor_tratado = str_replace('.', '', $valor_tratado);
+            $valor_tratado = str_replace(',', '.', $valor_tratado);
+            if($this->valor_hora == NULL)
+            {
+                $valor_tratado = NULL;
             }
+
+            //EDIÇÃO OU CRIAÇÃO updateOrCreate
+            User::updateOrCreate(['id' => $this->user_id], [
+                'name' => $this->nome,
+                'email' => $this->email,
+                'password' => $this ->senha,
+                'cep' => $this->cep,
+                'endereco' => $this->endereco,
+                'bairro' => $this->bairro,
+                'complemento' => $this->complemento,
+                'cidade' => $this->cidade,
+                'estado' => $this->estado,
+                'role' => $this->role,
+                'phone' => $this->telefone,
+                'birth_date' => $this->data_nasc,
+                'cpf' => $this->cpf,
+                'bank_account' => $this->conta,
+                'sort_code' => $this->codigo_bank,
+                'rg' => $this->rg,
+                'pix' => $this->pix,
+                'escolaridade' => $this->escolaridade,
+                'cnpj' => $this->cnpj,
+                'nacionalidade' => $this->nacionalidade,
+                'estado_civil' => $this->estado_civil,
+                'sexo' => $this->sexo,
+                'tamanho_roupa' => $this->tamanho_roupa,
+                'admission_date' =>	$this->data_admissao,
+                'tipo_contrato' =>	$this->tipo_contrato,
+                'habilidade' =>	$this->habilidade,
+                'valor_hora' =>	$valor_tratado,
+                ]);
+
+            $this->resetInputFields();
+
+            session()->flash('message', 'Pessoa registrado com sucesso.');
+
+            $this->closeModal();     
         }
-        else
-        {
-            $this->senha = Hash::make($this->senha);
-        }       
-        
-        
-        //converte valor do formato 15.120,00 para 15120.00
-        $valor_tratado = str_replace('R$', '', $this->valor_hora);
-        $valor_tratado = str_replace('.', '', $valor_tratado);
-        $valor_tratado = str_replace(',', '.', $valor_tratado);
-
-        //EDIÇÃO OU CRIAÇÃO updateOrCreate
-        User::updateOrCreate(['id' => $this->user_id], [
-            'name' => $this->nome,
-            'email' => $this->email,
-            'password' => $this ->senha,
-            'cep' => $this->cep,
-            'endereco' => $this->endereco,
-            'bairro' => $this->bairro,
-            'complemento' => $this->complemento,
-            'cidade' => $this->cidade,
-            'estado' => $this->estado,
-            'role' => $this->role,
-            'phone' => $this->telefone,
-            'birth_date' => $this->data_nasc,
-            'cpf' => $this->cpf,
-            'bank_account' => $this->conta,
-            'sort_code' => $this->codigo_bank,
-            'rg' => $this->rg,
-            'pix' => $this->pix,
-            'escolaridade' => $this->escolaridade,
-            'cnpj' => $this->cnpj,
-            'nacionalidade' => $this->nacionalidade,
-            'estado_civil' => $this->estado_civil,
-            'sexo' => $this->sexo,
-            'tamanho_roupa' => $this->tamanho_roupa,
-            'admission_date' =>	$this->data_admissao,
-            'tipo_contrato' =>	$this->tipo_contrato,
-            'habilidade' =>	$this->habilidade,
-            'valor_hora' =>	$valor_tratado,
-            ]);
-
-        $this->resetInputFields();
-
-        session()->flash('message', 'Pessoa registrado com sucesso.');
-
-        $this->closeModal();     
     }
 
     public function confirmingItemDeletion($id)

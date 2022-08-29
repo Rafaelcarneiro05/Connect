@@ -46,7 +46,7 @@
 
                             <div class="col-span-6 sm:col-span-6">
                                 <div class="form-control flex flex-col">
-                                    <label> Usuário:</label>
+                                    <label> Funcionário:</label>
                                     <select wire:model="usuario_id" class="border-2 border-neutral-500 rounded pppppp"> 
                                         <option value="">Selecione uma opção</option>
                                         @foreach ($usuarios as $usuario)
@@ -57,7 +57,7 @@
                             </div>
 
                             @if ($this->campo_nulo)
-                                <label class="text-red-600 w-full font-bold col-span-6 flex gap-1"><svg xmlns="http://www.w3.org/2000/svg" class='w-5' viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill='currentColor' d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM232 152C232 138.8 242.8 128 256 128s24 10.75 24 24v128c0 13.25-10.75 24-24 24S232 293.3 232 280V152zM256 400c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"/></svg> Preencha todos os campos antes de prosseguir.</label>                              
+                                <label class="text-red-600 w-full font-bold col-span-6 flex gap-1"><svg xmlns="http://www.w3.org/2000/svg" class='w-5' viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill='currentColor' d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM232 152C232 138.8 242.8 128 256 128s24 10.75 24 24v128c0 13.25-10.75 24-24 24S232 293.3 232 280V152zM256 400c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"/></svg> Preencha todos os campos.</label>                              
                             @endif
 
                             <div class="col-span-6 sm:col-span-6 bg-gray-50 gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

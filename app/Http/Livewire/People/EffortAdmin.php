@@ -82,6 +82,7 @@ class EffortAdmin extends Component
     public function closeModalPonto()
     {
         $this->isOpenPonto = false;
+        $this->total_geral = 0;
     }
      
     public function confirmingItemDeletion($id)
@@ -168,7 +169,7 @@ class EffortAdmin extends Component
         return $horas;
     }
 
-    public function horasTotais($id)
+    public function horasFeitas($id)//calcula as horas feitas no mês
     {
         
         $from_fechar = Carbon::create($this->from_fechar);
@@ -187,7 +188,7 @@ class EffortAdmin extends Component
         return EffortAdmin::secondsToHours($total_segundos);
     }
 
-    public function diffHoras($inicio, $fim = 'nulo')
+    public function diffHoras($inicio, $fim = 'nulo')//calcula as horas de cada esforco
     {
         if($fim == 'nulo')
         {
@@ -233,12 +234,36 @@ class EffortAdmin extends Component
         return EffortAdmin::secondsToHours($total_segundos);
     }
 
-    public function total($horas_totais, $valor_hora)
+    public function totalGeral($id)//calcula o total geral do salario
+    {
+        $from = Carbon::create($this->from_fechar);
+        $to = Carbon::create($this->to_fechar)->addDays(1);
+        //dd($to, $from, $id);
+        $esforcos = DB::table('efforts')->where([['inicio', '>=', $from], ['fim', '<', $to], ['usuario_id' ,'=', $id]])->get();
+        //dd($esforcos);
+        $total_segundos = 0;
+        foreach ($esforcos as $esforco)
+        {
+            $inicio = Carbon::createFromFormat('Y-m-d H:i:s', $esforco->inicio);
+            $fim = Carbon::createFromFormat('Y-m-d H:i:s', $esforco->fim);
+            $segundos_trabalhados = $fim->diffInSeconds($inicio);
+            $total_segundos += $segundos_trabalhados;
+        }
+        $horas = EffortAdmin::secondsToHours($total_segundos);
+        $usuario = DB::table('users')->where([['id' ,'=', $id]])->get();
+        foreach ($usuario as $usuario)
+        {
+            $valor_hora = $usuario->valor_hora;
+        }
+        $this->total_geral = ($this->total_geral) + EffortAdmin::total($horas, $valor_hora);
+    }
+
+    public function total($horas_totais, $valor_hora)//calcula o salario de cada colaborador 
     {
         $horas_totais = explode(':',$horas_totais);
         $total_horas = $horas_totais[0] + $horas_totais[1]/60 + $horas_totais[2]/3600;
-        $this->total_geral = ($this->total_geral) + round(($total_horas*$valor_hora), 2);
-        return round(($total_horas*$valor_hora), 2);
+        $total = round(($total_horas*$valor_hora), 2);
+        return $total;
     }
 
     public function folhaPonto($id)//redireciona para a rota do pdf passando o id

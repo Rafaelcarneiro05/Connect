@@ -95,6 +95,7 @@ class Effort extends Component
 
     public function fecharPonto()//fechar ponto
     {   
+        $this->hora = Carbon::now()->setTimezone('America/Sao_Paulo');
         Efforts::where([['usuario_id', '=', $this->logado],['fim', '=', NULL]])->update(['fim' => $this->hora]);
         $this->ponto_aberto = false;
     }
@@ -113,7 +114,17 @@ class Effort extends Component
         $this->logado = Auth::user()->id;
     }
 
-    public function diffHoras($inicio, $fim = 'nulo')
+    public function secondsToHours($seg) //transorma segundos em horas
+    {
+        $total_horas[0] = str_pad(intval($seg / 3600) , 2 , '0' , STR_PAD_LEFT);
+        $total_horas[1] = str_pad(intval(($seg - ($total_horas[0] * 3600)) / 60) , 2 , '0' , STR_PAD_LEFT);
+        $total_horas[2] = str_pad(intval($seg % 60) , 2 , '0' , STR_PAD_LEFT);
+
+        $horas = implode(':',  $total_horas);
+        return $horas;
+    }
+
+    public function diffHoras($inicio, $fim = 'nulo')//conta as horas de um esforço
     {
         if($fim == 'nulo')
         {
@@ -123,15 +134,10 @@ class Effort extends Component
         $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $fim);
         $segundos_trabalhadas = $hora_final->diffInSeconds($hora_inicial);
 
-        $total_horas[0] = str_pad(intval($segundos_trabalhadas / 3600) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[1] = str_pad(intval(($segundos_trabalhadas - ($total_horas[0] * 3600)) / 60) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[2] = str_pad(intval($segundos_trabalhadas % 60) , 2 , '0' , STR_PAD_LEFT);
-
-        $hours = implode(':',  $total_horas);//coloca numa string no fomrato H:i:s     
-        return $hours;
+        return Effort::secondsToHours($segundos_trabalhadas);
     }
 
-    public function contarHoras($inicio, $fim, $projeto)//conta as horas em determinado periodo
+    public function contarHoras($inicio, $fim, $projeto)//conta as horas em determinado periodo e projeto
     {
         $fim = Carbon::create($fim);
         $fim = $fim->addDays(1);
@@ -153,12 +159,7 @@ class Effort extends Component
             $total_segundos += $segundos_trabalhados;
         }
         //tranforma os segundos em horas, minutos e segundos
-        $total_horas[0] = str_pad(intval($total_segundos / 3600) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[1] = str_pad(intval(($total_segundos - ($total_horas[0] * 3600)) / 60) , 2 , '0' , STR_PAD_LEFT);
-        $total_horas[2] = str_pad(intval($total_segundos % 60) , 2 , '0' , STR_PAD_LEFT);
-
-        $hours = implode(':',  $total_horas);//coloca numa string no fomrato H:i:s     
-        return $hours;
+        return Effort::secondsToHours($total_segundos);
     }
 
     public function render()
@@ -183,7 +184,7 @@ class Effort extends Component
         {
             $to = Carbon::create($this->to);
             $to = $to->addDays(1);
-            $filtros[] = ['fim', '<',   $to];
+            $filtros[] = ['inicio', '<',   $to];
         }
         $filtros[] = ['usuario_id', '=', $this->logado];
 

@@ -14,10 +14,10 @@
 
                 <!-- CONTEUDO DA MODAL -->
                 <div>
-                    <label class="font-bold">Fechar Ponto</label>
+                    <label class="font-bold">Fechar Mês</label>
 
                     <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form> <!-- (FORMULARIO COM CAMPOS) wire:submit.prevent="store"-->
+                        <form> <!-- (FORMULARIO COM CAMPOS) -->
 
                             <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
                                 <label class="font-bold">Selecione a data inicial e final</label><br>
@@ -45,7 +45,7 @@
                                                     <td class="border border-slate-300">{{$colaborador->name}}</td>
 
                                                     <td class="border border-slate-300">
-                                                        <label>{{App\Http\Livewire\People\EffortAdmin::horasTotais($colaborador->id)}}</label>
+                                                        <label>{{App\Http\Livewire\People\EffortAdmin::horasFeitas($colaborador->id)}}</label>
                                                     </td>
 
                                                     <td class="border border-slate-300">
@@ -53,7 +53,7 @@
                                                     </td>
 
                                                     <td class="border border-slate-300">
-                                                        {{'R$ ' .number_format(App\Http\Livewire\People\EffortAdmin::total(App\Http\Livewire\People\EffortAdmin::horasTotais($colaborador->id), $colaborador->valor_hora), 2,',', '.')}}
+                                                        {{'R$ ' .number_format(App\Http\Livewire\People\EffortAdmin::total(App\Http\Livewire\People\EffortAdmin::horasFeitas($colaborador->id), $colaborador->valor_hora), 2,',', '.')}}
                                                         
                                                     </td>
                                                 
@@ -62,6 +62,7 @@
                                                             Folha de Ponto
                                                         </button> 
                                                 </tr>
+                                                {{App\Http\Livewire\People\EffortAdmin::totalGeral($colaborador->id)}}
                                             @endforeach
                                         </tbody>
                                     </table>

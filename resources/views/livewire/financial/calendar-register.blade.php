@@ -107,7 +107,7 @@
                                 </button>
 
 
-                                <button wire:click.prevent="effect" class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                <button wire:click="effect" class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                     Efetivar
                                 </button>
                                     <button wire:click.prevent="delete" type="button" class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">Apagar</button>
@@ -152,7 +152,6 @@
                     modal.style.display = "none";
                     @this.descricao = '';
                     @this.value = '';
-                    @this.color = '';
                 }
 
 
@@ -163,7 +162,6 @@
                     @this.recorrente_id = '';
                     @this.descricao = '';
                     @this.value = '';
-                    @this.color = '';
                 }
 
 
@@ -188,7 +186,8 @@
                     initialView: 'dayGridMonth',
                     locale: 'pt-BR',
                     selectable: true,
-
+                    editable: true,
+                    droppable: true,
                     select: function(startStr) {
                         //Pegar dia calendario
                         @this.data = startStr.startStr;

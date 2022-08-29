@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Empresas;
+namespace App\Http\Livewire\Financial;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Empresas;
 
-class EmpresasCreate extends Component
+class   CompanyCreate extends Component
 {
     use WithPagination;
     public $updateMode = false;
@@ -102,15 +102,16 @@ class EmpresasCreate extends Component
         $this->confirmingItemDeletion = false;
         session()->flash('message', 'Item deletado com sucesso.');
     }
-
     public function render()
     {
         $searchTerm = '%'.$this->searchTerm.'%'; // BUSCA DE EMPRESA POR NOME
 
-        return view('livewire.empresas.empresas-create', [
+        return view('livewire.financial.company-create', [
 
-            'empresas_retorno' => Empresas::where('name','like', $searchTerm)->paginate(5)
+        'empresas_retorno' => Empresas::where('name','like', $searchTerm)->orderBy('created_at', 'desc')->paginate(5)
 
         ]);
+
+
     }
 }

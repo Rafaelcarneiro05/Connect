@@ -39,10 +39,7 @@
                                 @if (Auth::user()->role == 'admin')
                                     <x-jet-dropdown-link href="{{ route('employee-module') }}">
                                         {{ __('Employees') }}
-                                    </x-jet-dropdown-link>
-                                    <x-jet-dropdown-link href="{{ route('projects-module') }}">
-                                        {{ __('Projects') }}
-                                    </x-jet-dropdown-link>
+                                    </x-jet-dropdown-link>                                    
                                     <x-jet-dropdown-link href="{{ route('effort-admin-module') }}">
                                         {{ __('Effort Control') }}
                                     </x-jet-dropdown-link>
@@ -51,6 +48,12 @@
                                 @if (Auth::user()->role == 'user')
                                     <x-jet-dropdown-link href="{{ route('effort-module') }}">
                                         {{ __('Effort Register') }}
+                                    </x-jet-dropdown-link>
+                                @endif
+
+                                @if (Auth::user()->role == 'project_manager')
+                                    <x-jet-dropdown-link href="{{ route('projects-module') }}">
+                                        {{ __('Projects') }}
                                     </x-jet-dropdown-link>
                                 @endif
 

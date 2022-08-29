@@ -97,9 +97,6 @@ Route::middleware([
         return view('livewire/people/employee-module');
     })->name('employee-module');
 
-    Route::get('/people/projects-module', function () {
-        return view('livewire/people/projects-module');
-    })->name('projects-module');
 
     Route::get('/people/effort-admin-module', function () {
         return view('livewire/people/effort-admin-module');
@@ -123,6 +120,18 @@ Route::middleware([
     })->name('effort-module');
 });
 
+//rotas do modo people para projects_manager
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'is.projectsManager'
+])->group(function ()
+{
+    Route::get('/people/projects-module', function () {
+        return view('livewire/people/projects-module');
+    })->name('projects-module');
+});
 
 
 

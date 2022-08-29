@@ -77,8 +77,6 @@
                                             {{__('Equipe')}}
                                         </x-jet-button>
 
-                                                                            
-
                                         <x-jet-danger-button type="button"
                                             class=""
                                             wire:click="confirmingItemDeletion({{ $project->id }})">

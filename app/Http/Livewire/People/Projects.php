@@ -44,7 +44,7 @@ class Projects extends Component
         $this->openModal();
     }
 
-    public function edit($id)//abrir modal para edicao
+    public function edit(int $id)//abrir modal para edicao
     {
         $project = Project::find($id); 
         

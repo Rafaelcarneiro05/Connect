@@ -109,7 +109,7 @@
                                 
                                 <td>
                                     <x-jet-button
-                                        class=""
+                                        class="bg-teal-500"
                                         wire:click="edit({{ $effort->id }})">
                                         {{__('Edit')}}
                                     </x-jet-button>

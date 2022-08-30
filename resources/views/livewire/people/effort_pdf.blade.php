@@ -9,6 +9,12 @@
 </head>
 
 <style>
+    * {
+        margin: 5;
+        padding: 0;
+        box-sizing: border-box;
+        text-decoration: none;
+    }
     table{
         border-collapse: collapse;
         widows: 100%;
@@ -20,17 +26,27 @@
         padding: 8px;
         border: 1px solid #cccccc;
     }
-    .teste {
-        text-align:ri;
+
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #cccccc;
     }
+    .teste {
+    }
+    body {
+        font-size: 100%;
+    }
+
 
     
 </style>
 
 <body>
     <header>
-        <h1>Folha de Ponto</h1>
-        <h2>CNN BLACK LTDA</h2>
+        <h1><strong>Folha de Ponto</strong></h1>
+        <label class="teste">CNN BLACK LTDA</label>
         <label>41.455.500/0001-03</label>
         <label>Praça do Rosario, 1</label>
         <label>Centro, Viçosa/MG</label>

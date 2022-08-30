@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\People;
+namespace App\Http\Livewire\Projects;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 
-//Models Ultilizadas
+//Models Utilizadas
 use App\Models\Project;
 use App\Models\User;
 use App\Models\UserProject;
@@ -36,18 +36,18 @@ class Projects extends Component
     //ATRIBUTOS MODAL EQUIPE
     public $projeto_nome;
     public $multi_equipe_escolhidos = [];
-    public $projeto_id;   
-    
-    public function create()//abrir modal para cadastro 
+    public $projeto_id;
+
+    public function create()//abrir modal para cadastro
     {
         $this->resetInputFields();
         $this->openModal();
     }
 
-    public function edit($id)//abrir modal para edicao
+    public function edit(int $id)//abrir modal para edicao
     {
-        $project = Project::find($id); 
-        
+        $project = Project::find($id);
+
         $this->project_id = $id;
         $this->nome = $project->nome;
         $this->descricao = $project->descricao;
@@ -60,7 +60,7 @@ class Projects extends Component
     private function resetInputFields()//reseta os campos
     {
         $this->reset();
-    }  
+    }
 
     public function openModal()//abre modal de cadastro
     {
@@ -75,10 +75,10 @@ class Projects extends Component
     public function openModal_equipe($id)//abre modal equipe
     {
         $this->isOpen_equipe = true;
-        
+
         $project = Project::find($id);
         $this->projeto_nome = $project->nome;
-        $this->projeto_id = $project->id;       
+        $this->projeto_id = $project->id;
 
         $users_ = User::pluck('id')->toArray();
         $this->multi_equipe_escolhidos = array_fill_keys($users_, false);//inicialmente todos os chekbox estao desmarcados
@@ -91,7 +91,7 @@ class Projects extends Component
                     $this->multi_equipe_escolhidos[$key] = true;
                 }
         }
-        
+
     }
 
     public function closeModal_equipe()//fecha modal equipe
@@ -115,13 +115,13 @@ class Projects extends Component
                 {
                     UserProject::create(['user_id' => $escolhidos, 'project_id' => $this->projeto_id]);
                 }
-            }   
+            }
         }
-        $this->isOpen_equipe = false;        
+        $this->isOpen_equipe = false;
     }
 
     public function store() //Processamento modal de cadastro/edicao
-    {       
+    {
         Project::updateOrCreate(['id' => $this->project_id],[
             'nome' => $this->nome,
             'descricao' => $this->descricao,
@@ -131,7 +131,7 @@ class Projects extends Component
 
         $this->resetInputFields();
         session()->flash('message', 'Projeto registrado com sucesso.');
-        $this->closeModal(); 
+        $this->closeModal();
     }
 
     public function confirmingItemDeletion($id)
@@ -152,32 +152,32 @@ class Projects extends Component
     {
         if(strlen($descricao)>$maxchar || $descricao == '' )
         {
-            $words = preg_split('/\s/', $descricao);      
+            $words = preg_split('/\s/', $descricao);
             $output = '';
             $i = 0;
-            while (1) 
+            while (1)
             {
                 $length = strlen($output)+strlen($words[$i]);
-                if ($length > $maxchar) 
+                if ($length > $maxchar)
                 {
                     break;
-                } 
-                else 
+                }
+                else
                 {
                     $output .= " " . $words[$i];
                     ++$i;
                 }
             }
             $output .= $end;
-        } 
-        else 
+        }
+        else
         {
             $output = $descricao;
         }
-        return $output; 
+        return $output;
     }
 
-    public function subnome($nome)    
+    public function subnome($nome)
     {
         $subnome = explode(" ", $nome);
         $output = '';
@@ -186,13 +186,13 @@ class Projects extends Component
             if($subnome[1] == 'de' or $subnome[1] == 'da' or $subnome[1] == 'do' or $subnome[1] == 'De' or $subnome[1] == 'Da' or $subnome[1] == 'Do')
             {
                 $output .= $subnome[0].' '.$subnome[2];
-                return $output;  
+                return $output;
             }
             else
             {
                 $output .= $subnome[0].' '.$subnome[1];
                 return $output;
-            }    
+            }
         }
         else
         {
@@ -204,8 +204,8 @@ class Projects extends Component
     {
         $i = 0;
         foreach ($this->users_projects as $user_project)
-        { 
-            if ($user_project->project_id == $id) 
+        {
+            if ($user_project->project_id == $id)
             {
                 $i++;
                 $equipe_to = DB::table('users')->where('id', '=', $user_project->user_id)->first();
@@ -215,7 +215,7 @@ class Projects extends Component
                     break;
                 }
                 echo($equipe_to->name), '<br>';
-            }    
+            }
         }
     }
 
@@ -223,10 +223,10 @@ class Projects extends Component
     {
         $this->multi_equipe_todos = User::orderBy('name', 'asc')->get();//consulta todos os usuarios
         $this->users_projects = UserProject::orderBy('user_id', 'asc')->get();//consulta as relações entre users e projects
-        
-   
+
+
         $searchTerm = '%'.$this->searchTerm.'%';
-        return view('livewire.people.projects',[
+        return view('livewire.projects.projects',[
             'projects_retorno' => Project::where('nome', 'like', $searchTerm)->paginate(10)
         ]);
     }

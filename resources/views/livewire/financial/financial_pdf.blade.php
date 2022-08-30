@@ -29,17 +29,25 @@
         <table>
             <thead>
                 <tr>
-                    <td><b>Natureza</b></td>
-                    <td><b>Valor</b></td>
-                    <td><b>Data</b></td>
-                    <td><b>Empresa</b></td>
+                    <th>Data</th>
+                    <th>Natureza</th>
+                    <th>Categoria</th>
+                    <th>Descição</th>
+                    <th>Fonte</th>
+                    <th>Empresa</th>
+                    <th>Moeda</th>
+                    <th>Cotação</th>
+                    <th>Fração</th>
+                    <th>Taxa</th>
+                    <th>Observação</th>
+                    <th>Valor</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($financials_retorno as $financial)
                 @php
                     $nome_empresa = '';
-                    if(!is_null($financial->empresas_id)){
+                    if(!is_null($financials_retorno->empresas_id)){
                         $empresa_to = DB::table('empresas')->where('id', '=', $financial->empresas_id)->first();
                         $nome_empresa = $empresa_to->name;
                     }
@@ -56,7 +64,6 @@
                         <td class=>{{$financial->taxa}} </td>
                         <td class=>{{$financial->observacao}} </td>
                         <td class=>{{'R$' .number_format($financial->value, 2,',', '.')}}</td>
-
                         <td class=>{{$nome_empresa}}</td>
 
                     </tr>

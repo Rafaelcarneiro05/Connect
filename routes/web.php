@@ -62,7 +62,7 @@ Route::middleware([
     })->name('financial-brief');
 
     //DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF
-    Route::get('/financial/brief/financial_pdf',[FinancialPDFController::class, 'exportPDF'])
+    Route::get('/financial/brief/financial_pdf',[FinancialBrief::class, 'pdf'])
     ->name('financial_pdf');
 
 
@@ -120,21 +120,6 @@ Route::middleware([
     })->name('effort-module');
 });
 
-//rotas do modo people para projects_manager
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-    'is.projectsManager'
-])->group(function ()
-{
-    Route::get('/people/projects-module', function () {
-        return view('livewire/people/projects-module');
-    })->name('projects-module');
-});
-
-
-
 
 
 //HENRIQUE
@@ -145,8 +130,18 @@ Route::middleware([
 
 
 
-
-
+//rotas do modo people para projects_manager
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'is.projectsManager'
+])->group(function ()
+{
+    Route::get('/projects/projects-module', function () {
+        return view('livewire/projects/projects-module');
+    })->name('projects-module');
+});
 
 
 //rotas modo PROJECTS para users

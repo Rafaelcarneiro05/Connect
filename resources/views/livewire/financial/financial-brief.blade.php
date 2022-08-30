@@ -15,7 +15,7 @@
     @endif
 
 
-    <x-jet-section-border/>
+
 
     <div>
 
@@ -50,9 +50,8 @@
                                         @endforeach
                                 </select>
                                 <div>
-                                    <a href={{route("financial_pdf")}}>
-                                        <button class="btn btn-secondary">PDF</button>
-                                    </a>
+                                    <a href='{{route('financial_pdf')}}'><button>PDF</button></a>
+
                                 </div>
                             </div>
 

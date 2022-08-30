@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 //Models Ultilizadas
 use App\Models\User;
@@ -52,8 +53,8 @@ class EffortAdmin extends Component
     public $isOpenPdf = 0;
 
     static $colab;
-    
-    
+
+
     public function openModal()//abrir modal de registro
     {
         $this->isOpen = true;
@@ -84,12 +85,12 @@ class EffortAdmin extends Component
         $this->isOpenPonto = false;
         $this->total_geral = 0;
     }
-     
+
     public function confirmingItemDeletion($id)
     {
         $this->confirmingItemDeletion = $id;
     }
-    
+
     private function resetInputFields()//reseta os campos
     {
         $this->reset();
@@ -97,14 +98,14 @@ class EffortAdmin extends Component
 
     public function edit($id)   //abrir modal para edicao
     {
-        $effort = Efforts::find($id); 
-        
+        $effort = Efforts::find($id);
+
         $this->esforco_id = $id;
 
         $this->inicio = $effort->inicio;
         $this->fim = $effort->fim;
         $this->projeto_id = $effort->projeto_id;
-        $this->usuario_id = $effort->usuario_id;        
+        $this->usuario_id = $effort->usuario_id;
 
         $this->openModal();
     }
@@ -121,11 +122,11 @@ class EffortAdmin extends Component
         {
             Efforts::where([['id', '=', $id]])->delete();
         }
-        
+
         $this->confirmingItemDeletion = false;
         session()->flash('message', 'Item deletado com sucesso.');
     }
-    
+
     public function store() //Processamento do registro de novo ponto
     {
         if($this->inicio == NULL or $this->fim == NULL or $this->projeto_id == NULL or $this->usuario_id == NULL)
@@ -134,7 +135,7 @@ class EffortAdmin extends Component
         }
         else
         {
-            Efforts::updateOrCreate(['id' => $this->esforco_id], 
+            Efforts::updateOrCreate(['id' => $this->esforco_id],
             [
                 'inicio' => $this->inicio,
                 'fim' => $this->fim,
@@ -171,10 +172,10 @@ class EffortAdmin extends Component
 
     public function horasFeitas($id)//calcula as horas feitas no mês
     {
-        
+
         $from_fechar = Carbon::create($this->from_fechar);
         $to_fechar = Carbon::create($this->to_fechar)->addDays(1);
-        
+
         $horas_usuarios = DB::table('efforts')->where([['usuario_id', '=', $id],['inicio', '>=',  $from_fechar], ['fim', '<',  $to_fechar]])->get();
         $total_segundos = 0;
         foreach($horas_usuarios as $hora_usuario)
@@ -184,7 +185,7 @@ class EffortAdmin extends Component
             $segundos_ponto = $hora_final->diffInSeconds($hora_inicial);
             $total_segundos += $segundos_ponto;
         }
-        
+
         return EffortAdmin::secondsToHours($total_segundos);
     }
 
@@ -258,7 +259,7 @@ class EffortAdmin extends Component
         $this->total_geral = ($this->total_geral) + EffortAdmin::total($horas, $valor_hora);
     }
 
-    public function total($horas_totais, $valor_hora)//calcula o salario de cada colaborador 
+    public function total($horas_totais, $valor_hora)//calcula o salario de cada colaborador
     {
         $horas_totais = explode(':',$horas_totais);
         $total_horas = $horas_totais[0] + $horas_totais[1]/60 + $horas_totais[2]/3600;
@@ -280,29 +281,29 @@ class EffortAdmin extends Component
         $this->usuarios = User::orderBy('id', 'asc')->get();
         $this->colaboradores = DB::table('users')->where([['tipo_contrato', '=', 'colaborador']])->get();
 
-        //FILTROS DE BUSCA      
+        //FILTROS DE BUSCA
         $filtros = [];
         if($this->filtro_usuario)
         {
             $filtros[] = ['usuario_id', '=', $this->filtro_usuario];
-        }               
+        }
         if($this->filtro_projeto)
         {
             $filtros[] = ['projeto_id', '=', $this->filtro_projeto];
-        }               
-        if ($this->from) 
+        }
+        if ($this->from)
         {
             $from = Carbon::create($this->from);
             $filtros[] = ['inicio', '>=',  $from];
         }
-        if ($this->to) 
+        if ($this->to)
         {
             $to = Carbon::create($this->to)->addDays(1);
-            $filtros[] = ['fim', '<',  $to];            
+            $filtros[] = ['fim', '<',  $to];
         }
 
         return view('livewire.people.effort-admin', [
             'efforts_retorno_admin' => Efforts::where($filtros)->orderBy('id', 'desc')->paginate(10)
-        ]);        
+        ]);
     }
 }

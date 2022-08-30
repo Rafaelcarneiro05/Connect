@@ -16,7 +16,7 @@
 
 
                 <!-- CONTEUDO DA MODAL -->
-                <div>
+                <div wire:model.lazy>
                             <div class="mt-5 md:mt-0 md:col-span-2">
                                 <form> <!-- wire:submit.prevent="store"-->
 
@@ -271,16 +271,13 @@
 
                 </div>
                 <script type="text/javascript">
-                    $(".value_valor").maskMoney({prefix: "R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
+                    $(".value_valor").maskMoney({prefix: "R$ ",decimal:",", thousands:".", allowZero: true, allowNegative: false});
                     $(".value_valor_transacao").maskMoney({prefix: "R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
                     $(".mascara_fracao").maskMoney({affixesStay: true, decimal:",", thousands:"", allowZero: false, allowNegative: false});
                </script>
 
 
                <!-- conteudo da modal: FIM -->
-
-
-
 
             </div>
 

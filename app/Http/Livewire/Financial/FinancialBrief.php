@@ -32,7 +32,7 @@ class FinancialBrief extends Component
     //TELA DE PESQUISA
     use WithPagination;
 
-    //public $financials;
+    public $financial_retorno_id;
 
     public $cashflow = 'entrada';
     public $from;
@@ -199,6 +199,45 @@ class FinancialBrief extends Component
         session()->flash('message', 'Item deletado com sucesso.');
     }
 
+    public function pdf()
+    {
+
+        $this->empresas = Empresas::get();
+
+        $where = [];
+
+        if ($this->empresa) {
+
+            $where[] = ['empresas_id', '=', $this->empresa];
+        }
+
+
+        if ($this->to) {
+
+            $to_explodido = explode('/', $this->to);
+            $to_explodido = array_reverse($to_explodido);
+            $to_explodido = implode('-', $to_explodido);
+
+            $where[] = ['data', '<=',   $to_explodido];
+        }
+
+        if ($this->from) {
+
+            $from_explodido = explode('/', $this->from);
+            $from_explodido = array_reverse($from_explodido);
+            $from_explodido = implode('-', $from_explodido);
+
+            $where[] = ['data', '>=',   $from_explodido];
+        }
+
+
+        $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [$this->cashflow];
+
+        $financials_retorno = Financial::where($where)->whereIn('cashflow', $filter)->get();
+        dd($from_explodido);
+        $pdf = PDF::loadView('livewire.financial.financial_pdf', ['financials_retorno' => $financials_retorno]);
+        return $pdf->stream('resumo_financeiro_connect' . rand(1, 1000) . '.pdf');
+    }
 
     public function render()
     {

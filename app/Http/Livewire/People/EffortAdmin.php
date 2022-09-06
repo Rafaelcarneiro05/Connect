@@ -156,7 +156,7 @@ class EffortAdmin extends Component
     }
     public function createPonto() //abrir modal para registrar novos pontos
     {
-        //$this->resetInputFields();
+        $this->resetInputFields();
         $this->openModalPonto();
     }
 

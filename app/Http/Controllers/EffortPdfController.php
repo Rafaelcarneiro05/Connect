@@ -69,8 +69,10 @@ class EffortPdfController extends Controller
            
 
         $user = User::where([['id', '=', $id_user]])->get();
+        $usuario = DB::table('users')->where([['id', '=', $id_user]])->first();
+        //dd($usuario->name);
         $pdf = PDF::loadView('livewire.people.effort_pdf', ['efforts' => $efforts, 'user' => $user, 'horas' => $horas, 'datas' => $datas]);
-        return $pdf->stream('folha-ponto' . rand(1, 1000) . '.pdf');
+        return $pdf->stream('folha-ponto - ' . $usuario->name . '.pdf');
 
     }
 }

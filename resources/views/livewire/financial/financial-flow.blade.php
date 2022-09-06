@@ -60,26 +60,32 @@
                                                 </select>
                                             </div>
                                             <br>
-                                            <div class="col-span-6 sm:col-span-4">
+                                            <div class="col-span-6 sm:col-span-4" wire:ignore>
                                                 <div>
                                                     <label for="valor">Valor</label>
                                                     <input id="valor" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="valor" onchange="@this.set('valor', this.value);" />
                                                 </div>
+                                                <div>
+                                                    <label for="">Fonte:</label>
+                                                    <input wire:model="fonte" type="text" class="border-2 border-neutral-500 rounded">
+                                                </div>
+
+                                                <div >
+                                                    <label for="">Observação:</label>
+                                                    <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        <label for="">Data</label>
+                                                        <input wire:model.defer="data" type="date" class="border-2 border-neutral-500 rounded">
+                                                    </div>
+                                                </div>
                                             </div>
                                             <br>
 
-                                                @if($moeda == 'brl')
-                                                    <div class="col-span-6 sm:col-span-4">
-                                                        <div>
-                                                            <label >Fonte:</label>
-                                                            <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                        <br>
-                                                        <div >
-                                                            <label >Observação:</label>
-                                                            <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                @endif
+
+
+
                                                 @if($moeda == 'usdt')
                                                     <div class="col-span-6 sm:col-span-4">
                                                         <div>
@@ -93,18 +99,11 @@
                                                             <br>
                                                             Exemplo: 1 USD = R$ 5,00
                                                         </div>
-                                                        <br>
-                                                        <div>
-                                                            <label for="">Fonte:</label>
-                                                            <input wire:model="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                        <br>
-                                                        <div >
-                                                            <label for="">Observação:</label>
-                                                            <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
-                                                        </div>
                                                     </div>
                                                 @endif
+
+
+
 
                                             @if($moeda == 'euro')
                                                 <div class="col-span-6 sm:col-span-4">
@@ -120,15 +119,6 @@
                                                         Exemplo: 1 € = 5,24 BRL
                                                     </div>
                                                     <br>
-                                                    <div>
-                                                        <label for="">Fonte:</label>
-                                                        <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Observação:</label>
-                                                        <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
                                                 </div>
                                             @endif
 
@@ -146,16 +136,6 @@
                                                         <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
                                                         <br>
                                                         Exemplo: 1 BNB = 1.420,17 BRL
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Fonte:</label>
-                                                        <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Observação:</label>
-                                                        <input wire:model.defer="observacao" type="text" class="border-2 border-neutral-500 rounded">
                                                     </div>
                                                     <br>
                                                 </div>
@@ -177,15 +157,6 @@
                                                         Exemplo: 1 BTC = 144.826,49 BRL
                                                     </div>
                                                     <br>
-                                                    <div>
-                                                        <label for="">Fonte:</label>
-                                                        <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
-                                                    </div>
-                                                    <br>
-                                                    <div>
-                                                        <label for="">Observação:</label>
-                                                        <input wire:model.defer="observacao" type="text" name="" id="" class="border-2 border-neutral-500 rounded">
-                                                    </div>
                                             @endif
 
                                         </div>
@@ -195,13 +166,8 @@
                                                 <div class="col-span-6 sm:col-span-4" id="divsaida">
                                                     <div class="col-span-6 sm:col-span-4">
                                                         <div class="form-control">
-                                                            <div>
-                                                                <div>
-                                                                    <label for="">Data</label>
-                                                                    <input wire:model.defer="data" type="date" class="border-2 border-neutral-500 rounded">
-                                                                </div>
-                                                            </div>
-                                                            <br>
+
+
                                                             <div>
                                                                 <label> Selecione a categoria:</label>
                                                                 <select wire:model.defer="saida" class="border-2 border-neutral-500 rounded">
@@ -216,12 +182,11 @@
                                                             <div>
                                                                 <textarea class="w-full h-20 border-2 border-neutral-500 rounded" name="" id="" cols="100" rows="15" wire:model.defer="descricao"></textarea>
                                                             </div>
-                                                            <br>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             @endif
-                                            <br>
                                             <div class="col-span-6 sm:col-span-4">
                                                 <div>
                                                     <label for="taxa">Taxa de Transação:</label>
@@ -232,21 +197,6 @@
 
                                         <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA -->
 
-
-                                            @if($cashflow == 'entrada')
-                                                <div class="col-span-6 sm:col-span-4" id="diventrada">
-                                                    <div class="form-control">
-                                                        <div>
-                                                            <div>
-                                                                <label for="">Data</label>
-                                                                <input wire:model.defer="data" type="date" class="border-2 border-neutral-500 rounded">
-                                                            </div>
-                                                        </div>
-                                                        <br>
-
-                                                    </div>
-                                                </div>
-                                            @endif
                                     </div>
                                 </form>
                             </div>
@@ -265,15 +215,14 @@
                                         Cancel
                                       </button>
                                     </span>
-
                                 </div>
 
 
                 </div>
                 <script type="text/javascript">
-                    $(".value_valor").maskMoney({prefix: "R$ ",decimal:",", thousands:".", allowZero: true, allowNegative: false});
-                    $(".value_valor_transacao").maskMoney({prefix: "R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
-                    $(".mascara_fracao").maskMoney({affixesStay: true, decimal:",", thousands:"", allowZero: false, allowNegative: false});
+                    $(".value_valor").maskMoney({prefix:"R$ ",decimal:",", thousands:".", allowZero: true, allowNegative: false});
+                    $(".value_valor_transacao").maskMoney({prefix:"R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
+                    $(".mascara_fracao").maskMoney({affixesStay: false, decimal:",", thousands:"", allowZero: true, allowNegative: false,});
                </script>
 
 

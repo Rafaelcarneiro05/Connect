@@ -12,10 +12,6 @@
 
         <script defer src="{{ asset('/js/app.js') }}"></script>
 
-        <!-- Styles -->
-        {{-- <link href="{{ mix('css/app.css') }}" rel='stylesheet'> --}}
-
-        <script src="{{ mix('/js/app.js') }}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css">
         @livewireStyles

@@ -4,17 +4,18 @@ namespace App\Http\Livewire\Financial;
 
 //models utilizadas
 
-use App\Http\Livewire\Empresas\EmpresasCreate;
 use App\Models\Financial;
 use App\Models\Empresas;
-use App\Models\Recorrentes;
-use Illuminate\Http\Request;
 
 
-use Illuminate\Support\Facades\DB;
+
 use Livewire\Component;
+
+//PAGINAÇÃO
 use Livewire\WithPagination;
-use Barryvdh\DomPDF\Facade\Pdf;
+
+
+
 
 class FinancialBrief extends Component
 {
@@ -27,14 +28,15 @@ class FinancialBrief extends Component
     public $empresas;
     public $empresas_id;
 
-
-
+    //PDF
+    public $from_pdf;
+    public $to_pdf;
     //TELA DE PESQUISA
     use WithPagination;
 
-    public $financial_retorno_id;
 
-    public $cashflow = 'entrada';
+
+    public $cashflow = '';
     public $from;
     public $to;
     public $items;
@@ -75,6 +77,8 @@ class FinancialBrief extends Component
     public function edit($id)   //abrir modal para edicao ----
     {
 
+
+
         $financial = Financial::find($id);
 
         $this->financial_id = $id;
@@ -82,13 +86,13 @@ class FinancialBrief extends Component
         $this->FIELD_cashflow = $financial->cashflow;
         $this->saida = $financial->saida;
         $this->descricao = $financial->descriacao;
-        $this->valor = $financial->value;
+        $this->valor = 'R$' .number_format($financial->value, 2,',', '.');
         $this->moeda = $financial->moeda;
         $this->fonte = $financial->fonte;
         $this->observacao = $financial->observacao;
         $this->data = $financial->data;
         $this->cotacaoEmBRL = $financial->cotacaoEmBRL;
-        $this->taxa = $financial->taxa;
+        $this->taxa = 'R$' .number_format($financial->taxa, 2,',', '.');
         $this->fracao = $financial->fracao;
         $this->brl = $financial->brl;
         $this->empresas_id = $financial->empresas_id;
@@ -199,8 +203,10 @@ class FinancialBrief extends Component
         session()->flash('message', 'Item deletado com sucesso.');
     }
 
-    public function pdf()
+    public function pdf() // DOWNLOAD PDF PELA SESSION
     {
+        //BUSCA PDF
+
 
         $this->empresas = Empresas::get();
 
@@ -231,12 +237,62 @@ class FinancialBrief extends Component
         }
 
 
-        $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [$this->cashflow];
 
-        $financials_retorno = Financial::where($where)->whereIn('cashflow', $filter)->get();
-        dd($from_explodido);
-        $pdf = PDF::loadView('livewire.financial.financial_pdf', ['financials_retorno' => $financials_retorno]);
-        return $pdf->stream('resumo_financeiro_connect' . rand(1, 1000) . '.pdf');
+        $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [$this->cashflow];
+        //dd($this->from);
+        $financials_retorno = Financial::where($where)->whereIn('cashflow', $filter)->orderBy('data', 'desc')->get();
+
+        //SOMATORIO FECHAMENTO DE CAIXA
+
+        if ($this->cashflow == 'entrada') {
+            $this->balanco_entr = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
+            $this->balanco_saida = '0';
+        } elseif ($this->cashflow == 'saida') {
+            $this->balanco_saida = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
+            $this->balanco_entr = '0';
+        } else {
+            $this->balanco_entr = Financial::where($where)->whereIn('cashflow', ['entrada'])->sum('value');
+            $this->balanco_saida = Financial::where($where)->whereIn('cashflow', ['saida'])->sum('value');
+            $this->balanco_taxa = Financial::where($where)->sum('taxa');
+            $this->soma = $this->balanco_entr - $this->balanco_saida - $this->balanco_taxa;
+        }
+
+
+
+        //FORMATANDO DATA PARA PDF
+        $from_pdf = '';
+        if ($this->from) {
+            $from_pdf = explode('-', $this->from);
+            $from_pdf = array_reverse($from_pdf);
+            $from_pdf = implode('/', $from_pdf);
+        }
+        $to_pdf = '';
+        if ($this->to) {
+            $to_pdf = explode('-', $this->to);
+            $to_pdf = array_reverse($to_pdf);
+            $to_pdf = implode('/', $to_pdf);
+        }
+
+
+
+
+
+
+
+        //guardar os dados na sessão
+        session()->put('financial_brief_financials_retorno_pdf', $financials_retorno);
+        session()->put('financial_brief_from_explodido_pdf', $from_pdf);
+        session()->put('financial_brief_to_explodido_pdf', $to_pdf);
+        session()->put('financial_brief_cash_flow_pdf', $this->cashflow);
+        session()->put('financial_brief_cbalanco_entr_pdf', $this->balanco_entr);
+        session()->put('financial_brief_balanco_saida_pdf', $this->balanco_saida);
+        session()->put('financial_brief_balanco_taxa_pdf', $this->balanco_taxa);
+        session()->put('financial_brief_soma_pdf', $this->soma);
+
+
+
+        redirect()->route('financial_pdf');
+
     }
 
     public function render()

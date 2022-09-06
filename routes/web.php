@@ -62,7 +62,7 @@ Route::middleware([
     })->name('financial-brief');
 
     //DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF
-    Route::get('/financial/brief/financial_pdf',[FinancialBrief::class, 'pdf'])
+    Route::get('/financial/brief/financial_pdf',[FinancialPDFController::class, 'exportPDF'])
     ->name('financial_pdf');
 
 

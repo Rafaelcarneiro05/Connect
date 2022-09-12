@@ -16,37 +16,13 @@
 
 
                 <!-- CONTEUDO DA MODAL -->
-                <div wire:model.lazy>
+                        <div>
                             <div class="mt-5 md:mt-0 md:col-span-2">
-                                <form> <!-- wire:submit.prevent="store"-->
+                                <form wire:submit.prevent="store">
 
-                                    <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
+                                    <div class="px-4 py-5 bg-white sm:p-6 shadow  'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
                                         <div class="grid grid-cols-6 gap-6">
 
-                                            <div class="col-span-6 sm:col-span-4">
-                                                <label for="">Selecione a Empresa</label>
-                                                <select wire:model.defer="empresas_id" class="border-2 border-neutral-500 rounded">
-                                                    <option disabled >Selecione uma opção</option>
-                                                    <option value="">Nenhuma</option>
-                                                        @foreach($empresas as $empresa)
-                                                            <option  name="" value="{{$empresa->id}}"> {{$empresa->name}}</option>
-
-                                                        @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-span-6 sm:col-span-4">
-                                                <div class="form-control">
-                                                    <label> Selecione o tipo de operação:</label>
-                                                    <select wire:model="cashflow" class="border-2 border-neutral-500 rounded">
-                                                        <option disabled >Selecione uma opção</option>
-                                                        <option value="entrada">Entrada</option>
-                                                        <option value="saida">Saída</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <br>
                                             <div class="col-span-6 sm:col-span-4">
                                                 <label for="">Moeda</label>
                                                 <select wire:model="moeda" class="border-2 border-neutral-500 rounded">
@@ -56,18 +32,46 @@
                                                     <option value="euro">EURO</option>
                                                     <option value="bnb">BNB</option>
                                                     <option value="btc">BTC</option>
-
                                                 </select>
                                             </div>
                                             <br>
-                                            <div class="col-span-6 sm:col-span-4" wire:ignore>
+                                            <div class="col-span-6 sm:col-span-4">
+                                                <div class="form-control">
+                                                    <label> Selecione o tipo de operação:</label>
+                                                    <select wire:model="cashflow" class="border-2 border-neutral-500 rounded">
+                                                        <option selected>Selecione uma opção</option>
+                                                        <option value="entrada">Entrada</option>
+                                                        <option value="saida">Saída</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-span-6 sm:col-span-4">
+                                                <label for="">Selecione a Empresa</label>
+                                                <select wire:model="empresas_id" class="border-2 border-neutral-500 rounded">
+                                                    <option disabled >Selecione uma opção</option>
+                                                    <option value="">Nenhuma</option>
+                                                        @foreach($empresas as $empresa)
+                                                            <option  name="" value="{{$empresa->id}}"> {{$empresa->name}}</option>
+
+                                                        @endforeach
+                                                </select>
+                                            </div>
+
+
+
+                                            <br>
+
+                                            <br>
+                                            <div class="col-span-6 sm:col-span-4"wire:ignore>
                                                 <div>
                                                     <label for="valor">Valor</label>
                                                     <input id="valor" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="valor" onchange="@this.set('valor', this.value);" />
                                                 </div>
                                                 <div>
                                                     <label for="">Fonte:</label>
-                                                    <input wire:model="fonte" type="text" class="border-2 border-neutral-500 rounded">
+                                                    <input wire:model.defer="fonte" type="text" class="border-2 border-neutral-500 rounded">
                                                 </div>
 
                                                 <div >
@@ -86,21 +90,21 @@
 
 
 
-                                                @if($moeda == 'usdt')
-                                                    <div class="col-span-6 sm:col-span-4">
-                                                        <div>
-                                                            <label for="">Fração em dollar:</label>
-                                                            <input wire:model.deboundance.800ms="fracao" onchange="@this.set('fracao', this.value);" type="text" class="mascara_fracao border-2 border-neutral-500 rounded">
-                                                        </div>
-                                                        <br>
-                                                        <div>
-                                                            <label for="">Cotação do dia Dollar:</label>
-                                                            <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
-                                                            <br>
-                                                            Exemplo: 1 USD = R$ 5,00
-                                                        </div>
+                                            @if($moeda == 'usdt')
+                                                <div class="col-span-6 sm:col-span-4">
+                                                    <div>
+                                                        <label for="">Fração em dollar:</label>
+                                                        <input wire:model.deboundance.800ms="fracao" onchange="@this.set('fracao', this.value);" type="text" class="mascara_fracao border-2 border-neutral-500 rounded">
                                                     </div>
-                                                @endif
+                                                    <br>
+                                                    <div>
+                                                        <label for="">Cotação do dia Dollar:</label>
+                                                        <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
+                                                        <br>
+                                                        Exemplo: 1 USD = R$ 5,00
+                                                    </div>
+                                                </div>
+                                            @endif
 
 
 
@@ -157,9 +161,8 @@
                                                         Exemplo: 1 BTC = 144.826,49 BRL
                                                     </div>
                                                     <br>
+                                                </div>
                                             @endif
-
-                                        </div>
 
 
                                             @if($cashflow == 'saida')
@@ -171,7 +174,8 @@
                                                             <div>
                                                                 <label> Selecione a categoria:</label>
                                                                 <select wire:model.defer="saida" class="border-2 border-neutral-500 rounded">
-                                                                    <option disabled >Selecione uma opção</option>
+
+                                                                    <option disabled selected value="">Selecione</option>
                                                                     <option value="despesas">Despesas</option>
                                                                     <option value="custos">Custos</option>
                                                                     <option value="imobilizados">Imobilizados</option>
@@ -187,6 +191,8 @@
                                                     </div>
                                                 </div>
                                             @endif
+
+
                                             <div class="col-span-6 sm:col-span-4">
                                                 <div>
                                                     <label for="taxa">Taxa de Transação:</label>
@@ -194,41 +200,38 @@
                                                 </div>
                                             </div>
 
-
-                                        <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA --> <!--ENTRADA -->
-
+                                        </div>
                                     </div>
                                 </form>
                             </div>
 
 
 
-                                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                    <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                      <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                        Save
-                                      </button>
-                                    </span>
-                                    <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                    <button wire:click="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                    Save
+                                    </button>
+                                </span>
+                                <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
 
-                                      <button wire:click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                        Cancel
-                                      </button>
-                                    </span>
-                                </div>
+                                    <button wire:click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                    Cancel
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
 
-
-                </div>
-                <script type="text/javascript">
-                    $(".value_valor").maskMoney({prefix:"R$ ",decimal:",", thousands:".", allowZero: true, allowNegative: false});
-                    $(".value_valor_transacao").maskMoney({prefix:"R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
-                    $(".mascara_fracao").maskMoney({affixesStay: false, decimal:",", thousands:"", allowZero: true, allowNegative: false,});
-               </script>
-
+                    <script type="text/javascript">
+                        $(".value_valor").maskMoney({prefix:"R$ ",decimal:",", thousands:".", allowZero: true, allowNegative: false});
+                        $(".value_valor_transacao").maskMoney({prefix:"R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
+                        $(".mascara_fracao").maskMoney({affixesStay: true, decimal:",", thousands:"", precision: 8, allowNegative: false,});
+                    </script>
 
                <!-- conteudo da modal: FIM -->
 
             </div>
+
 
 
 

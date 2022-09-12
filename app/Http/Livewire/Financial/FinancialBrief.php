@@ -45,14 +45,25 @@ class FinancialBrief extends Component
     public $balanco_saida;
     public $balanco_taxa;
     public $soma;
+    public $fracao_usdt_entr;
+    public $fracao_usdt_saida;
+    public $soma_usdt;
+    public $fracao_btc_entr;
+    public $fracao_btc_saida;
+    public $soma_btc;
+    public $fracao_euro_entr;
+    public $fracao_euro_saida;
+    public $soma_euro;
+    public $fracao_bnb_entr;
+    public $fracao_bnb_saida;
+    public $soma_bnb;
 
 
     //TELA DE CADASTRO/EDIÇÃO
     public $isOpen = 0;
     public $financial_id;
 
-    public $FIELD_cashflow = 'entrada';
-    public $saida = 'despesas';
+    public $saida;
     public $descricao;
     public $valor;
     public $moeda = 'brl';
@@ -83,7 +94,7 @@ class FinancialBrief extends Component
 
         $this->financial_id = $id;
 
-        $this->FIELD_cashflow = $financial->cashflow;
+        $this->cashflow = $financial->cashflow;
         $this->saida = $financial->saida;
         $this->descricao = $financial->descriacao;
         $this->valor = 'R$' .number_format($financial->value, 2,',', '.');
@@ -91,11 +102,13 @@ class FinancialBrief extends Component
         $this->fonte = $financial->fonte;
         $this->observacao = $financial->observacao;
         $this->data = $financial->data;
-        $this->cotacaoEmBRL = $financial->cotacaoEmBRL;
+        $this->cotacaoEmBRL = 'R$' .number_format($financial->cotacaoEmBRL, 2,',', '.'); ;
         $this->taxa = 'R$' .number_format($financial->taxa, 2,',', '.');
         $this->fracao = $financial->fracao;
         $this->brl = $financial->brl;
         $this->empresas_id = $financial->empresas_id;
+
+
 
         $this->openModal();
     }
@@ -145,8 +158,7 @@ class FinancialBrief extends Component
         //FRACAO
         $fracao_tratada = null;
         if ($this->fracao) {
-            $fracao_tratada = str_replace('.', '', $this->fracao);
-            $fracao_tratada = str_replace(',', '.', $fracao_tratada);
+            $fracao_tratada = str_replace(',', '.', $this->fracao);
         }
 
 
@@ -237,9 +249,11 @@ class FinancialBrief extends Component
         }
 
 
-
+        //FILTRO PARA SELEÇÃO DO TIPO DE FLUXO
         $filter = $this->cashflow == '' ? ['entrada', 'saida'] : [$this->cashflow];
-        //dd($this->from);
+
+
+        //FILTRO PARA RETORNO EM PDF
         $financials_retorno = Financial::where($where)->whereIn('cashflow', $filter)->orderBy('data', 'desc')->get();
 
         //SOMATORIO FECHAMENTO DE CAIXA
@@ -288,6 +302,11 @@ class FinancialBrief extends Component
         session()->put('financial_brief_balanco_saida_pdf', $this->balanco_saida);
         session()->put('financial_brief_balanco_taxa_pdf', $this->balanco_taxa);
         session()->put('financial_brief_soma_pdf', $this->soma);
+        session()->put('financial_brief_soma_usdt_pdf', $this->soma_usdt);
+        session()->put('financial_brief_soma_euro_pdf', $this->soma_euro);
+        session()->put('financial_brief_soma_btc_pdf', $this->soma_btc);
+        session()->put('financial_brief_soma_bnb_pdf', $this->soma_bnb);
+
 
 
 
@@ -339,7 +358,7 @@ class FinancialBrief extends Component
 
 
 
-
+        //SOMATORIO CAIXA VALOR EM REAIS. ENTRADA E SAÍDA
         if ($this->cashflow == 'entrada') {
             $this->balanco_entr = Financial::where($where)->whereIn('cashflow', $filter)->sum('value');
             $this->balanco_saida = '0';
@@ -354,6 +373,66 @@ class FinancialBrief extends Component
         }
 
 
+        //SOMATORIO CAIXA FRACAO EM DOLLAR
+        if ($this->cashflow == 'entrada') {
+            $this->fracao_usdt_entr = Financial::where($where)->whereIn('moeda' , ['usdt'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_usdt_saida = '0';
+        } elseif($this->cashflow == 'saida') {
+            $this->fracao_usdt_saida = Financial::where($where)->whereIn('moeda', ['usdt'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_usdt_entr = '0';
+        }
+        else {
+            $this->fracao_usdt_entr = Financial::where($where)->whereIn('moeda', ['usdt'])->whereIn('cashflow', ['entrada'])->sum('fracao');
+            $this->fracao_usdt_saida = Financial::where($where)->whereIn('moeda', ['usdt'])->whereIn('cashflow', ['saida'])->sum('fracao');
+            $this->soma_usdt = $this->fracao_usdt_entr - $this->fracao_usdt_saida;
+        }
+
+        //SOMATORIO FRACAO EM BTC
+
+        if ($this->cashflow == 'entrada') {
+            $this->fracao_btc_entr = Financial::where($where)->whereIn('moeda' , ['btc'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_btc_saida = '0';
+        } elseif($this->cashflow == 'saida') {
+            $this->fracao_btc_saida = Financial::where($where)->whereIn('moeda', ['btc'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_btc_entr = '0';
+        }
+        else {
+            $this->fracao_btc_entr = Financial::where($where)->whereIn('moeda', ['btc'])->whereIn('cashflow', ['entrada'])->sum('fracao');
+            $this->fracao_btc_saida = Financial::where($where)->whereIn('moeda', ['btc'])->whereIn('cashflow', ['saida'])->sum('fracao');
+            $this->soma_btc = $this->fracao_btc_entr - $this->fracao_btc_saida;
+        }
+
+        //SOMATORIO FRACAO EM EURO
+
+        if ($this->cashflow == 'entrada') {
+            $this->fracao_euro_entr = Financial::where($where)->whereIn('moeda' , ['euro'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_euro_saida = '0';
+        } elseif($this->cashflow == 'saida') {
+            $this->fracao_euro_saida = Financial::where($where)->whereIn('moeda', ['euro'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_euro_entr = '0';
+        }
+        else {
+            $this->fracao_euro_entr = Financial::where($where)->whereIn('moeda', ['euro'])->whereIn('cashflow', ['entrada'])->sum('fracao');
+            $this->fracao_euro_saida = Financial::where($where)->whereIn('moeda', ['euro'])->whereIn('cashflow', ['saida'])->sum('fracao');
+            $this->soma_euro = $this->fracao_euro_entr - $this->fracao_euro_saida;
+        }
+
+        // SOMATORIO FRACAO EM BNB
+
+        if ($this->cashflow == 'entrada') {
+            $this->fracao_bnb_entr = Financial::where($where)->whereIn('moeda' , ['bnb'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_bnb_saida = '0';
+        } elseif($this->cashflow == 'saida') {
+            $this->fracao_bnb_saida = Financial::where($where)->whereIn('moeda', ['bnb'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_bnb_entr = '0';
+        }
+        else {
+            $this->fracao_bnb_entr = Financial::where($where)->whereIn('moeda', ['bnb'])->whereIn('cashflow', ['entrada'])->sum('fracao');
+            $this->fracao_bnb_saida = Financial::where($where)->whereIn('moeda', ['bnb'])->whereIn('cashflow', ['saida'])->sum('fracao');
+            $this->soma_bnb = $this->fracao_bnb_entr - $this->fracao_bnb_saida;
+        }
+
+        //dd($this->saida);
         return view('livewire.financial.financial-brief', [
 
             'financials_retorno' => $financials_retorno,

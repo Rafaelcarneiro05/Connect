@@ -22,6 +22,14 @@
         border: 1px solid #cccccc;
     }
 
+    .container {
+        font-size: 10px;
+        position: absolute;
+        width: 100px;
+        height: 100px;
+
+        right: -25px;
+}
 </style>
 
 <body>
@@ -40,6 +48,16 @@
         $balanco_taxa = session()->get('financial_brief_balanco_taxa_pdf');
 
         $soma = session()->get('financial_brief_soma_pdf');
+
+        $soma_usdt = session()->get('financial_brief_soma_usdt_pdf');
+
+        $soma_euro = session()->get('financial_brief_soma_euro_pdf');
+
+        $soma_btc = session()->get('financial_brief_soma_btc_pdf');
+
+        $soma_bnb = session()->get('financial_brief_soma_bnb_pdf');
+
+
 
     @endphp
     <h1>Resumo Financeiro Connect</h1>
@@ -105,24 +123,33 @@
             </tbody>
         </table>
 
-        <div>
+        <div class="container">
             <div>
-                Entrada: {{'R$' .number_format($balanco_entr, 2,',', '.')}}
+                Entrada: {{'R$: ' .number_format($balanco_entr, 2,',', '.')}}
             </div>
             <div>
-                Saída: {{'R$' .number_format($balanco_saida, 2,',', '.')}}
+                Saída: {{'R$: ' .number_format($balanco_saida, 2,',', '.')}}
             </div>
             <div>
-                Taxas: {{'R$' .number_format($balanco_taxa, 2,',', '.')}}
+                Taxas: {{'R$: ' .number_format($balanco_taxa, 2,',', '.')}}
             </div>
 
             <div>
                 @php
                 if ( empty($cashflow) ) {
-                    echo 'Final: R$'.number_format($soma, 2,',', '.');
+                    echo 'Final: R$: '.number_format($soma, 2,',', '.'),
+                    "<br>", "Final: USDT: " .number_format($soma_usdt, 8,',', '.'),
+                    "<br>", 'Final: EURO: ' .number_format($soma_euro, 8,',', '.'),
+                    "<br>", 'Final: BTC: ' .number_format($soma_btc, 8,',', '.'),
+                    "<br>", 'Final: BNB: ' .number_format($soma_bnb, 8,',', '.');
+
+
                 }
                 @endphp
             </div>
+
+
+
         </div>
 
 

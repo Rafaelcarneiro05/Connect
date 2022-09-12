@@ -57,7 +57,7 @@
                             <th>Data</th>
                             <th>Natureza</th>
                             <th>Categoria</th>
-                            <th>Descição</th>
+                            <th>Descrição</th>
                             <th>Fonte</th>
                             <th>Empresa</th>
                             <th>Moeda</th>
@@ -84,7 +84,7 @@
                                 <tr >
 
                                     <td class="border border-slate-400">{{date('d/m/Y',strtotime($financial->data))}}</td>
-                                    <td class="border border-slate-400">{{$financial->cashflow}} </td>
+                                    <th class="border border-slate-400">{{$financial->cashflow}} </th>
                                     <td class="border border-slate-400">{{$financial->saida}} </td>
                                     <td class="border border-slate-400">{{$financial->descricao}} </td>
                                     <td class="border border-slate-400">{{$financial->fonte}} </td>
@@ -133,11 +133,119 @@
                 </div>
 
                 <div>
-                    @php
-                    if ( empty($cashflow) ) {
-                        echo 'Final: R$'.number_format($soma, 2,',', '.');
-                    }
-                    @endphp
+                    <strong>
+                        @php
+                        if ( empty($cashflow) ) {
+                            echo 'Final: R$: '.number_format($soma, 2,',', '.');
+                        }
+                        @endphp
+                    </strong>
+                </div>
+                <hr>
+
+                <!--CALCULO USDT -->
+                <div>
+                    @if ($this->fracao_usdt_entr)
+                        Total USDT Entrada:{{$fracao_usdt_entr}}
+                    @endif
+                </div>
+
+
+                <div>
+                    @if ($this->fracao_usdt_saida)
+                       Total USDT Saida:{{$fracao_usdt_saida}}
+                    @endif
+                </div>
+
+
+                <div>
+                    <strong>
+                        @php
+                        if ( empty($cashflow) ) {
+                            echo 'Final: USDT: ' .number_format($soma_usdt, 8,',', '.');
+                        }
+                        @endphp
+                    </strong>
+                </div>
+                <hr>
+
+
+                <!--CALCULO EURO -->
+                <div>
+                    @if ($this->fracao_euro_entr)
+                        Total EURO Entrada:{{$fracao_euro_entr}}
+                    @endif
+                </div>
+
+
+                <div>
+                    @if ($this->fracao_euro_saida)
+                        Total EURO Saida:{{$fracao_euro_saida}}
+                    @endif
+                </div>
+
+
+                <div>
+                    <strong>
+                        @php
+                        if ( empty($cashflow) ) {
+                            echo 'Final: EURO: '.number_format($soma_euro, 8,',', '.');
+                        }
+                        @endphp
+                    </strong>
+                </div>
+                <hr>
+
+
+                <!--CALCULO BTC -->
+                <div>
+                    @if ($this->fracao_btc_entr)
+                        Total BTC Entrada:{{$fracao_btc_entr}}
+                    @endif
+                </div>
+
+
+                <div>
+                    @if ($this->fracao_btc_saida)
+                        Total BTC Saida:{{$fracao_btc_saida}}
+                    @endif
+                </div>
+
+
+                <div>
+                    <strong>
+                        @php
+                        if ( empty($cashflow) ) {
+                            echo 'Final: BTC: '.number_format($soma_btc, 8,',', '.');
+                        }
+                        @endphp
+                    </strong>
+                </div>
+                <hr>
+
+                <!--CALCULO BNB -->
+                <div>
+                    @if ($this->fracao_bnb_entr)
+                        Total BNB Entrada:{{$fracao_bnb_entr}}
+                    @endif
+                </div>
+
+
+                <div>
+                    @if ($this->fracao_bnb_saida)
+                        Total BNB Saida:{{$fracao_bnb_saida}}
+                    @endif
+                </div>
+
+
+                <div>
+                    <strong>
+                        @php
+                        if ( empty($cashflow) ) {
+                            echo 'Final: BNB: '.number_format($soma_bnb, 8,',', '.');
+                        }
+                        @endphp
+                    </strong>
                 </div>
             </div>
 

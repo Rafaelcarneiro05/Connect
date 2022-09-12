@@ -1,11 +1,27 @@
 <div>
+    @php
 
+        $message_effetive_clicked = session()->get('message_effetive_clicked');
+    @endphp
+    @if ($message_effetive_clicked)
+    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
+        <div class="flex">
+            <div>
+                <p class="text-sm">{!! $message_effetive_clicked !!}</p>
+            </div>
+        </div>
+    </div>
+    @php
+        session()->forget($message_effetive_clicked);
+    @endphp
+
+    @endif
     @if (session()->has('message'))
         <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
             <div class="flex">
-            <div>
-                <p class="text-sm">{{ session('message') }}</p>
-            </div>
+                <div>
+                    <p class="text-sm">{{ session('message') }}</p>
+                </div>
             </div>
         </div>
     @endif

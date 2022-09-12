@@ -14,9 +14,11 @@
                                 <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Cadastrar Pagamento</h3>
                                 <form wire:submit.prevent="save" class="space-y-6" action="#">
                                     <div class="w-full">
-                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Categoria da saída:</label>
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Categoria do lembrete:</label>
                                         <select name="" id="categoria" wire:model.defer="categoria" >
                                             <option disabled>Selecione uma categoria</option>
+                                            <option value="outros">Outros</option>
+                                            <option value="entrada">Entrada</option>
                                             <option value="despesas">Despesas</option>
                                             <option value="custos">Custos</option>
                                             <option value="imobilizados">Imobilziados</option>
@@ -71,9 +73,11 @@
                         <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Editar Pagamento</h3>
                         <form wire:submit.prevent="update" class="space-y-6" action="#">
                             <div class="w-full">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Categoria da saída:</label>
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Categoria do Lembrete:</label>
                                 <select name="" id="categoria" wire:model.defer="categoria" >
                                     <option disabled>Selecione uma categoria</option>
+                                    <option value="outros">Outros</option>
+                                    <option value="entrada">Entrada</option>
                                     <option value="despesas">Despesas</option>
                                     <option value="custos">Custos</option>
                                     <option value="imobilizados">Imobilziados</option>

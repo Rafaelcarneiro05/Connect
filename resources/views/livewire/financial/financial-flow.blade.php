@@ -26,7 +26,7 @@
                                             <div class="col-span-6 sm:col-span-4">
                                                 <label for="">Moeda</label>
                                                 <select wire:model="moeda" class="border-2 border-neutral-500 rounded">
-                                                    <option disabled >Selecione uma opção</option>
+                                                    <option disable selected >Selecione uma opção</option>
                                                     <option value="brl">BRL</option>
                                                     <option value="usdt">USDT</option>
                                                     <option value="euro">EURO</option>
@@ -43,6 +43,15 @@
                                                         <option value="entrada">Entrada</option>
                                                         <option value="saida">Saída</option>
                                                     </select>
+                                                    @error('cashflow')
+                                                        <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+                                                            <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                                                            <span class="sr-only">Info</span>
+                                                            <div>>
+                                                                <span class="error">{{ $message }}</span>
+                                                            </div>
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                             </div>
 
@@ -67,7 +76,20 @@
                                             <div class="col-span-6 sm:col-span-4"wire:ignore>
                                                 <div>
                                                     <label for="valor">Valor</label>
-                                                    <input id="valor" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="valor" onchange="@this.set('valor', this.value);" />
+
+                                                        <input id="valor" type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="valor" onchange="@this.set('valor', this.value);">
+                                                            @error('valor')
+                                                                <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+                                                                    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                                                                    <span class="sr-only">Info</span>
+                                                                    <div>>
+                                                                        <span class="error">{{ $message }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            @enderror
+
+
+
                                                 </div>
                                                 <div>
                                                     <label for="">Fonte:</label>
@@ -173,9 +195,9 @@
 
                                                             <div>
                                                                 <label> Selecione a categoria:</label>
-                                                                <select wire:model.defer="saida" class="border-2 border-neutral-500 rounded">
+                                                                <select wire:model="saida" class="border-2 border-neutral-500 rounded">
 
-                                                                    <option disabled selected value="">Selecione</option>
+                                                                    <option disabled>Selecione</option>
                                                                     <option value="despesas">Despesas</option>
                                                                     <option value="custos">Custos</option>
                                                                     <option value="imobilizados">Imobilizados</option>
@@ -225,7 +247,7 @@
                     <script type="text/javascript">
                         $(".value_valor").maskMoney({prefix:"R$ ",decimal:",", thousands:".", allowZero: true, allowNegative: false});
                         $(".value_valor_transacao").maskMoney({prefix:"R$ ", affixesStay: true, decimal:",", thousands:".", allowZero: true, allowNegative: false});
-                        $(".mascara_fracao").maskMoney({affixesStay: true, decimal:",", thousands:"", precision: 8, allowNegative: false,});
+                        $(".mascara_fracao").maskMoney({affixesStay: true, decimal:",", thousands:".", precision: 8, allowNegative: false,});
                     </script>
 
                <!-- conteudo da modal: FIM -->

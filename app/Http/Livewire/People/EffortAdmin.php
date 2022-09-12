@@ -5,16 +5,15 @@ namespace App\Http\Livewire\People;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 
-//Models Ultilizadas
+// MODELS UTILIZADAS
 use App\Models\User;
 use App\Models\Efforts;
 use App\Models\Project;
-use App\Models\UserProject;
-use App\Http\Controllers\EffortPdfController;
+
+// CONTROLLERS ULTILIZADAS
+use App\Http\Livewire\Financial\CalendarRegister;
 
 class EffortAdmin extends Component
 {
@@ -50,9 +49,8 @@ class EffortAdmin extends Component
     public $from_fechar;
     public $to_fechar;
     public $colab_id;
-    public $isOpenPdf = 0;
-
-    static $colab;
+    public $verifica_from;
+    public $verifica_to;
 
 
     public function openModal()//abrir modal de registro
@@ -75,12 +73,7 @@ class EffortAdmin extends Component
         $this->isOpen = false;
     }
 
-    public function closePdf()
-    {
-        $this->isOpenPdf = false;
-    }
-
-    public function closeModalPonto()
+    public function closeModalPonto()//fecha modal de fechar mês e zera o total geral
     {
         $this->isOpenPonto = false;
         $this->total_geral = 0;
@@ -96,7 +89,7 @@ class EffortAdmin extends Component
         $this->reset();
     }
 
-    public function edit($id)   //abrir modal para edicao
+    public function edit($id) //abrir modal para edicao
     {
         $effort = Efforts::find($id);
 
@@ -170,7 +163,14 @@ class EffortAdmin extends Component
         return $horas;
     }
 
-    public function horasFeitas($id)//calcula as horas feitas no mês
+    public function totalSeconds($inicio, $fim)//recebe 2 datas e calcula a diferença de segundos entre as duas
+    {
+        $inicio = Carbon::createFromFormat('Y-m-d H:i:s', $inicio);
+        $fim = Carbon::createFromFormat('Y-m-d H:i:s', $fim);
+        return $fim->diffInSeconds($inicio);
+    }
+
+    public function horasFeitas($id)//calcula as horas feitas no mês em effort-fecharponto.blade
     {
 
         $from_fechar = Carbon::create($this->from_fechar);
@@ -180,32 +180,24 @@ class EffortAdmin extends Component
         $total_segundos = 0;
         foreach($horas_usuarios as $hora_usuario)
         {
-            $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $hora_usuario->inicio);
-            $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $hora_usuario->fim);
-            $segundos_ponto = $hora_final->diffInSeconds($hora_inicial);
-            $total_segundos += $segundos_ponto;
+            $total_segundos += EffortAdmin::totalSeconds($hora_usuario->inicio, $hora_usuario->fim);
         }
-
         return EffortAdmin::secondsToHours($total_segundos);
     }
 
-    public function diffHoras($inicio, $fim = 'nulo')//calcula as horas de cada esforco
+    public function diffHoras($inicio, $fim = 'nulo')//calcula as horas de cada esforco na tabela em effor-admin-module
     {
         if($fim == 'nulo')
         {
             $fim = Carbon::now()->setTimezone('America/Sao_Paulo');
         }
-        $hora_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $inicio);
-        $hora_final = Carbon::createFromFormat('Y-m-d H:i:s', $fim);
-        $segundos_trabalhados = $hora_final->diffInSeconds($hora_inicial);
-
+        $segundos_trabalhados = EffortAdmin::totalSeconds($inicio, $fim);
         return EffortAdmin::secondsToHours($segundos_trabalhados);
     }
 
-    public function contarHoras($inicio, $fim, $usuario, $projeto)//conta as horas em relação a determinado periodo, projeto e usuario
+    public function contarHoras($inicio, $fim, $usuario, $projeto)//conta as horas em relação aos flitros de effort-admin-module
     {
         $fim = Carbon::create($fim)->addDays(1);
-
         //verifica quais filtros serão aplicados
         if($projeto and $usuario)
         {
@@ -227,36 +219,9 @@ class EffortAdmin extends Component
         $total_segundos = 0;
         foreach($horas as $hora)
         {
-            $data_inicial = Carbon::createFromFormat('Y-m-d H:i:s', $hora->inicio);
-            $data_final = Carbon::createFromFormat('Y-m-d H:i:s', $hora->fim);
-            $segundos_trabalhados = $data_final->diffInSeconds($data_inicial);
-            $total_segundos += $segundos_trabalhados;
+            $total_segundos += EffortAdmin::totalSeconds($hora->inicio, $hora->fim);
         }
         return EffortAdmin::secondsToHours($total_segundos);
-    }
-
-    public function totalGeral($id)//calcula o total geral do salario
-    {
-        $from = Carbon::create($this->from_fechar);
-        $to = Carbon::create($this->to_fechar)->addDays(1);
-        //dd($to, $from, $id);
-        $esforcos = DB::table('efforts')->where([['inicio', '>=', $from], ['fim', '<', $to], ['usuario_id' ,'=', $id]])->get();
-        //dd($esforcos);
-        $total_segundos = 0;
-        foreach ($esforcos as $esforco)
-        {
-            $inicio = Carbon::createFromFormat('Y-m-d H:i:s', $esforco->inicio);
-            $fim = Carbon::createFromFormat('Y-m-d H:i:s', $esforco->fim);
-            $segundos_trabalhados = $fim->diffInSeconds($inicio);
-            $total_segundos += $segundos_trabalhados;
-        }
-        $horas = EffortAdmin::secondsToHours($total_segundos);
-        $usuario = DB::table('users')->where([['id' ,'=', $id]])->get();
-        foreach ($usuario as $usuario)
-        {
-            $valor_hora = $usuario->valor_hora;
-        }
-        $this->total_geral = ($this->total_geral) + EffortAdmin::total($horas, $valor_hora);
     }
 
     public function total($horas_totais, $valor_hora)//calcula o salario de cada colaborador
@@ -264,15 +229,23 @@ class EffortAdmin extends Component
         $horas_totais = explode(':',$horas_totais);
         $total_horas = $horas_totais[0] + $horas_totais[1]/60 + $horas_totais[2]/3600;
         $total = round(($total_horas*$valor_hora), 2);
+        $this->total_geral = ($this->total_geral) + $total;//acumula o total geral
         return $total;
     }
 
-    public function folhaPonto($id)//redireciona para a rota do pdf passando o id
+    public function folhaPonto($id)//redireciona para a rota do pdf passando o id e as datas
     {
         $user_id = $id;
         $from_fechar = $this->from_fechar;
         $to_fechar = $this->to_fechar;
         redirect()->route("effort_pdf", ['id_user' => $user_id, 'from' => $from_fechar, 'to' =>$to_fechar]);
+    }
+
+    public function lembreteSalario($value)// gera lembrete do salario no calendario e fecha a modal
+    {
+        CalendarRegister::lembreteSalario($value);
+        EffortAdmin::closeModalPonto();
+        session()->flash('message', 'Lembrete gerado com sucesso.');
     }
 
     public function render()

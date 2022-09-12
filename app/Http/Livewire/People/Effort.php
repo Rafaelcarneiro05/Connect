@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 //Models Ultilizadas
-use App\Models\User;
 use App\Models\Efforts;
 use App\Models\Project;
 use App\Models\UserProject;
@@ -33,13 +32,14 @@ class Effort extends Component
     public $logado;
     public $projeto_id;
     public $campo_nulo;
-    
-    public function openModal()
+
+
+    public function openModal()//abre a modal
     {
         $this->isOpen = true;
     }
 
-    public function closeModal()
+    public function closeModal()//fecha a modal
     {
         $this->isOpen = false;
     }

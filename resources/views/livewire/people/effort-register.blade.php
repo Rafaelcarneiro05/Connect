@@ -22,13 +22,7 @@
                             <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
                                 <div class="grid grid-cols-6 gap-6">    
 
-                            <!-- campos -->
-                            <div class="col-span-6 sm:col-span-6">
-                                @php
-                                    //<input type="text" name="" id="" wire:model="hora" value="{{ \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo')}}" > 
-                                @endphp
-                                {{\Carbon\Carbon::now()->setTimezone('America/Sao_Paulo')}}
-                            </div>                                                             
+                            <!-- campos -->                                                          
 
                             <div class="col-span-6 sm:col-span-6">
                                 <div class="form-control">

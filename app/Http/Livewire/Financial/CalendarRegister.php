@@ -24,6 +24,29 @@ class CalendarRegister extends Component
         $this->reset();
     }
 
+    public static function lembreteSalario($value)//criar lembrete do sálario
+    {
+        Recorrentes::create([
+
+            'categoria' => 'custos',
+            'descricao' => 'Salário',
+            'value' => $value,
+            'data' => date('Y-m-25'),
+            'color' => '#62019b',
+        ]);
+    }
+
+    public static function lembrenteAdmissao($name, $data)//criar lembrete de 3 meses 
+    {
+        Recorrentes::create([
+            'categoria' => 'imobilizados',
+            'descricao' => '3 meses '. $name,
+            'value' => 0,
+            'data' => $data,
+            'color' => '#62019b'
+        ]);
+    }
+
     //Cadastrar pagamento
     public function save()
     {
@@ -33,7 +56,6 @@ class CalendarRegister extends Component
         $valor_tratado = str_replace(',', '.', $valor_tratado);
         $valor_tratado = str_replace('R$', '', $valor_tratado);
         $valor_tratado = str_replace(' ', '', $valor_tratado);
-
 
 
         Recorrentes::create([

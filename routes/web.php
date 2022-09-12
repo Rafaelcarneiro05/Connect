@@ -92,11 +92,9 @@ Route::middleware([
     'is.admin'
 ])->group(function ()
 {
-    //ROTA QUE ABRE A VIEW MODULE, QUE POR SUA VEZ CHAMA O COMPONENTE LIVEWIRE
     Route::get('/people/employee-module', function (){
         return view('livewire/people/employee-module');
     })->name('employee-module');
-
 
     Route::get('/people/effort-admin-module', function () {
         return view('livewire/people/effort-admin-module');
@@ -107,6 +105,24 @@ Route::middleware([
     ->name('effort_pdf');
 
 });
+
+//rotas do modo people para projects_manager
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'is.projectsManager'
+])->group(function ()
+{
+    Route::get('/projects/projects-module', function () {
+        return view('livewire/projects/projects-module');
+    })->name('projects-module');
+
+    Route::get('/people/effort-module', function () {
+        return view('livewire/people/effort-module');
+    })->name('effort-module');
+});
+
 //rotas modo people para users
 Route::middleware([
     'auth:sanctum',
@@ -130,18 +146,7 @@ Route::middleware([
 
 
 
-//rotas do modo people para projects_manager
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-    'is.projectsManager'
-])->group(function ()
-{
-    Route::get('/projects/projects-module', function () {
-        return view('livewire/projects/projects-module');
-    })->name('projects-module');
-});
+
 
 
 //rotas modo PROJECTS para users

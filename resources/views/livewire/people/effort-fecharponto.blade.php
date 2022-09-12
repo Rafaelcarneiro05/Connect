@@ -22,50 +22,57 @@
                             <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
                                 <label class="font-bold">Selecione a data inicial e final</label><br>
                                 <label>Data inicial:</label>
-                                <input wire:model="from_fechar" type="date"><br>
+                                <input wire:model="from_fechar" type="date"
+                                    @if ($this->from_fechar && $this->to_fechar)
+                                        readonly
+                                    @endif
+                                ><br>
 
                                 <label>Data Final:</label>
-                                <input wire:model="to_fechar" type="date">
+                                <input wire:model="to_fechar" type="date"
+                                    @if ($this->from_fechar && $this->to_fechar)
+                                        readonly
+                                    @endif
+                                >
 
-                                @if ($this->from_fechar && $this->to_fechar)
-                                    <table class="table-fixed w-full">
-                                        <div class="col-span-6 sm:col-span-4">                                      
-                                        </div> 
-                                        <thead>
+                                @if ($this->from_fechar && $this->to_fechar) 
+                                <table class="table-fixed w-full">
+                                    <div class="col-span-6 sm:col-span-4">                                      
+                                    </div> 
+                                    <thead>
+                                        <tr>
+                                            <th class="">Colaborador</th>
+                                            <th class="">Horas Feitas</th>
+                                            <th class="">Valor por Hora</th>
+                                            <th class="">Total</th>
+                                        </tr>                            
+                                    </thead>                                    
+                                    <tbody align="center">
+                                        @foreach ($colaboradores as $colaborador)                           
                                             <tr>
-                                                <th class="">Colaborador</th>
-                                                <th class="">Horas Feitas</th>
-                                                <th class="">Valor por Hora</th>
-                                                <th class="">Total</th>
-                                            </tr>                            
-                                        </thead>                                    
-                                        <tbody align="center">
-                                            @foreach ($colaboradores as $colaborador)                           
-                                                <tr>
-                                                    <td class="border border-slate-300">{{$colaborador->name}}</td>
+                                                <td class="border border-slate-300">{{$colaborador->name}}</td>
 
-                                                    <td class="border border-slate-300">
-                                                        <label>{{App\Http\Livewire\People\EffortAdmin::horasFeitas($colaborador->id)}}</label>
-                                                    </td>
+                                                <td class="border border-slate-300">
+                                                    <label>{{App\Http\Livewire\People\EffortAdmin::horasFeitas($colaborador->id)}}</label>
+                                                </td>
 
-                                                    <td class="border border-slate-300">
-                                                        {{'R$ ' .number_format($colaborador->valor_hora, 2,',', '.')}}  
-                                                    </td>
+                                                <td class="border border-slate-300">
+                                                    {{'R$ ' .number_format($colaborador->valor_hora, 2,',', '.')}}  
+                                                </td>
 
-                                                    <td class="border border-slate-300">
-                                                        {{'R$ ' .number_format(App\Http\Livewire\People\EffortAdmin::total(App\Http\Livewire\People\EffortAdmin::horasFeitas($colaborador->id), $colaborador->valor_hora), 2,',', '.')}}
-                                                        
-                                                    </td>
-                                                
-                                                    <td>
-                                                        <button wire:click="folhaPonto({{$colaborador->id}})" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                                            Folha de Ponto
-                                                        </button> 
-                                                </tr>
-                                                {{App\Http\Livewire\People\EffortAdmin::totalGeral($colaborador->id)}}
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                <td class="border border-slate-300">
+                                                    {{'R$ ' .number_format(App\Http\Livewire\People\EffortAdmin::total(App\Http\Livewire\People\EffortAdmin::horasFeitas($colaborador->id), $colaborador->valor_hora), 2,',', '.')}}
+                                                    
+                                                </td>
+                                            
+                                                <td>
+                                                    <button wire:click="folhaPonto({{$colaborador->id}})" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                                        Folha de Ponto
+                                                    </button> 
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                                     <div class="font-bold w-full text-right">Total Geral: {{'R$ ' .number_format($this->total_geral, 2,',', '.')}}</div>
                                 @endif
                             <!-- campos -->                                                          
@@ -77,7 +84,7 @@
                             </button>
                         </span>
                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                            <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            <button wire:click.prevent="lembreteSalario({{$this->total_geral}})" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-black shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                 Gerar Lembrete
                             </button>
                         </span>                              

@@ -55,6 +55,9 @@
                                     <x-jet-dropdown-link href="{{ route('projects-module') }}">
                                         {{ __('Projects') }}
                                     </x-jet-dropdown-link>
+                                    <x-jet-dropdown-link href="{{ route('effort-module') }}">
+                                        {{ __('Effort Register') }}
+                                    </x-jet-dropdown-link>
                                 @endif
 
                             </x-slot>

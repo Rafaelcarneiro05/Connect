@@ -5,10 +5,14 @@ namespace App\Http\Livewire\People;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
 
-//  MODELS UTILIZADAS
+// MODELS UTILIZADAS
 use App\Models\User;
 use App\Models\UserProject;
+
+// CONTROLLERS ULTILIZADAS
+use App\Http\Livewire\Financial\CalendarRegister;
 
 
 class Employee extends Component
@@ -22,7 +26,6 @@ class Employee extends Component
     //ATRIBUTOS TELA DE CADASTRO/EDIÇÃO
     public $isOpen = 0;
     public $user_id;
-
     public $nome;
     public $email;
     public $senha;
@@ -51,7 +54,6 @@ class Employee extends Component
     public $habilidade;
     public $valor_hora;
     public $campo_nulo;
-
     public $informacoes_usuarios = [];
 
 
@@ -92,7 +94,7 @@ class Employee extends Component
         $this->data_admissao = $user->admission_date;
         $this->tipo_contrato = $user->tipo_contrato;
         $this->habilidade = $user->habilidade;
-        $this->valor_hora = $user->valor_hora;
+        $this->valor_hora = 'R$' .number_format($user->valor_hora, 2,',', '.') ;
 
         $this->openModal();
     }
@@ -110,7 +112,13 @@ class Employee extends Component
     private function resetInputFields()//reseta os campos
     {
         $this->reset();
-    }     
+    }
+    
+    public function lembreteAdmissao($name, $date)//cria lembrete de 3 meses no calendario
+    {
+        $date = Carbon::parse($date)->addMonth(3)->format('Y-m-d');
+        CalendarRegister::lembrenteAdmissao($name, $date);
+    }
 
     public function store()  //PROCESSAMENTO do cadastrar ou editar: updateOrCreate
     {       
@@ -120,7 +128,6 @@ class Employee extends Component
         }
         else
         {
-        
             if($this->user_id)//VERIFICA SE É UPDATE OU CREATE E ADICIONA HASH NA SENHA
             {
                 if(!$this->senha)
@@ -144,8 +151,7 @@ class Employee extends Component
                 $this->senha = Hash::make($this->senha);
             }       
             
-            
-            //converte valor do formato 15.120,00 para 15120.00
+            //converte valor do formato 15.120,02 para 15120.02
             $valor_tratado = str_replace('R$', '', $this->valor_hora);
             $valor_tratado = str_replace('.', '', $valor_tratado);
             $valor_tratado = str_replace(',', '.', $valor_tratado);
@@ -184,6 +190,8 @@ class Employee extends Component
                 'habilidade' =>	$this->habilidade,
                 'valor_hora' =>	$valor_tratado,
                 ]);
+
+            Employee::lembreteAdmissao($this->nome, $this->data_admissao);
 
             $this->resetInputFields();
 

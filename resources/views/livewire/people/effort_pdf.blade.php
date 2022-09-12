@@ -85,10 +85,6 @@
         border-bottom-style: solid;
         line-height: 10px;
     }
-
-    .total {
-        background: #B9B5B5;
-    }
     .assisnatura {
         text-align: center;
     }

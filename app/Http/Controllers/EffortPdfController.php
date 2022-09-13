@@ -27,7 +27,16 @@ class EffortPdfController extends Controller
         $segundos = $final->diffInSeconds($inicio);
         return gmdate("H:i:s", $segundos);
     }
-    
+
+    public static function isEdited($id)//verifica se o ponto foi editado
+    {
+        $efforts = Efforts::where([['id', '=', $id]])->first();
+        $fim = Carbon::createFromFormat('Y-m-d H:i:s', $efforts->fim);
+        if ($efforts->updated_at != $fim)
+            {
+                return "*";
+            }
+    }
 
     public function exportPDF($id_user, $from, $to)
     {
@@ -57,6 +66,6 @@ class EffortPdfController extends Controller
         $user = User::where([['id', '=', $id_user]])->get();
         $usuario = DB::table('users')->where([['id', '=', $id_user]])->first();
         $pdf = PDF::loadView('livewire.people.effort_pdf', ['efforts' => $efforts, 'user' => $user, 'horas' => $horas, 'datas' => $datas]);
-        return $pdf->download('folha-ponto - ' . $usuario->name . '.pdf');//stram para abrir o pdf na pagina
+        return $pdf->stream('folha-ponto - ' . $usuario->name . '.pdf');//stram para abrir o pdf na pagina
     }
 }

@@ -20,7 +20,7 @@
                         <form> <!-- (FORMULARIO COM CAMPOS) -->
 
                             <div class="px-4 py-5 bg-white sm:p-6 shadow {{ isset($actions) ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md' }}">
-                                <label class="font-bold">Selecione a data inicial e final</label><br>
+                                <label class="font-bold" >Selecione a data inicial e final</label><br>
                                 <label>Data inicial:</label>
                                 <input wire:model="from_fechar" type="date"
                                     @if ($this->from_fechar && $this->to_fechar)

@@ -135,7 +135,7 @@
                                     {{date('d/m/Y - H:i:s',strtotime($effort->fim))}}
                                 @endif
                             </td>
-                            <td class=>{{App\Http\Controllers\EffortPdfController::horasDiarias($effort->id)}}</td>
+                            <td class=>{{App\Http\Controllers\EffortPdfController::horasDiarias($effort->id)}}{{App\Http\Controllers\EffortPdfController::isEdited($effort->id)}} </td>
                         </tr>
                     @endforeach
                     <tr>
@@ -150,6 +150,7 @@
 
         <section>
             <h6>Horas de {{$datas}}</h6>
+            <h6>Os pontos com * foram editados ou criados manualmente.</h6>
         </section>
 
     </main>
@@ -161,8 +162,6 @@
         <hr>
         <p class="assisnatura">CNN BLACK LTDA</p>
     </footer>
-
-    
 </body>
 </html>
 

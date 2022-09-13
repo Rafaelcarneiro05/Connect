@@ -60,7 +60,6 @@ Route::middleware([
     Route::get('/financial/brief', function () {
         return view('livewire/financial/brief');
     })->name('financial-brief');
-
     //DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF//DOWNLOAD PDF
     Route::get('/financial/brief/financial_pdf',[FinancialPDFController::class, 'exportPDF'])
     ->name('financial_pdf');

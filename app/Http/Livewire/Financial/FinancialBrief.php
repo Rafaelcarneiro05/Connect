@@ -66,7 +66,7 @@ class FinancialBrief extends Component
     public $saida;
     public $descricao;
     public $valor;
-    public $moeda = 'brl';
+    public $moeda = 'usdt';
     public $fonte;
     public $observacao;
     public $data;
@@ -77,6 +77,16 @@ class FinancialBrief extends Component
     public $brl;
 
 
+
+    protected $rules = [
+        'cashflow' => 'required',
+        'valor' => 'required'
+
+    ];
+    protected $messages = [
+        'cashflow.required' => 'Selecione uma opção para o campo Tipo de Operação.',
+        'valor.required' => 'Selecione uma opção para o campo Valor.',
+    ];
 
     public function create() //abrir modal para cadastro ----
     {
@@ -171,7 +181,7 @@ class FinancialBrief extends Component
             $cotacao_tratada = str_replace(' ', '', $cotacao_tratada);
         }
 
-
+        $this->validate();
         //EDIÇÃO OU CRIAÇÃO updateOrCreate
 
         Financial::updateOrCreate(['id' => $this->financial_id], [

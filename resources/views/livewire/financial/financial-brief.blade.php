@@ -106,7 +106,7 @@
                                     <td class="border border-slate-400">{{$financial->fonte}} </td>
                                     <td class="border border-slate-400">{{$nome_empresa}}</td>
                                     <td class="border border-slate-400">{{$financial->moeda}} </td>
-                                    <td class="border border-slate-400">{{$financial->cotacaoEmBRL}} </td>
+                                    <td class="border border-slate-400">{{'R$' .number_format($financial->cotacaoEmBRL, 2,',', '.')}} </td>
                                     <td class="border border-slate-400">{{$financial->fracao}} </td>
                                     <td class="border border-slate-400">{{$financial->taxa}} </td>
                                     <td class="border border-slate-400">{{$financial->observacao}} </td>

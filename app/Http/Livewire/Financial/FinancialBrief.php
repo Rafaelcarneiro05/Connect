@@ -6,7 +6,12 @@ namespace App\Http\Livewire\Financial;
 
 use App\Models\Financial;
 use App\Models\Empresas;
+use App\Models\Config;
 
+
+//Bibliotecas utilizadas
+
+use Illuminate\Support\Facades\Http;
 
 
 use Livewire\Component;
@@ -60,6 +65,7 @@ class FinancialBrief extends Component
 
 
     //TELA DE CADASTRO/EDIÇÃO
+
     public $isOpen = 0;
     public $financial_id;
 
@@ -76,6 +82,14 @@ class FinancialBrief extends Component
 
     public $brl;
 
+    public $price_btc_brl;
+    public $price_btc_brl_formated;
+
+    public $price_bnb_brl;
+    public $price_bnb_brl_formated;
+
+    public $price_eur_brl;
+    public $price_eur_brl_formated;
 
 
     protected $rules = [
@@ -107,13 +121,13 @@ class FinancialBrief extends Component
         $this->cashflow = $financial->cashflow;
         $this->saida = $financial->saida;
         $this->descricao = $financial->descriacao;
-        $this->valor = 'R$' .number_format($financial->value, 2,',', '.');
+        $this->valor = 'R$' . number_format($financial->value, 2, ',', '.');
         $this->moeda = $financial->moeda;
         $this->fonte = $financial->fonte;
         $this->observacao = $financial->observacao;
         $this->data = $financial->data;
-        $this->cotacaoEmBRL = 'R$' .number_format($financial->cotacaoEmBRL, 2,',', '.'); ;
-        $this->taxa = 'R$' .number_format($financial->taxa, 2,',', '.');
+        $this->cotacaoEmBRL = 'R$' . number_format($financial->cotacaoEmBRL, 2, ',', '.');;
+        $this->taxa = 'R$' . number_format($financial->taxa, 2, ',', '.');
         $this->fracao = $financial->fracao;
         $this->brl = $financial->brl;
         $this->empresas_id = $financial->empresas_id;
@@ -146,6 +160,9 @@ class FinancialBrief extends Component
     public function store()  //PROCESSAMENTO do cadastrar ou editar: updateOrCreate
 
     {
+
+
+
 
 
         //converte valor do formato 15.120,00 para 15120.00
@@ -320,12 +337,107 @@ class FinancialBrief extends Component
 
 
 
+        //REDIRECIONA PARA PÁGINA DE PDF
         redirect()->route('financial_pdf');
-
     }
 
     public function render()
     {
+        //API KEY  COINMARKET
+        $config = Config::first();
+
+
+
+        //SOLICITA COTAÇÃO EURO/BRL NA COIN MARKET CAP
+/*           try {
+
+            $response_eur  = Http::withHeaders([
+                'X-CMC_PRO_API_KEY' => $config->coinmarketcap_api_key
+            ])->get('/v1/exchange/listings/latest ');
+
+
+
+            $jsonData_eur = $response_eur->json();
+                dd($jsonData_eur);
+            $this->price_eur_brl = $jsonData_eur['data']['EUR'];
+
+
+
+        } catch (\Exception $e) {
+            //chamar VOVÔ!!
+            //fazer amanhã trativo de erro
+
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        } */
+
+
+        //FORMATÇÃO DOUBLE RETORNADO COINMARKET
+        $this->price_bnb_brl_formated = 'R$' . number_format($this->price_bnb_brl, 2, ',', '.');
+
+
+
+
+        //SOLICITA COTAÇÃO BNB/BRL NA COIN MARKET CAP
+        try {
+
+            $response_bnb  = Http::withHeaders([
+                'X-CMC_PRO_API_KEY' => $config->coinmarketcap_api_key
+            ])->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BNB&convert=BRL');
+
+
+
+            $jsonData_bnb = $response_bnb->json();
+
+            $this->price_bnb_brl = $jsonData_bnb['data']['BNB']['quote']['BRL']['price'];
+
+
+
+        } catch (\Exception $e) {
+            //chamar VOVÔ!!
+            //fazer amanhã trativo de erro
+
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
+
+
+        //FORMATÇÃO DOUBLE RETORNADO COINMARKET
+        $this->price_bnb_brl_formated = 'R$' . number_format($this->price_bnb_brl, 2, ',', '.');
+
+
+
+
+        //SOLICITA COTAÇÃO BTC/BRL NA COIN MARKET CAP
+
+        try {
+
+            $response_btc  = Http::withHeaders([
+                'X-CMC_PRO_API_KEY' => $config->coinmarketcap_api_key
+            ])->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BTC&convert=BRL');
+
+
+
+            $jsonData_btc = $response_btc->json();
+
+           $this->price_btc_brl = $jsonData_btc['data']['BTC']['quote']['BRL']['price'];
+
+
+
+        } catch (\Exception $e) {
+            //chamar VOVÔ!!
+            //fazer amanhã trativo de erro
+
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
+
+
+        //FORMATÇÃO DOUBLE RETORNADO COINMARKET
+        $this->price_btc_brl_formated = 'R$' . number_format($this->price_btc_brl, 2, ',', '.');
+
+
+
+
+
+
         //SELECT EMPRESAS
 
         $this->empresas = Empresas::get();
@@ -385,13 +497,12 @@ class FinancialBrief extends Component
 
         //SOMATORIO CAIXA FRACAO EM DOLLAR
         if ($this->cashflow == 'entrada') {
-            $this->fracao_usdt_entr = Financial::where($where)->whereIn('moeda' , ['usdt'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_usdt_entr = Financial::where($where)->whereIn('moeda', ['usdt'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_usdt_saida = '0';
-        } elseif($this->cashflow == 'saida') {
+        } elseif ($this->cashflow == 'saida') {
             $this->fracao_usdt_saida = Financial::where($where)->whereIn('moeda', ['usdt'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_usdt_entr = '0';
-        }
-        else {
+        } else {
             $this->fracao_usdt_entr = Financial::where($where)->whereIn('moeda', ['usdt'])->whereIn('cashflow', ['entrada'])->sum('fracao');
             $this->fracao_usdt_saida = Financial::where($where)->whereIn('moeda', ['usdt'])->whereIn('cashflow', ['saida'])->sum('fracao');
             $this->soma_usdt = $this->fracao_usdt_entr - $this->fracao_usdt_saida;
@@ -400,13 +511,12 @@ class FinancialBrief extends Component
         //SOMATORIO FRACAO EM BTC
 
         if ($this->cashflow == 'entrada') {
-            $this->fracao_btc_entr = Financial::where($where)->whereIn('moeda' , ['btc'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_btc_entr = Financial::where($where)->whereIn('moeda', ['btc'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_btc_saida = '0';
-        } elseif($this->cashflow == 'saida') {
+        } elseif ($this->cashflow == 'saida') {
             $this->fracao_btc_saida = Financial::where($where)->whereIn('moeda', ['btc'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_btc_entr = '0';
-        }
-        else {
+        } else {
             $this->fracao_btc_entr = Financial::where($where)->whereIn('moeda', ['btc'])->whereIn('cashflow', ['entrada'])->sum('fracao');
             $this->fracao_btc_saida = Financial::where($where)->whereIn('moeda', ['btc'])->whereIn('cashflow', ['saida'])->sum('fracao');
             $this->soma_btc = $this->fracao_btc_entr - $this->fracao_btc_saida;
@@ -415,13 +525,12 @@ class FinancialBrief extends Component
         //SOMATORIO FRACAO EM EURO
 
         if ($this->cashflow == 'entrada') {
-            $this->fracao_euro_entr = Financial::where($where)->whereIn('moeda' , ['euro'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_euro_entr = Financial::where($where)->whereIn('moeda', ['euro'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_euro_saida = '0';
-        } elseif($this->cashflow == 'saida') {
+        } elseif ($this->cashflow == 'saida') {
             $this->fracao_euro_saida = Financial::where($where)->whereIn('moeda', ['euro'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_euro_entr = '0';
-        }
-        else {
+        } else {
             $this->fracao_euro_entr = Financial::where($where)->whereIn('moeda', ['euro'])->whereIn('cashflow', ['entrada'])->sum('fracao');
             $this->fracao_euro_saida = Financial::where($where)->whereIn('moeda', ['euro'])->whereIn('cashflow', ['saida'])->sum('fracao');
             $this->soma_euro = $this->fracao_euro_entr - $this->fracao_euro_saida;
@@ -430,13 +539,12 @@ class FinancialBrief extends Component
         // SOMATORIO FRACAO EM BNB
 
         if ($this->cashflow == 'entrada') {
-            $this->fracao_bnb_entr = Financial::where($where)->whereIn('moeda' , ['bnb'])->whereIn('cashflow', $filter)->sum('fracao');
+            $this->fracao_bnb_entr = Financial::where($where)->whereIn('moeda', ['bnb'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_bnb_saida = '0';
-        } elseif($this->cashflow == 'saida') {
+        } elseif ($this->cashflow == 'saida') {
             $this->fracao_bnb_saida = Financial::where($where)->whereIn('moeda', ['bnb'])->whereIn('cashflow', $filter)->sum('fracao');
             $this->fracao_bnb_entr = '0';
-        }
-        else {
+        } else {
             $this->fracao_bnb_entr = Financial::where($where)->whereIn('moeda', ['bnb'])->whereIn('cashflow', ['entrada'])->sum('fracao');
             $this->fracao_bnb_saida = Financial::where($where)->whereIn('moeda', ['bnb'])->whereIn('cashflow', ['saida'])->sum('fracao');
             $this->soma_bnb = $this->fracao_bnb_entr - $this->fracao_bnb_saida;
@@ -447,9 +555,5 @@ class FinancialBrief extends Component
 
             'financials_retorno' => $financials_retorno,
         ]);
-
-        }
-
-
     }
-
+}

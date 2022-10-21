@@ -35,6 +35,7 @@
                                                 </select>
                                             </div>
                                             <br>
+
                                             <div class="col-span-6 sm:col-span-4">
                                                 <div class="form-control">
                                                     <label> Selecione o tipo de operação:</label>
@@ -43,6 +44,7 @@
                                                         <option value="entrada">Entrada</option>
                                                         <option value="saida">Saída</option>
                                                     </select>
+
                                                     @error('cashflow')
                                                         <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
                                                             <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
@@ -142,7 +144,7 @@
                                                         <label for="">Cotação do dia Euro:</label>
                                                         <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
                                                         <br>
-                                                        Exemplo: 1 € = 5,24 BRL
+                                                        Exemplo: 1 € =
                                                     </div>
                                                     <br>
                                                 </div>
@@ -161,7 +163,8 @@
                                                         <label for="">Cotação BNB:</label>
                                                         <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
                                                         <br>
-                                                        Exemplo: 1 BNB = 1.420,17 BRL
+
+                                                        Cotação do dia: 1 BNB = {{$price_bnb_brl_formated}}
                                                     </div>
                                                     <br>
                                                 </div>
@@ -180,7 +183,8 @@
                                                         <label for="">Cotação BTC:</label>
                                                         <input type="text" class="value_valor border-2 border-neutral-500 rounded" wire:model.deboundance.800ms="cotacaoEmBRL" onchange="@this.set('cotacaoEmBRL', this.value);">
                                                         <br>
-                                                        Exemplo: 1 BTC = 144.826,49 BRL
+                                                        Cotação do dia: 1 BTC = {{$price_btc_brl_formated}}
+
                                                     </div>
                                                     <br>
                                                 </div>
